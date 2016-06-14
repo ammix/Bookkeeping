@@ -1,0 +1,9 @@
+http://johnatten.com/2012/05/09/extending-c-listview-with-collapsible-groups-part-i/
+http://www.codeproject.com/Articles/4406/An-Observer-Pattern-and-an-Extended-ListView-Event
+http://objectlistview.sourceforge.net/cs/gettingStarted.html
+http://stackoverflow.com/questions/361271/best-free-controls-for-net
+http://www.codeproject.com/Articles/3225/TreeListView
+https://www.devexpress.com/Products/NET/Controls/WinForms/Grid/get-started.xml#!product=xtragrid
+http://www.dotnetperls.com/datagridview
+http://www.dotnetperls.com/datagridview-tutorial
+
