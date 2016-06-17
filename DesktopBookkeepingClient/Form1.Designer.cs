@@ -36,12 +36,12 @@
 			this.olvColumn4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.olvColumn5 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.olvColumn6 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.treeListView1 = new BrightIdeasSoftware.TreeListView();
+			this.treeListView = new BrightIdeasSoftware.TreeListView();
 			this.olvColumn7 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.olvColumn8 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.olvColumn9 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			((System.ComponentModel.ISupportInitialize)(this.objectListView)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.treeListView1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.treeListView)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// objectListView
@@ -103,37 +103,37 @@
 			this.olvColumn6.AspectName = "Comment";
 			this.olvColumn6.Text = "Примітка";
 			// 
-			// treeListView1
+			// treeListView
 			// 
-			this.treeListView1.AllColumns.Add(this.olvColumn7);
-			this.treeListView1.AllColumns.Add(this.olvColumn8);
-			this.treeListView1.AllColumns.Add(this.olvColumn9);
-			this.treeListView1.CellEditUseWholeCell = false;
-			this.treeListView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+			this.treeListView.AllColumns.Add(this.olvColumn7);
+			this.treeListView.AllColumns.Add(this.olvColumn8);
+			this.treeListView.AllColumns.Add(this.olvColumn9);
+			this.treeListView.CellEditUseWholeCell = false;
+			this.treeListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumn7,
             this.olvColumn8,
             this.olvColumn9});
-			this.treeListView1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.treeListView1.Location = new System.Drawing.Point(0, 276);
-			this.treeListView1.Name = "treeListView1";
-			this.treeListView1.ShowGroups = false;
-			this.treeListView1.Size = new System.Drawing.Size(767, 267);
-			this.treeListView1.TabIndex = 1;
-			this.treeListView1.UseCompatibleStateImageBehavior = false;
-			this.treeListView1.View = System.Windows.Forms.View.Details;
-			this.treeListView1.VirtualMode = true;
+			this.treeListView.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.treeListView.Location = new System.Drawing.Point(0, 262);
+			this.treeListView.Name = "treeListView";
+			this.treeListView.ShowGroups = false;
+			this.treeListView.Size = new System.Drawing.Size(767, 281);
+			this.treeListView.TabIndex = 1;
+			this.treeListView.UseCompatibleStateImageBehavior = false;
+			this.treeListView.View = System.Windows.Forms.View.Details;
+			this.treeListView.VirtualMode = true;
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(767, 543);
-			this.Controls.Add(this.treeListView1);
+			this.Controls.Add(this.treeListView);
 			this.Controls.Add(this.objectListView);
 			this.Name = "Form1";
 			this.Text = "Form1";
 			((System.ComponentModel.ISupportInitialize)(this.objectListView)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.treeListView1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.treeListView)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -147,7 +147,7 @@
 		private BrightIdeasSoftware.OLVColumn olvColumn4;
 		private BrightIdeasSoftware.OLVColumn olvColumn5;
 		private BrightIdeasSoftware.OLVColumn olvColumn6;
-		private BrightIdeasSoftware.TreeListView treeListView1;
+		private BrightIdeasSoftware.TreeListView treeListView;
 		private BrightIdeasSoftware.OLVColumn olvColumn7;
 		private BrightIdeasSoftware.OLVColumn olvColumn8;
 		private BrightIdeasSoftware.OLVColumn olvColumn9;
