@@ -32,7 +32,7 @@ namespace DesktopBookkeepingClient
 		public string Comment;
 		public string Balance;
 		public List<Transaction> InvoiceLines;
-		public bool IsInvoiceLine => InvoiceLines != null && InvoiceLines.Count != 0;
+		public bool IsInvoiceLine {get{ return InvoiceLines != null && InvoiceLines.Count != 0;}}
 
 		public static List<Transaction> GetTransactions()
 		{
@@ -42,9 +42,9 @@ namespace DesktopBookkeepingClient
 				{
 					Date = "1 липня 2016", Account = "Готівка", CustomerOrSupplier = "Сільпо", Amount = "-100.00", Balance = "3568.95",
 					InvoiceLines = new List<Transaction> {
-						new Transaction {CustomerOrSupplier = "   • молоко", Amount = "   10.50"},
-						new Transaction {CustomerOrSupplier = "   • хліб", Amount = "   15.20"},
-						new Transaction {CustomerOrSupplier = "   • черешні", Amount = "   50.50"} }
+						new Transaction {CustomerOrSupplier = "   • молоко", Amount = "      10.50"},
+						new Transaction {CustomerOrSupplier = "   • хліб", Amount = "      15.20"},
+						new Transaction {CustomerOrSupplier = "   • черешні", Amount = "      50.50"} }
 				},
 				new Transaction {Date = "1 липня 2016", Account = "Готівка", CustomerOrSupplier = "Алейка", Amount = "-52.30", Balance = "3668.95"},
 				new Transaction {Date = "1 липня 2016", Account = "Гаманець UAH", CustomerOrSupplier = "Обмін", Amount = "-2500.00", Comment = "25.00 UAH/$", Balance = "2150.00"},
