@@ -16,7 +16,7 @@ namespace DesktopBookkeepingClient
 
 		private void InitializeTreeListView()
 		{
-			treeListView.CanExpandGetter = model => ((Transaction)model).IsInvoiceLine;
+			treeListView.CanExpandGetter = model => ((Transaction)model).HasInvoiceLine;
 			treeListView.ChildrenGetter = model => ((Transaction) model).InvoiceLines;
 			treeListView.Roots = Transaction.GetTransactions();
 
@@ -29,11 +29,23 @@ namespace DesktopBookkeepingClient
 
 		private void treeListView_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
 		{
-			var decoration = new TextDecoration("ABCDEF", 255);
-			decoration.Font = new Font(Font.Name, Font.SizeInPoints +2);
-			decoration.TextColor = Color.Red;
-            decoration.Alignment = ContentAlignment.MiddleRight;
-			e.SubItem.Decoration = decoration;
+			//e.Item.
+			//var decoration = new TextDecoration("ABCDEF", 255);
+			//decoration.Font = new Font(Font.Name, Font.SizeInPoints +2);
+			//decoration.TextColor = Color.Red;
+			//decoration.Alignment = ContentAlignment.MiddleRight;
+			//e.SubItem.Decoration = decoration;
+			//e.SubItem.CellPadding = 
+		}
+
+		private void treeListView_FormatRow(object sender, FormatRowEventArgs e)
+		{
+			var row = (Transaction) e.Model;
+			if (row.Account != null)
+			{
+				var font = e.Item.Font;
+				e.Item.Font = new Font(font.Name, font.Size, FontStyle.Bold);
+			}
 		}
 	}
 
