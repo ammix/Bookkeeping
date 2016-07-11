@@ -30,29 +30,29 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.treeListView = new BrightIdeasSoftware.TreeListView();
-			this.olvColumn7 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn8 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn9 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn10 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn11 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn12 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn13 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn14 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn15 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn16 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.imageList = new System.Windows.Forms.ImageList(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.treeListView)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// treeListView
 			// 
-			this.treeListView.AllColumns.Add(this.olvColumn7);
-			this.treeListView.AllColumns.Add(this.olvColumn8);
-			this.treeListView.AllColumns.Add(this.olvColumn9);
-			this.treeListView.AllColumns.Add(this.olvColumn10);
-			this.treeListView.AllColumns.Add(this.olvColumn11);
+			this.treeListView.AllColumns.Add(this.olvColumn12);
+			this.treeListView.AllColumns.Add(this.olvColumn13);
+			this.treeListView.AllColumns.Add(this.olvColumn14);
+			this.treeListView.AllColumns.Add(this.olvColumn15);
+			this.treeListView.AllColumns.Add(this.olvColumn16);
 			this.treeListView.CellEditUseWholeCell = false;
 			this.treeListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumn7,
-            this.olvColumn8,
-            this.olvColumn9,
-            this.olvColumn10,
-            this.olvColumn11});
+            this.olvColumn12,
+            this.olvColumn13,
+            this.olvColumn14,
+            this.olvColumn15,
+            this.olvColumn16});
 			this.treeListView.Cursor = System.Windows.Forms.Cursors.Default;
 			this.treeListView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.treeListView.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -70,37 +70,37 @@
 			this.treeListView.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.treeListView_FormatCell);
 			this.treeListView.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.treeListView_FormatRow);
 			// 
-			// olvColumn7
+			// olvColumn12
 			// 
-			this.olvColumn7.AspectName = "Account";
-			this.olvColumn7.Text = "Рахунок";
-			this.olvColumn7.Width = 200;
+			this.olvColumn12.AspectName = "Date";
+			this.olvColumn12.Text = "Дата";
+			this.olvColumn12.Width = 208;
 			// 
-			// olvColumn8
+			// olvColumn13
 			// 
-			this.olvColumn8.AspectName = "CustomerOrSupplier";
-			this.olvColumn8.Text = "Постачальник";
-			this.olvColumn8.Width = 101;
+			this.olvColumn13.AspectName = "Amount";
+			this.olvColumn13.Text = "Сума";
+			this.olvColumn13.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.olvColumn13.Width = 107;
 			// 
-			// olvColumn9
+			// olvColumn14
 			// 
-			this.olvColumn9.AspectName = "Amount";
-			this.olvColumn9.Text = "Сума";
-			this.olvColumn9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.olvColumn9.Width = 107;
+			this.olvColumn14.AspectName = "Comment";
+			this.olvColumn14.Text = "Примітка";
+			this.olvColumn14.Width = 200;
 			// 
-			// olvColumn10
+			// olvColumn15
 			// 
-			this.olvColumn10.AspectName = "Comment";
-			this.olvColumn10.Text = "Примітка";
-			this.olvColumn10.Width = 200;
+			this.olvColumn15.AspectName = "Acount";
+			this.olvColumn15.Text = "Рахунок";
+			this.olvColumn15.Width = 101;
 			// 
-			// olvColumn11
+			// olvColumn16
 			// 
-			this.olvColumn11.AspectName = "Balance";
-			this.olvColumn11.Text = "Залишок";
-			this.olvColumn11.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.olvColumn11.Width = 150;
+			this.olvColumn16.AspectName = "Balance";
+			this.olvColumn16.Text = "Залишок";
+			this.olvColumn16.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.olvColumn16.Width = 150;
 			// 
 			// imageList
 			// 
@@ -123,11 +123,11 @@
 
 		#endregion
 		private BrightIdeasSoftware.TreeListView treeListView;
-		private BrightIdeasSoftware.OLVColumn olvColumn7;
-		private BrightIdeasSoftware.OLVColumn olvColumn8;
-		private BrightIdeasSoftware.OLVColumn olvColumn9;
-		private BrightIdeasSoftware.OLVColumn olvColumn10;
-		private BrightIdeasSoftware.OLVColumn olvColumn11;
+		private BrightIdeasSoftware.OLVColumn olvColumn12;
+		private BrightIdeasSoftware.OLVColumn olvColumn15;
+		private BrightIdeasSoftware.OLVColumn olvColumn13;
+		private BrightIdeasSoftware.OLVColumn olvColumn14;
+		private BrightIdeasSoftware.OLVColumn olvColumn16;
 		private System.Windows.Forms.ImageList imageList;
 	}
 }
