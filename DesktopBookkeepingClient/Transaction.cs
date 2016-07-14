@@ -81,7 +81,8 @@ namespace DesktopBookkeepingClient
 							Date = "Обмін",
 							Acount = "Гаманець $",
 							Amount = "100.00",
-							Balance = "100.00"
+							Balance = "100.00",
+							Currency = "$"
 						}
 					}
 				},

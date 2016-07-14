@@ -40,7 +40,7 @@ namespace DesktopBookkeepingClient
 			if (e.ColumnIndex == 1)
 			{
 				var model = (Transaction)e.Model;
-				if (model.Amount!= null)
+				if (model.Amount != null && model.Acount != null)
 					e.SubItem.ForeColor = double.Parse(model.Amount) < 0 ? Color.Red : Color.Green;
 			}
 			if (e.ColumnIndex == 2)
