@@ -1,10 +1,10 @@
 
-DELETE FROM Snapshoots
-DELETE FROM Transaction
-DELETE FROM Accounts
-DELETE FROM Counterparties
-DELETE FROM Users
-GO
+--DELETE FROM Snapshots
+--DELETE FROM Transactions
+--DELETE FROM Counterparties
+--DELETE FROM Accounts
+--DELETE FROM Users
+
 
 INSERT INTO [Bookkeeping].[dbo].[Users] (Id, Name, Pwd)
 VALUES (1, 'Maxim', NULL)
@@ -67,8 +67,15 @@ VALUES (5, 1, 5, 22069, '1.06.2016', NULL)
 INSERT INTO [Bookkeeping].[dbo].[Snapshots] (Id, UserId, AccountId, Amount, SnapshotDate, Note)
 VALUES (6, 1, 6, 5943, '1.06.2016', NULL)
 
+INSERT INTO [Bookkeeping].[dbo].[Categories] (Id, UserId, ParentCategory, Label)
+VALUES (1, 1, NULL, 'Продукти харчування')
+INSERT INTO [Bookkeeping].[dbo].[Categories] (Id, UserId, ParentCategory, Label)
+VALUES (2, 1, 1, 'Молоко')
+INSERT INTO [Bookkeeping].[dbo].[Categories] (Id, UserId, ParentCategory, Label)
+VALUES (3, 1, NULL, 'Транспорт')
 
-
+INSERT INTO [Bookkeeping].[dbo].[Articles] (Id, UserId, ParentCategory, Label)
+VALUES (3, 1, NULL, 'Транспорт')
 
 
 
