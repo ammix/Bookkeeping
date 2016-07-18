@@ -1,12 +1,13 @@
 
---DROP TABLE InvoiceLines
---DROP TABLE Articles
---DROP TABLE Categories
---DROP TABLE Transactions
---DROP TABLE Snapshots
---DROP TABLE Accounts
---DROP TABLE Counterparties
---DROP TABLE Users
+Use Bookkeeping
+
+DROP TABLE InvoiceLines
+DROP TABLE Articles
+DROP TABLE Transactions
+DROP TABLE Snapshots
+DROP TABLE Accounts
+DROP TABLE Counterparties
+DROP TABLE Users
 
 
 CREATE TABLE Users
@@ -29,9 +30,10 @@ CREATE TABLE Articles
 (
 	Id INT NOT NULL PRIMARY KEY,
 	UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
-	CaterogyId INT FOREIGN KEY REFERENCES Articles(Id),
+	CategoryId INT FOREIGN KEY REFERENCES Articles(Id),
 	Label NVARCHAR(32) NOT NULL,
-	IsArticle BIT NOT NULL
+	IsArticle BIT NOT NULL,
+	IsForPurchase BIT NOT NULL
 )
 
 CREATE TABLE Counterparties
@@ -49,8 +51,8 @@ CREATE TABLE Transactions
 	UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
 	AccountId INT NOT NULL FOREIGN KEY REFERENCES Accounts(Id),
 	CounterpartyId INT FOREIGN KEY REFERENCES Counterparties(Id),
-	Amount INT NOT NULL,
-	TransactionDate DATE NOT NULL,
+	Amount MONEY NOT NULL,
+	TransactionDate DATETIME NOT NULL,
 	Note NVARCHAR(255)
 )
 
@@ -60,7 +62,7 @@ CREATE TABLE InvoiceLines
 	UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
 	TransactionId INT NOT NULL FOREIGN KEY REFERENCES Transactions(Id),
 	ArticleId INT NOT NULL FOREIGN KEY REFERENCES Articles(Id),
-	Price INT NOT NULL,
+	Price MONEY NOT NULL,
 	Note NVARCHAR(255)
 )
 
@@ -70,7 +72,7 @@ CREATE TABLE Snapshots
 	UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
 	AccountId INT NOT NULL FOREIGN KEY REFERENCES Accounts(Id),
 	Amount INT NOT NULL,
-	SnapshotDate DATE NOT NULL,
+	SnapshotDate DATETIME NOT NULL,
 	Note NVARCHAR(255)
 )
 
