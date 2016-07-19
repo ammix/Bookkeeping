@@ -8,6 +8,7 @@ DROP TABLE Snapshots
 DROP TABLE Accounts
 DROP TABLE Counterparties
 DROP TABLE Users
+DROP VIEW MainView
 
 
 CREATE TABLE Users
@@ -21,6 +22,7 @@ CREATE TABLE Accounts
 (
 	Id INT NOT NULL PRIMARY KEY,
 	UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
+	IsActive BIT NOT NULL,
 	Name NVARCHAR(32) NOT NULL,
 	Currency NCHAR(3) NOT NULL,
 	Note NVARCHAR(255)
@@ -76,4 +78,22 @@ CREATE TABLE Snapshots
 	Note NVARCHAR(255)
 )
 
+CREATE VIEW MainView
+AS SELECT
+trs.TransactionDate AS Date,
+cps.Name AS Counterparty,
+ars.Label AS Article,
+trs.Amount,
+ils.Price,
+CONCAT(trs.Note, ils.Note) AS Note,
+acs.Name AS Acount,
+sns.Amount AS Balance,
+acs.Currency
 
+FROM Transactions trs 
+	LEFT OUTER JOIN InvoiceLines ils ON trs.Id = ils.TransactionId
+	LEFT OUTER JOIN Articles ars ON ars.Id = ils.ArticleId
+	INNER JOIN CounterParties cps ON trs.CounterpartyId = cps.Id
+	INNER JOIN Accounts acs ON trs.AccountId = acs.Id
+	INNER JOIN Snapshots sns ON sns.AccountId = trs.AccountId
+WHERE DATEPART(day, sns.SnapshotDate)=1
