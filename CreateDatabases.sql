@@ -24,6 +24,7 @@ CREATE TABLE Accounts
 	UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
 	IsActive BIT NOT NULL,
 	Name NVARCHAR(32) NOT NULL,
+	Balance MONEY NOT NULL,
 	Currency NCHAR(3) NOT NULL,
 	Note NVARCHAR(255)
 )
@@ -78,22 +79,23 @@ CREATE TABLE Snapshots
 	Note NVARCHAR(255)
 )
 
+GO
+
 CREATE VIEW MainView
 AS SELECT
-trs.TransactionDate AS Date,
-cps.Name AS Counterparty,
-ars.Label AS Article,
-trs.Amount,
-ils.Price,
-CONCAT(trs.Note, ils.Note) AS Note,
-acs.Name AS Acount,
-sns.Amount AS Balance,
-acs.Currency
+t.TransactionDate AS Date,
+c.Name AS Counterparty,
+ar.Label AS Article,
+t.Amount,
+i.Price,
+CONCAT(t.Note, i.Note) AS Note,
+ac.Name AS Acount,
+ac.Balance,
+ac.Currency
 
-FROM Transactions trs 
-	LEFT OUTER JOIN InvoiceLines ils ON trs.Id = ils.TransactionId
-	LEFT OUTER JOIN Articles ars ON ars.Id = ils.ArticleId
-	INNER JOIN CounterParties cps ON trs.CounterpartyId = cps.Id
-	INNER JOIN Accounts acs ON trs.AccountId = acs.Id
-	INNER JOIN Snapshots sns ON sns.AccountId = trs.AccountId
-WHERE DATEPART(day, sns.SnapshotDate)=1
+FROM Transactions t 
+	LEFT OUTER JOIN InvoiceLines i ON i.TransactionId = t.Id
+	LEFT OUTER JOIN Articles ar ON ar.Id = i.ArticleId
+	INNER JOIN CounterParties c ON c.Id = t.CounterpartyId
+	INNER JOIN Accounts ac ON ac.Id = t.AccountId
+
