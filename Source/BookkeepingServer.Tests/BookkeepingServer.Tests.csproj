@@ -102,7 +102,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BookkeepingServer\BookkeepingServer.csproj">
+    <ProjectReference Include="..\BookkeepingServer\BookkeepingServer.csproj">
       <Project>{1CD7536D-4FDE-4909-B1B1-C2FB5264CE08}</Project>
       <Name>BookkeepingServer</Name>
     </ProjectReference>
