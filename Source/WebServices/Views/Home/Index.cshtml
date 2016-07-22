@@ -1,8 +1,20 @@
-﻿@model System.Collections.Generic.IEnumerable<WebServices.Models.Reservation>
+﻿@using WebServices.Models
+
+@model IEnumerable<Reservation>
 
 @{
-	ViewBag.Title = "title";
-	Layout = "_Layout";
+	ViewBag.Title = "Reservations";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Body
+{
+	<div id="summary" class="section panel panel-primary">
+		@Html.Partial("Summary", Model)
+	</div>
+	<div id="editor" class="section panel panel-primary">
+		@Html.Partial("Editor", new Reservation())
+	</div>
 }
 
 <h2>title</h2>
