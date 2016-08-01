@@ -8,6 +8,27 @@
 }
 
 @section Scripts {
+	<script>
+		var model = {
+			reservations: ko.observableArray()
+		};
+
+		function sendAjaxRequest(httpMethod, callback, url) {
+			$.ajax("/api/web" + (url ? "/" + url : ""), {
+				type: httpMethod, success: callback
+			});
+		}
+
+		function getAllItems() {
+			sendAjaxRequest("GET", function(data) {
+				model.reservations.removeAll();
+				for (var i = 0; i < data.Length; i++) {
+					model.reservations.push(data[i]);
+				}
+			});
+		}
+
+	</script>
 }
 
 @section Body
