@@ -28,15 +28,29 @@
 			});
 		}
 
+		function removeItem(item) {
+			sendAjaxRequest("DELETE", function() {
+				getAllItems();
+			}, item.ReservationId);
+		};
+
+		$(document).ready(function() {
+			getAllItems();
+			ko.applyBindings(model);
+		});
 	</script>
 }
 
 @section Body
 {
 	<div id="summary" class="section panel panel-primary">
-		@Html.Partial("Summary", Model)
+		<div class="panel-heading">Reservation Summary</div>
 	</div>
-	<div id="editor" class="section panel panel-primary">
-		@Html.Partial("Editor", new Reservation())
-	</div>
+
+	@*<div id="summary" class="section panel panel-primary">
+			@Html.Partial("Summary", Model)
+		</div>
+		<div id="editor" class="section panel panel-primary">
+			@Html.Partial("Editor", new Reservation())
+		</div>*@
 }
