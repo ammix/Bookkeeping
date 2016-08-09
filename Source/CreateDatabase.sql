@@ -86,9 +86,9 @@ AS SELECT
 t.TransactionDate AS Date,
 c.Name AS Counterparty,
 ar.Label AS Article,
-t.Amount,
 i.Price,
 CONCAT(t.Note, i.Note) AS Note,
+t.Amount,
 ac.Name AS Acount,
 ac.Balance,
 ac.Currency

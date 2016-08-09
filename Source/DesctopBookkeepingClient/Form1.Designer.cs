@@ -35,8 +35,8 @@
 			this.olvColumn14 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.olvColumn15 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.olvColumn16 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.imageList = new System.Windows.Forms.ImageList(this.components);
 			this.olvColumn1 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.imageList = new System.Windows.Forms.ImageList(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.treeListView)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -75,7 +75,7 @@
 			// 
 			// olvColumn12
 			// 
-			this.olvColumn12.AspectName = "Date";
+			this.olvColumn12.AspectName = "ColumnWithHierarchy";
 			this.olvColumn12.Text = "Дата";
 			this.olvColumn12.Width = 208;
 			// 
@@ -105,16 +105,16 @@
 			this.olvColumn16.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.olvColumn16.Width = 120;
 			// 
+			// olvColumn1
+			// 
+			this.olvColumn1.AspectName = "Currency";
+			this.olvColumn1.Text = "Валюта";
+			// 
 			// imageList
 			// 
 			this.imageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
 			this.imageList.ImageSize = new System.Drawing.Size(16, 16);
 			this.imageList.TransparentColor = System.Drawing.Color.Transparent;
-			// 
-			// olvColumn1
-			// 
-			this.olvColumn1.AspectName = "Currency";
-			this.olvColumn1.Text = "Валюта";
 			// 
 			// Form1
 			// 
