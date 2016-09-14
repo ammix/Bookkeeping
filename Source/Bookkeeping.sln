@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServices", "WebServices\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookkeepingServer", "BookkeepingServer\BookkeepingServer.csproj", "{2C79824B-DD84-4D52-BEF2-81BDA196CEEB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "HelloWorld\HelloWorld.csproj", "{4F9B7CCB-B8BB-4D09-B7B9-53CAC84EBC24}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2C79824B-DD84-4D52-BEF2-81BDA196CEEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C79824B-DD84-4D52-BEF2-81BDA196CEEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C79824B-DD84-4D52-BEF2-81BDA196CEEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F9B7CCB-B8BB-4D09-B7B9-53CAC84EBC24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F9B7CCB-B8BB-4D09-B7B9-53CAC84EBC24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F9B7CCB-B8BB-4D09-B7B9-53CAC84EBC24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F9B7CCB-B8BB-4D09-B7B9-53CAC84EBC24}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

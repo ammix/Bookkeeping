@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
+using RestSharp;
 
 namespace DesktopBookkeepingClient
 {
@@ -38,6 +39,12 @@ namespace DesktopBookkeepingClient
         public List<TransactionView> Children;
 		public bool HasChildren => Children != null && Children.Count != 0;
 
+
+		//public static List<TransactionView> GetTransactionsFromRemoteDb()
+		//{
+		//	var client = new RestClient("http://http://money.somee.com/");
+
+		//}
 
 		public static List<TransactionView> GetTransactionsFromDb()
 		{
