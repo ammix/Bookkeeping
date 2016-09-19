@@ -40,11 +40,16 @@ namespace DesktopBookkeepingClient
 		public bool HasChildren => Children != null && Children.Count != 0;
 
 
-		//public static List<TransactionView> GetTransactionsFromRemoteDb()
-		//{
-		//	var client = new RestClient("http://http://money.somee.com/");
+		public static List<TransactionView> GetTransactionsFromRemoteDb()
+		{
+			var client = new RestClient("http://money.somee.com/");
+			var request = new RestRequest("api/transactions");
 
-		//}
+			IRestResponse response = client.Get(request);
+			var content = response.Content;
+
+			return null;
+		}
 
 		public static List<TransactionView> GetTransactionsFromDb()
 		{
