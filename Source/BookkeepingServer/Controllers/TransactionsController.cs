@@ -3,18 +3,26 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Web.Http;
+using Newtonsoft.Json;
 
 namespace BookkeepingServer.Controllers
 {
 	public class TransactionView
 	{
 		// Date, Counterparty, InvoiceLine
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string ColumnWithHierarchy;
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string Amount;
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string Comment;
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string Acount;
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string Balance;
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string Currency;
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public List<TransactionView> Children;
 	}
 
