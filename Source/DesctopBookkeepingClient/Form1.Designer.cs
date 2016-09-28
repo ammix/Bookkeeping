@@ -124,6 +124,7 @@
 			this.Controls.Add(this.treeListView);
 			this.Name = "Form1";
 			this.Text = "Form1";
+			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			((System.ComponentModel.ISupportInitialize)(this.treeListView)).EndInit();
 			this.ResumeLayout(false);
 

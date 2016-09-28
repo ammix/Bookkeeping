@@ -16,15 +16,15 @@ namespace DesktopBookkeepingClient
 		private void InitializeTreeListView()
 		{
 			treeListView.CanExpandGetter = model => ((TransactionView)model).HasChildren;
-			treeListView.ChildrenGetter = model => ((TransactionView) model).Children;
+			treeListView.ChildrenGetter = model => ((TransactionView)model).Children;
 			var q = TransactionView.GetTransactionsFromRemoteDb();
 			var w = TransactionView.GetTransactions();
 			treeListView.Roots = TransactionView.GetTransactionsFromDb();
 
-            treeListView.TreeColumnRenderer.IsShowLines = false;
-            treeListView.TreeColumnRenderer.UseTriangles = true;
-            treeListView.FullRowSelect = true;
-            treeListView.UseCellFormatEvents = true;
+			treeListView.TreeColumnRenderer.IsShowLines = false;
+			treeListView.TreeColumnRenderer.UseTriangles = true;
+			treeListView.FullRowSelect = true;
+			treeListView.UseCellFormatEvents = true;
 		}
 
 
@@ -59,7 +59,7 @@ namespace DesktopBookkeepingClient
 
 		private void treeListView_FormatRow(object sender, FormatRowEventArgs e)
 		{
-			var row = (TransactionView) e.Model;
+			var row = (TransactionView)e.Model;
 			var font = e.Item.Font;
 
 			if (row.Acount != null)
