@@ -3,6 +3,7 @@ using System.Data;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
+using Newtonsoft.Json;
 using RestSharp;
 
 namespace DesktopBookkeepingClient
@@ -49,7 +50,7 @@ namespace DesktopBookkeepingClient
 			IRestResponse response = client.Get(request);
 			var content = response.Content;
 
-			return null;
+			---> return JsonConvert.DeserializeObject<List<TransactionView>>(content);
 		}
 
         static string GetValue(IDataReader dr, string fieldName)
@@ -62,7 +63,7 @@ namespace DesktopBookkeepingClient
 		{
 			var transactions = new List<TransactionView>();
 			//var connectionString = "workstation id=Bookkeeping.mssql.somee.com;packet size=4096;user id=ammix_SQLLogin_1;pwd=8h1c8vsmnk;data source=Bookkeeping.mssql.somee.com;persist security info=False;initial catalog=Bookkeeping";
-			var connectionString = "data source=localhost;initial catalog=Bookkeeping;uid=sa;pwd=1";
+			var connectionString = "data source=localhost;initial catalog=Bookkeeping;user=sa;password=sys1nt3rn@ls";
 			var culture = CultureInfo.GetCultureInfo("uk-UA");
 
 			using (var connection = new SqlConnection(connectionString))

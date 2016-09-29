@@ -1,42 +1,24 @@
 ﻿using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Web.Http;
-using Newtonsoft.Json;
+using BookkeepingServer.Views;
 
 namespace BookkeepingServer.Controllers
 {
-	public class TransactionView
-	{
-		// Date, Counterparty, InvoiceLine
-		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public string ColumnWithHierarchy;
-		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public string Amount;
-		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public string Comment;
-		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public string Acount;
-		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public string Balance;
-		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public string Currency;
-		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public List<TransactionView> Children;
-	}
-
 	public class TransactionsController : ApiController
 	{
-		public IEnumerable<TransactionView> GetTransactions()
+		public IEnumerable<FinPeriod> GetTransactions()
 		{
 			return GetTransactionsFromDb();
 		}
 
 		#region repository access
-		static List<TransactionView> GetTransactionsFromDb()
+		static IEnumerable<FinPeriod> GetTransactionsFromDb()
 		{
-			var transactions = new List<TransactionView>();
+			var finPeriods = new List<FinPeriod>();
 
 			var connectionString = "workstation id=Bookkeeping.mssql.somee.com;packet size=4096;user id=ammix_SQLLogin_1;pwd=8h1c8vsmnk;data source=Bookkeeping.mssql.somee.com;persist security info=False;initial catalog=Bookkeeping";
 			var culture = CultureInfo.GetCultureInfo("uk-UA");
@@ -52,71 +34,80 @@ namespace BookkeepingServer.Controllers
 					{
 						var date = ((DateTime)dr["Date"]).ToString(culture.DateTimeFormat.ShortDatePattern, culture);
 						var counterparty = dr["Counterparty"].ToString();
-						var article = dr["Article"].ToString();
-						var price = dr["Price"].ToString();
-						var lineNote = (dr["LineNote"] is DBNull) ? null : dr["LineNote"].ToString();
-						var note = (dr["Note"] is DBNull) ? null : dr["Note"].ToString();
+						var article = GetValue(dr, "Article");
+						var price = GetValue(dr, "Price");
+						var transacNote = GetValue(dr, "Note");
+						var lineNote = GetValue(dr, "LineNote");
 						var amount = dr["Amount"].ToString();
 						var acount = dr["Acount"].ToString();
 						var balance = dr["Balance"].ToString();
 						var currency = dr["Currency"].ToString();
 
-						if (transactions.Exists(x => x.ColumnWithHierarchy == date))
+						if (finPeriods.Exists(x => x.Date == date))
 						{
-							var transaction = transactions.Find(x => x.ColumnWithHierarchy == date);
-							if (transaction.Children.Exists(x => x.ColumnWithHierarchy == counterparty))
+							var finPeriod = finPeriods.Find(x => x.Date == date);
+							if (finPeriod.FinTransactions.Exists(x => x.Counterparty == counterparty))
 							{
-								var invoiceLine = transaction.Children.Find(x => x.ColumnWithHierarchy == counterparty);
-								invoiceLine.Children.Add(GetItem(article, price, lineNote));
+								if (article != null)
+								{
+									var finTransaction = finPeriod.FinTransactions.Find(x => x.Counterparty == counterparty);
+									finTransaction.InvoiceLines.Add(CreateInvoiceLineView(article, price, lineNote));
+								}
 							}
 							else
 							{
-								transaction.Children.Add(GetItem(counterparty, article, price, lineNote, note, amount, acount, balance, currency));
+								finPeriod.FinTransactions.Add(CreateFinTransactionView(counterparty, article, price, lineNote, transacNote, amount, acount, balance, currency));
 							}
 						}
 						else
 						{
-							transactions.Add(GetItem(date, counterparty, article, price, lineNote, note, amount, acount, balance, currency));
+							finPeriods.Add(CreateFinPeriodView(date, counterparty, article, price, lineNote, transacNote, amount, acount, balance, currency));
 						}
 					}
 				}
 			}
 
-			return transactions;
+			return finPeriods;
 		}
 
-		static TransactionView GetItem(string date, string counterparty, string article, string price, string lineNote, string note, string amount, string acount, string balance, string currency)
+		static FinPeriod CreateFinPeriodView(string date, string counterparty, string article, string price, string lineNote, string note, string amount, string account, string balance, string currency)
 		{
-			return new TransactionView
+			return new FinPeriod
 			{
-				ColumnWithHierarchy = date,
-				Children = new List<TransactionView> { GetItem(counterparty, article, price, lineNote, note, amount, acount, balance, currency) }
+				Date = date,
+				FinTransactions = new List<FinTransaction> { CreateFinTransactionView(counterparty, article, price, lineNote, note, amount, account, balance, currency) }
 			};
 		}
 
-		static TransactionView GetItem(string counterparty, string article, string price, string lineNote, string note, string amount, string acount, string balance, string currency)
+		static FinTransaction CreateFinTransactionView(string counterparty, string article, string price, string lineNote, string note, string amount, string account, string balance, string currency)
 		{
-			return new TransactionView
+			return new FinTransaction
 			{
-				ColumnWithHierarchy = counterparty,
+				Counterparty = counterparty,
 				Amount = amount,
-				Acount = acount,
+				Account = account,
 				Balance = balance,
 				Currency = currency,
-				Comment = note,
-				Children = new List<TransactionView> { GetItem(article, price, lineNote) }
+				Note = note,
+				InvoiceLines = (article != null) ? new List<InvoiceLine> { CreateInvoiceLineView(article, price, lineNote) } : null
 			};
 		}
 
-		static TransactionView GetItem(string article, string price, string lineNote)
+		static InvoiceLine CreateInvoiceLineView(string article, string price, string note)
 		{
-			return new TransactionView
+			return new InvoiceLine
 			{
-				ColumnWithHierarchy = article,
-				Amount = price,
-				Comment = lineNote
+				Article = article,
+				Price = price,
+				Note = note
 			};
 		}
-	#endregion
+
+		static string GetValue(IDataRecord dr, string fieldName)
+		{
+			var field = dr[fieldName];
+			return (field is DBNull) ? null : field.ToString();
+		}
+		#endregion
 	}
 }

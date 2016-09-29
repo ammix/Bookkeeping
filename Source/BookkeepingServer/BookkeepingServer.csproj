@@ -114,6 +114,9 @@
     </Compile>
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\FinPeriod.cs" />
+    <Compile Include="Views\FinTransaction.cs" />
+    <Compile Include="Views\InvoiceLine.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
