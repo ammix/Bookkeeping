@@ -10,6 +10,7 @@ namespace BookkeepingServer.Controllers
 {
 	public class TransactionsController : ApiController
 	{
+		// api/transactions/{month}
 		public IEnumerable<FinPeriod> GetTransactions()
 		{
 			return GetTransactionsFromDb();
@@ -42,15 +43,18 @@ namespace BookkeepingServer.Controllers
 						var acount = dr["Acount"].ToString();
 						var balance = dr["Balance"].ToString();
 						var currency = dr["Currency"].ToString();
+						var id = dr["Id"].ToString();
 
 						if (finPeriods.Exists(x => x.Date == date))
 						{
 							var finPeriod = finPeriods.Find(x => x.Date == date);
-							if (finPeriod.FinTransactions.Exists(x => x.Counterparty == counterparty))
+							//if (finPeriod.FinTransactions.Exists(x => x.Counterparty == counterparty))
+							if (finPeriod.FinTransactions.Exists(x => x.Id == id))
 							{
 								if (article != null)
 								{
-									var finTransaction = finPeriod.FinTransactions.Find(x => x.Counterparty == counterparty);
+									//var finTransaction = finPeriod.FinTransactions.Find(x => x.Counterparty == counterparty);
+									var finTransaction = finPeriod.FinTransactions.Find(x => x.Id == id);
 									finTransaction.InvoiceLines.Add(CreateInvoiceLineView(article, price, lineNote));
 								}
 							}

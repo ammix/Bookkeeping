@@ -5,6 +5,7 @@ namespace BookkeepingServer.Views
 {
 	public class FinTransaction
 	{
+		public string Id;
 		public string Counterparty;
 		public string Account;
 		public string Amount;

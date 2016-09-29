@@ -17,9 +17,10 @@ namespace DesktopBookkeepingClient
 		{
 			treeListView.CanExpandGetter = model => ((TransactionView)model).HasChildren;
 			treeListView.ChildrenGetter = model => ((TransactionView)model).Children;
-			var q = TransactionView.GetTransactionsFromRemoteDb();
-			var w = TransactionView.GetTransactions();
-			treeListView.Roots = TransactionView.GetTransactionsFromDb();
+			//var q = TransactionView.GetTransactionsFromRemoteDb();
+			//var w = TransactionView.GetTransactions();
+			//treeListView.Roots = TransactionView.GetTransactionsFromDb();
+			treeListView.Roots = Extensions.GetTransactionsFromRemoteDb();
 
 			treeListView.TreeColumnRenderer.IsShowLines = false;
 			treeListView.TreeColumnRenderer.UseTriangles = true;

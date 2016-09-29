@@ -75,7 +75,7 @@
 			// 
 			// olvColumn12
 			// 
-			this.olvColumn12.AspectName = "ColumnWithHierarchy";
+			this.olvColumn12.AspectName = "Hierarchy";
 			this.olvColumn12.Text = "Дата";
 			this.olvColumn12.Width = 208;
 			// 
