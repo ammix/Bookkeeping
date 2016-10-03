@@ -48,24 +48,20 @@ namespace BookkeepingServer.Controllers
 						if (finPeriods.Exists(x => x.Date == date))
 						{
 							var finPeriod = finPeriods.Find(x => x.Date == date);
-							//if (finPeriod.FinTransactions.Exists(x => x.Counterparty == counterparty))
 							if (finPeriod.FinTransactions.Exists(x => x.Id == id))
 							{
-								if (article != null)
-								{
-									//var finTransaction = finPeriod.FinTransactions.Find(x => x.Counterparty == counterparty);
-									var finTransaction = finPeriod.FinTransactions.Find(x => x.Id == id);
+								var finTransaction = finPeriod.FinTransactions.Find(x => x.Id == id);
+								if (article != null || price != null || lineNote != null)
 									finTransaction.InvoiceLines.Add(CreateInvoiceLineView(article, price, lineNote));
-								}
 							}
 							else
 							{
-								finPeriod.FinTransactions.Add(CreateFinTransactionView(counterparty, article, price, lineNote, transacNote, amount, acount, balance, currency));
+								finPeriod.FinTransactions.Add(CreateFinTransactionView(id, date, counterparty, article, price, lineNote, transacNote, amount, acount, balance, currency));
 							}
 						}
 						else
 						{
-							finPeriods.Add(CreateFinPeriodView(date, counterparty, article, price, lineNote, transacNote, amount, acount, balance, currency));
+							finPeriods.Add(CreateFinPeriodView(id, date, counterparty, article, price, lineNote, transacNote, amount, acount, balance, currency));
 						}
 					}
 				}
@@ -74,19 +70,21 @@ namespace BookkeepingServer.Controllers
 			return finPeriods;
 		}
 
-		static FinPeriod CreateFinPeriodView(string date, string counterparty, string article, string price, string lineNote, string note, string amount, string account, string balance, string currency)
+		static FinPeriod CreateFinPeriodView(string id, string date, string counterparty, string article, string price, string lineNote, string note, string amount, string account, string balance, string currency)
 		{
 			return new FinPeriod
 			{
 				Date = date,
-				FinTransactions = new List<FinTransaction> { CreateFinTransactionView(counterparty, article, price, lineNote, note, amount, account, balance, currency) }
+				FinTransactions = new List<FinTransaction> { CreateFinTransactionView(id, date, counterparty, article, price, lineNote, note, amount, account, balance, currency) }
 			};
 		}
 
-		static FinTransaction CreateFinTransactionView(string counterparty, string article, string price, string lineNote, string note, string amount, string account, string balance, string currency)
+		static FinTransaction CreateFinTransactionView(string id, string time, string counterparty, string article, string price, string lineNote, string note, string amount, string account, string balance, string currency)
 		{
 			return new FinTransaction
 			{
+				Id = id,
+				Time = time,
 				Counterparty = counterparty,
 				Amount = amount,
 				Account = account,
