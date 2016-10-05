@@ -57,6 +57,7 @@ CREATE TABLE Transactions
 	Amount MONEY NOT NULL,
 	TransactionDate DATETIME NOT NULL,
 	Note NVARCHAR(255)
+	Invoice
 )
 
 CREATE TABLE InvoiceLines

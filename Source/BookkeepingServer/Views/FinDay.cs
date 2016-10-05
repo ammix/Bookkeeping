@@ -2,9 +2,9 @@
 
 namespace BookkeepingServer.Views
 {
-	public class FinPeriod
+	public class FinDay
 	{
-		public string Date; //Period
+		public string Date;
 		public List<FinTransaction> FinTransactions;
 	}
 }

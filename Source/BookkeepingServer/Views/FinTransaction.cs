@@ -5,7 +5,8 @@ namespace BookkeepingServer.Views
 {
 	public class FinTransaction
 	{
-		public string Id;
+		[JsonIgnore]
+		public int Id;
 		public string Time;
 		public string Counterparty;
 		public string Account;
