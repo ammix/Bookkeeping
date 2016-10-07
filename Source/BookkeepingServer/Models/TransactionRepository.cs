@@ -26,7 +26,7 @@ namespace BookkeepingServer.Models
 		IDataReader dr;
 		readonly string connectionString = ConfigurationManager.ConnectionStrings["RemoteSqlServer"].ConnectionString;
 
-		public IEnumerable<FinDay> GetTransactionsFromDb(int month)
+		public IEnumerable<FinDay> GetTransactions(int month)
 		{
 			var finDays = new List<FinDay>();
 			var culture = CultureInfo.GetCultureInfo("uk-UA");

@@ -12,7 +12,7 @@ namespace BookkeepingServer.Controllers
 		// api/transactions/{month}
 		public IEnumerable<FinDay> GetTransactions(int month)
 		{
-			return repository.GetTransactionsFromDb(month);
+			return repository.GetTransactions(month);
 		}
 	}
 }
