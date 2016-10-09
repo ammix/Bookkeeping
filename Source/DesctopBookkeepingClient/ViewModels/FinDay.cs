@@ -2,7 +2,7 @@
 
 namespace DesktopBookkeepingClient
 {
-	public class FinPeriod
+	public class FinDay
 	{
 		public string Date;
 		public List<FinTransaction> FinTransactions;

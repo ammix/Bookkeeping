@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using BookkeepingServer.Views;
+using BookkeepingServer.Controllers;
 
 namespace BookkeepingServer.Models
 {
@@ -17,16 +18,16 @@ namespace BookkeepingServer.Models
 		string article;
 		string price;
 		string note;
-		string comment;
-		string amount;
+        string comment;
+        string amount;
 		string account;
 		string balance;
 		string currency;
 
 		IDataReader dr;
-		readonly string connectionString = ConfigurationManager.ConnectionStrings["RemoteSqlServer"].ConnectionString;
+		string connectionString = ConfigurationManager.ConnectionStrings["RemoteSqlServer"].ConnectionString;
 
-		public IEnumerable<FinDay> GetTransactions(int month)
+        public IEnumerable<FinDay> GetTransactions(int month)
 		{
 			var finDays = new List<FinDay>();
 			var culture = CultureInfo.GetCultureInfo("uk-UA");
@@ -34,7 +35,7 @@ namespace BookkeepingServer.Models
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				var cmdText = $"SELECT * FROM MainView WHERE DATEPART(month, [DATE]) = {month}";
+                var cmdText = $"SELECT * FROM MainView WHERE DATEPART(month, [DATE]) = {month} ORDER BY [Id] DESC";
 				var command = new SqlCommand(cmdText, connection);
 				using (dr = command.ExecuteReader())
 				{
@@ -46,12 +47,12 @@ namespace BookkeepingServer.Models
 						time = dateTime.ToString(culture.DateTimeFormat.ShortTimePattern, culture);
 						counterparty = GetValue("Counterparty");
 						article = GetValue("Article");
-						price = GetValue("Price");
+						price = $"{GetValue("Price"):N}";
 						note = GetValue("Note");
-						comment = GetValue("LineNote");
-						amount = GetValue("Amount");
+						comment = GetValue("Comment");
+						amount = $"{GetValue("Amount"):N}";
 						account = GetValue("Account");
-						balance = GetValue("Balance");
+						balance = $"{GetValue("Balance"):N}";
 						currency = GetValue("Currency");
 
 						if (finDays.Exists(x => x.Date == date))
@@ -60,7 +61,7 @@ namespace BookkeepingServer.Models
 							if (finPeriod.FinTransactions.Exists(x => x.Id == id))
 							{
 								var finTransaction = finPeriod.FinTransactions.Find(x => x.Id == id);
-								if (article != null || price != null || comment != null)
+								if (article != null || price != null || note != null)
 									finTransaction.InvoiceLines.Add(CreateInvoiceLineView());
 							}
 							else
@@ -99,16 +100,16 @@ namespace BookkeepingServer.Models
 				Account = account,
 				Balance = balance,
 				Currency = currency,
-				Note = note,
+				Note = comment,
 				InvoiceLines = (article != null) ? new List<InvoiceLine> { CreateInvoiceLineView() } : null
 			};
 		}
 
 		InvoiceLine CreateInvoiceLineView()
 		{
-			return new InvoiceLine
-			{
-				Article = article,
+            return new InvoiceLine
+            {
+                Article = "• " + article,
 				Price = price,
 				Note = note
 			};
@@ -117,7 +118,7 @@ namespace BookkeepingServer.Models
 		string GetValue(string fieldName)
 		{
 			var field = dr[fieldName];
-			return (field is DBNull) ? null : field.ToString();
+			return (field is DBNull) ? null : field.ToString(); //"N"
 		}
 	}
 }

@@ -56,8 +56,8 @@ CREATE TABLE Transactions
 	CounterpartyId INT FOREIGN KEY REFERENCES Counterparties(Id),
 	Amount MONEY NOT NULL,
 	TransactionDate DATETIME NOT NULL,
+	Invoice VARBINARY(MAX),
 	Note NVARCHAR(255)
-	Invoice
 )
 
 CREATE TABLE InvoiceLines
@@ -84,14 +84,15 @@ GO
 
 CREATE VIEW MainView
 AS SELECT
+t.Id,
 t.TransactionDate AS Date,
 c.Name AS Counterparty,
 ar.Label AS Article,
 i.Price,
-i.Note AS LineNote,
-t.Note AS Note,
+i.Note AS Note,
+t.Note AS Comment,
 t.Amount,
-ac.Name AS Acount,
+ac.Name AS Account,
 ac.Balance,
 ac.Currency
 

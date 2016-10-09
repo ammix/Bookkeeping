@@ -14,5 +14,5 @@ namespace BookkeepingServer.Controllers
 		{
 			return repository.GetTransactions(month);
 		}
-	}
+    }
 }
