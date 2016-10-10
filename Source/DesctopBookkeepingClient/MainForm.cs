@@ -37,11 +37,29 @@ namespace DesktopBookkeepingClient
 			//e.SubItem.Decoration = decoration;
 			//e.SubItem.CellPadding = 
 
+            if (e.ColumnIndex == 0)
+            {
+                var model = (TransactionView)e.Model;
+                if (model.Balance == null && !model.HasChildren)
+                    e.SubItem.Text = "• " + e.SubItem.Text;
+            }
+
 			if (e.ColumnIndex == 1)
 			{
 				var model = (TransactionView)e.Model;
-				if (model.Amount != null && model.Acount != null)
-					e.SubItem.ForeColor = double.Parse(model.Amount) < 0 ? Color.Red : Color.Green;
+                if (model.Amount != null && model.Acount != null)
+                    e.SubItem.ForeColor = double.Parse(model.Amount) < 0 ? Color.Red : Color.Green;
+                else
+                {
+                    var font = e.Item.Font;
+                    e.SubItem.Font = new Font(font.Name, font.Size, FontStyle.Regular);
+                    e.SubItem.Text += "   ";
+                    //e.SubItem.ForeColor = Color.Gray;
+                    //e.Item
+                    //var cellPadding = e.SubItem.CellPadding;
+                    //cellPadding.Value.X += 10;
+                    //e.SubItem.CellPadding = cellPadding;
+                }
 			}
 			if (e.ColumnIndex == 2)
 			{
@@ -60,12 +78,22 @@ namespace DesktopBookkeepingClient
 			var row = (TransactionView)e.Model;
 			var font = e.Item.Font;
 
-			if (row.Acount != null)
-			{
-				e.Item.Font = new Font(font.Name, font.Size, FontStyle.Bold);
-			}
+            //if (row.Acount != null)
+            //{
+            //	e.Item.Font = new Font(font.Name, font.Size, FontStyle.Bold);
+            //}
 
-			if (row.Amount == null)
+            if (row.Balance == null && !row.HasChildren)
+            {
+                e.Item.ForeColor = Color.Gray;
+            }
+
+            if (row.Balance == null && row.HasChildren)
+            {
+                e.Item.BackColor = Color.WhiteSmoke;
+            }
+
+            if (row.Amount == null)
 			{
 				e.Item.Font = new Font(font.Name, font.Size, FontStyle.Regular | FontStyle.Underline);
 				e.Item.ForeColor = Color.Blue;

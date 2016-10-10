@@ -118,7 +118,7 @@ namespace BookkeepingServer.Models
 		string GetValue(string fieldName)
 		{
 			var field = dr[fieldName];
-			return (field is DBNull) ? null : field.ToString(); //"N"
+			return (field is DBNull) ? null : field.ToString();
 		}
 	}
 }

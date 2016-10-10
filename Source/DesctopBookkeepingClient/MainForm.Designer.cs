@@ -86,7 +86,7 @@
             this.treeListView.Location = new System.Drawing.Point(0, 0);
             this.treeListView.Name = "treeListView";
             this.treeListView.ShowGroups = false;
-            this.treeListView.Size = new System.Drawing.Size(1153, 426);
+            this.treeListView.Size = new System.Drawing.Size(1153, 400);
             this.treeListView.SmallImageList = this.imageList;
             this.treeListView.TabIndex = 1;
             this.treeListView.UseCompatibleStateImageBehavior = false;
@@ -106,7 +106,7 @@
             this.olvColumn13.AspectName = "Amount";
             this.olvColumn13.Text = "Сума";
             this.olvColumn13.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.olvColumn13.Width = 192;
+            this.olvColumn13.Width = 146;
             // 
             // olvColumn14
             // 
@@ -147,10 +147,10 @@
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tabControl1.Location = new System.Drawing.Point(0, 49);
+            this.tabControl1.Location = new System.Drawing.Point(0, 81);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1167, 562);
+            this.tabControl1.Size = new System.Drawing.Size(1167, 530);
             this.tabControl1.TabIndex = 2;
             // 
             // tabPage1
@@ -159,7 +159,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1159, 533);
+            this.tabPage1.Size = new System.Drawing.Size(1159, 501);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -175,16 +175,16 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.treeListView);
-            this.splitContainer1.Size = new System.Drawing.Size(1153, 527);
-            this.splitContainer1.SplitterDistance = 426;
+            this.splitContainer1.Size = new System.Drawing.Size(1153, 495);
+            this.splitContainer1.SplitterDistance = 400;
             this.splitContainer1.TabIndex = 2;
             // 
             // tabPage2
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(425, 199);
+            this.tabPage2.Size = new System.Drawing.Size(1159, 533);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -200,7 +200,7 @@
             this.toolStripLabel1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1167, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1167, 57);
             this.toolStrip1.TabIndex = 3;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -210,7 +210,7 @@
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Size = new System.Drawing.Size(54, 54);
             this.toolStripButton1.Text = "toolStripButton1";
             // 
             // toolStripButton2
@@ -219,23 +219,23 @@
             this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
             this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton2.Size = new System.Drawing.Size(54, 54);
             this.toolStripButton2.Text = "toolStripButton2";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 57);
             // 
             // toolStripComboBox1
             // 
             this.toolStripComboBox1.Name = "toolStripComboBox1";
-            this.toolStripComboBox1.Size = new System.Drawing.Size(121, 25);
+            this.toolStripComboBox1.Size = new System.Drawing.Size(121, 57);
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(86, 22);
+            this.toolStripLabel1.Size = new System.Drawing.Size(86, 54);
             this.toolStripLabel1.Text = "toolStripLabel1";
             // 
             // menuStrip1

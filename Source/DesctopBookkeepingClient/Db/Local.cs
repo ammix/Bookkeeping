@@ -27,7 +27,7 @@ namespace DesktopBookkeepingClient
 						var date = ((DateTime)dr["Date"]).ToString(culture.DateTimeFormat.ShortDatePattern, culture);
 						var counterparty = dr["Counterparty"].ToString();
 						var article = GetValue(dr, "Article");
-						var price = $"{GetValue(dr, "Price"):N}";
+						var price = GetValue(dr, "Price");
 						var lineNote = GetValue(dr, "Note");
 						var note = GetValue(dr, "Comment");
                         var amount = $"{dr["Amount"]:N}";
@@ -89,7 +89,7 @@ namespace DesktopBookkeepingClient
 		{
 			return new TransactionView
 			{
-				Counterparty = "• " + article,
+				Counterparty = article,
 				Amount = price,
 				Comment = lineNote
 			};
@@ -98,7 +98,10 @@ namespace DesktopBookkeepingClient
         static string GetValue(IDataReader dr, string fieldName)
         {
             var field = dr[fieldName];
-            return (field is DBNull) ? null : field.ToString();
+            if (field.GetType().ToString() == "System.String")
+                return (field is DBNull) ? null : field.ToString();
+            else
+                return (field is DBNull) ? null : ((decimal)field).ToString("N");
         }
     }
 }
