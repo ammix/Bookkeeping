@@ -48,7 +48,7 @@ namespace DesktopBookkeepingClient
 			{
 				var model = (TransactionView)e.Model;
                 if (model.Amount != null && model.Acount != null)
-                    e.SubItem.ForeColor = double.Parse(model.Amount) < 0 ? Color.Red : Color.Green;
+                    e.SubItem.ForeColor = double.Parse(model.Amount) < 0 ? Color.DeepPink : Color.Green;
                 else
                 {
                     var font = e.Item.Font;
@@ -61,17 +61,27 @@ namespace DesktopBookkeepingClient
                     //e.SubItem.CellPadding = cellPadding;
                 }
 			}
-			if (e.ColumnIndex == 2)
-			{
-				var font = e.Item.Font;
-				e.SubItem.Font = new Font(font.Name, font.Size, FontStyle.Regular);
-			}
-			if (e.ColumnIndex == 3)
-			{
-				var font = e.Item.Font;
-				e.SubItem.Font = new Font(font.Name, font.Size, FontStyle.Regular);
-			}
-		}
+
+            //if (e.ColumnIndex == 5)
+            //{
+            //    var font = e.Item.Font;
+            //    //e.SubItem.Font = new Font(font.Name, font.Size, FontStyle.Regular);
+            //    e.SubItem.ForeColor = Color.Gray;
+            //}
+
+            //if (e.ColumnIndex == 3)
+            //{
+            //	var font = e.Item.Font;
+            //	e.SubItem.Font = new Font(font.Name, font.Size, FontStyle.Bold);
+            //}
+
+            if (e.ColumnIndex == 4)
+            {
+                var font = e.Item.Font;
+                //e.SubItem.Font = new Font(font.Name, font.Size, FontStyle.Bold);
+                e.SubItem.ForeColor = Color.Gray;
+            }
+        }
 
 		private void treeListView_FormatRow(object sender, FormatRowEventArgs e)
 		{
@@ -90,7 +100,7 @@ namespace DesktopBookkeepingClient
 
             if (row.Balance == null && row.HasChildren)
             {
-                e.Item.BackColor = Color.WhiteSmoke;
+                e.Item.BackColor = Color.LightGray; // WhiteSmoke;
             }
 
             if (row.Amount == null)

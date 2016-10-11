@@ -5,6 +5,7 @@ namespace DesktopBookkeepingClient
 	class TransactionView
 	{
 		public string Counterparty;        // Date, Counterparty, InvoiceLine
+        public string Time;
 		public List<TransactionView> Nodes;
 		public string Amount;
 		public string Comment;

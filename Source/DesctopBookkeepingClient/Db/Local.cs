@@ -76,6 +76,7 @@ namespace DesktopBookkeepingClient
 			return new TransactionView
 			{
 				Counterparty = counterparty,
+                Time = "12:00",
 				Amount = amount,
 				Acount = acount,
 				Balance = balance,
