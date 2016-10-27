@@ -48,12 +48,15 @@ namespace DesktopBookkeepingClient
 			{
 				var model = (TransactionView)e.Model;
                 if (model.Amount != null && model.Acount != null)
+                {
                     e.SubItem.ForeColor = double.Parse(model.Amount) < 0 ? Color.DeepPink : Color.Green;
+                    //e.SubItem.Text += "  ";
+                }
                 else
                 {
                     var font = e.Item.Font;
-                    e.SubItem.Font = new Font(font.Name, font.Size, FontStyle.Regular);
-                    e.SubItem.Text += "   ";
+                    e.SubItem.Font = new Font(font.Name, font.Size - 1, FontStyle.Regular);
+                    //e.SubItem.Text += "   ";
                     //e.SubItem.ForeColor = Color.Gray;
                     //e.Item
                     //var cellPadding = e.SubItem.CellPadding;
@@ -80,6 +83,13 @@ namespace DesktopBookkeepingClient
                 var font = e.Item.Font;
                 //e.SubItem.Font = new Font(font.Name, font.Size, FontStyle.Bold);
                 e.SubItem.ForeColor = Color.Gray;
+            }
+
+            if (e.ColumnIndex == 5)
+            {
+                var font = e.Item.Font;
+                //e.SubItem.Font = new Font(font.Name, font.Size, FontStyle.Bold);
+                e.SubItem.ForeColor = Color.LightGray;
             }
         }
 
@@ -109,6 +119,11 @@ namespace DesktopBookkeepingClient
 				e.Item.ForeColor = Color.Blue;
 			}
 		}
-	}
+
+        private void toolStripTextBox1_Click(object sender, System.EventArgs e)
+        {
+
+        }
+    }
 
 }

@@ -64,6 +64,12 @@
   <ItemGroup>
     <Compile Include="Db\Local.cs" />
     <Compile Include="Db\Remote.cs" />
+    <Compile Include="InputWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InputWindow.Designer.cs">
+      <DependentUpon>InputWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
