@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookkeepingServer.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopBookkepingClient.Tests", "DesktopBookkepingClient.Tests\DesktopBookkepingClient.Tests.csproj", "{AE96A485-702E-4809-A12E-CD84178E66B8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookkeepingServerChecker", "BookkeepingServerChecker\BookkeepingServerChecker.csproj", "{CF2797FA-695E-4962-A8CE-59D3C5530444}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{AE96A485-702E-4809-A12E-CD84178E66B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE96A485-702E-4809-A12E-CD84178E66B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE96A485-702E-4809-A12E-CD84178E66B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF2797FA-695E-4962-A8CE-59D3C5530444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF2797FA-695E-4962-A8CE-59D3C5530444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF2797FA-695E-4962-A8CE-59D3C5530444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF2797FA-695E-4962-A8CE-59D3C5530444}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
