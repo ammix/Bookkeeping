@@ -15,7 +15,7 @@ namespace Privat24Module
 
     public class payment
     {
-        [XmlAttribute("id")] public string Id;
+	    [XmlAttribute("id")] public string Id = "";
         [XmlElement("prop")] public List<Property> Properties;
     }
 
@@ -40,11 +40,18 @@ namespace Privat24Module
         [XmlElement] public merchant merchant;
         [XmlElement] public data data;
 
-        public Request(int merchantId, DateTime startDate, DateTime endDate, string cardNumber)
+	    public Request() { }
+
+	    public Request(int merchantId, DateTime startDate, DateTime endDate, string cardNumber)
         {
-            
+			
         }
     }
+
+	public class Privat24
+	{
+		
+	}
 
 
     class Program
