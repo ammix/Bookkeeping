@@ -4,6 +4,8 @@ using System.Text;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Xml.Linq;
+using System.Linq;
 
 namespace Privat24Module
 {
@@ -48,11 +50,48 @@ namespace Privat24Module
         }
     }
 
-	public class Privat24
+	public static class Privat24
 	{
-		
+		public static Stream GetRequest(int merchantId, DateTime startDate, DateTime endDate, string cardNumber)
+        {
+            data data = new data
+            {
+                oper = "cmt",
+                wait = "0",
+                test = "0",
+                payment = new payment
+                {
+                    Id = "",
+                    Properties = new List<Property>()
+                        {
+                            new Property {Name = "sd", Value = startDate.ToShortDateString() },
+                            new Property {Name = "ed", Value = endDate.ToShortDateString() },
+                            new Property {Name = "card", Value = cardNumber }
+                        }
+                }
+            };
+
+            return null;
+        }
 	}
 
+    static class Extensions
+    {
+        public static XmlNode GetXmlNode(this XElement element)
+        {
+            using (XmlReader xmlReader = element.CreateReader())
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(xmlReader);
+                return xmlDoc;
+            }
+        }
+
+        public static String InnerXml(this XElement source)
+        {
+            return source.Elements().Select(x => x.ToString(SaveOptions.DisableFormatting)).Aggregate(String.Concat);
+        }
+    }
 
     class Program
     {
@@ -85,35 +124,32 @@ namespace Privat24Module
             };
 
 
+            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+            ns.Add(string.Empty, string.Empty);
 
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
             settings.OmitXmlDeclaration = true;
-            //settings.Encoding = Encoding.UTF8;
+            settings.Encoding = Encoding.UTF8;
 
 
-            //DataContractSerializer serializer = new DataContractSerializer(typeof(payment));
+            XmlSerializer serializer1 = new XmlSerializer(typeof(data));
+            using (var writer = XmlWriter.Create(Console.Out, settings))
+            //using (var writer = new MyXmlTextWriter(Console.Out))
+            {
+                //XmlWriter writer = XmlWriter.Create(ms, settings);
+                serializer1.Serialize(writer, request.data, ns);
 
-            //using (var writer = XmlWriter.Create(Console.Out, settings))
-            ////using (var writer = new MyXmlTextWriter(Console.Out))
-            //{
-            //    //XmlWriter writer = XmlWriter.Create(ms, settings);
-            //    serializer.WriteObject(writer, payment);
+                //writer.
 
-            //    //writer.
-
-            //    ////ms.Position = 0;
-            //    //StreamReader sr = new StreamReader(ms);
-            //    //string str = sr.ReadToEnd();
-            //    //Console.WriteLine(str);
-            //}
+                ////ms.Position = 0;
+                //StreamReader sr = new StreamReader(ms);
+                //string str = sr.ReadToEnd();
+                //Console.WriteLine(str);
+            }
 
             //XmlDictionaryWriter xdw = XmlDictionaryWriter.CreateTextWriter(someStream, Encoding.UTF8);
 
-
-
-            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
-            ns.Add(string.Empty, string.Empty);
 
             XmlSerializer serializer = new XmlSerializer(typeof(Request)/*, new Type[] { typeof(payment) }*/);
             serializer.Serialize(Console.Out, request, ns);
@@ -129,8 +165,54 @@ namespace Privat24Module
                 serializer.Serialize(sw, request, ns);
             }
 
-            Console.ReadLine();
 
+            Console.WriteLine();
+            //XmlWriter writer2 = XmlWriter.Create(Console.Out);
+
+            //writer2.WriteElementString("oper", "cmt");
+            //writer2.WriteElementString("wait", "0");
+            //writer2.Flush();
+
+            //-------------------------------------------------
+            Console.WriteLine("______");
+            XDocument xml = XDocument.Parse(Resources.rest_fiz);
+            //var q = xml.Descendants("prop").Where(x => x.Attribute("name").Name == "sd").First();
+
+            //Console.WriteLine(xml.Element("request").Element("data").Element("payment").Element("prop").Attribute("name").Value);
+
+            //xml.Element("request").Element("data").Element("payment").Element("prop").Attribute("name").Value);
+
+            //xml.Descendants("prop").First(x => x.Attribute("name").Value == "sd").Attribute("value").SetValue(DateTime.Now.ToShortDateString());
+            //xml.Descendants("prop").First(x => x.Attribute("name").Value == "ed").Attribute("value").SetValue(DateTime.Now.ToShortDateString());
+
+            string s = "";
+            foreach (var x in xml.Descendants("data").First().Elements())
+                s += x.ToString(SaveOptions.DisableFormatting);
+            Console.WriteLine(s);
+
+            Console.WriteLine("______");
+            
+            Console.WriteLine(
+                string.Join("", from x in xml.Descendants("data").First().Elements() select x.ToString(SaveOptions.DisableFormatting))
+            );
+            Console.WriteLine("______");
+
+            //Console.WriteLine(xml.Descendants("data").First().ToString(SaveOptions.None));
+            Console.WriteLine(xml.Descendants("data").First().ToString(SaveOptions.DisableFormatting).Replace("<data>", "").Replace("</data>", ""));
+            Console.WriteLine("______");
+
+            //-------------------------------------------------
+            Console.WriteLine(xml.Descendants("data").First().GetXmlNode().InnerXml);
+            Console.WriteLine("______");
+
+            Console.WriteLine(xml.Descendants("data").First().InnerXml());
+            Console.WriteLine("______");
+
+            var w = xml.Descendants("data").Elements().Select(x => x.ToString(SaveOptions.DisableFormatting)).Aggregate(string.Concat);
+            Console.WriteLine(w);
+
+
+            Console.ReadLine();
         }
     }
 }
