@@ -1,95 +1,62 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
-using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
 using System.Xml.Linq;
 using System.Linq;
+using System.Security.Cryptography;
+using RestSharp;
 
 namespace Privat24Module
 {
-    public class Property
-    {
-        [XmlAttribute("name")] public string Name;
-        [XmlAttribute("value")] public string Value;
-    }
-
-    public class payment
-    {
-	    [XmlAttribute("id")] public string Id = "";
-        [XmlElement("prop")] public List<Property> Properties;
-    }
-
-    public class data
-    {
-        public string oper;
-        public string wait;
-        public string test;
-        public payment payment;
-    }
-
-    public class merchant
-    {
-        public string id;
-        public string signature; // $sign=sha1 (md5($data.$password));
-    }
-
-    [XmlRoot("request")]
-    public class Request
-    {
-        [XmlAttribute] public string version = "1.0";
-        [XmlElement] public merchant merchant;
-        [XmlElement] public data data;
-
-	    public Request() { }
-
-	    public Request(int merchantId, DateTime startDate, DateTime endDate, string cardNumber)
-        {
-			
-        }
-    }
-
 	public static class Privat24
 	{
-		public static Stream GetRequest(int merchantId, DateTime startDate, DateTime endDate, string cardNumber)
+        static string GetSignature(string data)
         {
-            data data = new data
+            using (var md5 = MD5.Create())
+            using (var sha1 = SHA1.Create())
             {
-                oper = "cmt",
-                wait = "0",
-                test = "0",
-                payment = new payment
+                // $sign = sha1(md5($data.$password));
+                var md5Hash = md5.ComputeHash(Encoding.UTF8.GetBytes(data));
+                StringBuilder sBuilder0 = new StringBuilder();
+                for (int i = 0; i < md5Hash.Length; i++)
                 {
-                    Id = "",
-                    Properties = new List<Property>()
-                        {
-                            new Property {Name = "sd", Value = startDate.ToShortDateString() },
-                            new Property {Name = "ed", Value = endDate.ToShortDateString() },
-                            new Property {Name = "card", Value = cardNumber }
-                        }
+                    sBuilder0.Append(md5Hash[i].ToString("x2"));
                 }
-            };
+                var q= sBuilder0.ToString();
+                var w = Encoding.UTF8.GetBytes(q);
 
-            return null;
-        }
-	}
+                var sha1Hash = sha1.ComputeHash(w);
 
-    static class Extensions
-    {
-        public static XmlNode GetXmlNode(this XElement element)
-        {
-            using (XmlReader xmlReader = element.CreateReader())
-            {
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.Load(xmlReader);
-                return xmlDoc;
+                StringBuilder sBuilder = new StringBuilder();
+                for (int i = 0; i < sha1Hash.Length; i++)
+                {
+                    sBuilder.Append(sha1Hash[i].ToString("x2"));
+                }
+                return sBuilder.ToString(); // Return from using body? Is that Ok?
             }
         }
 
-        public static String InnerXml(this XElement source)
+		public static string GetRequest(int merchantId, DateTime startDate, DateTime endDate, string cardNumber)
         {
-            return source.Elements().Select(x => x.ToString(SaveOptions.DisableFormatting)).Aggregate(String.Concat);
+            XDocument xml = XDocument.Parse(Resources.rest_fiz);
+
+            var props = xml.Descendants("prop");
+            props.First(x => x.Attribute("name").Value == "sd").SetAttributeValue("value", startDate.ToShortDateString());
+            //props.First(x => x.Attribute("name").Value == "sd").Attribute("value").SetValue(startDate.ToShortDateString());
+            props.First(x => x.Attribute("name").Value == "ed").SetAttributeValue("value", endDate.ToShortDateString());
+            props.First(x => x.Attribute("name").Value == "card").SetAttributeValue("value", cardNumber);
+
+            string data = xml.Descendants("data").Elements().Select(x => x.ToString(SaveOptions.DisableFormatting)).Aggregate(string.Concat);
+            string password = "...";
+            Console.WriteLine(data);
+
+            string signature = GetSignature(data + password);
+
+            xml.Descendants("merchant").First().SetElementValue("id", merchantId);
+            //xml.Descendants("id").First().SetValue(merchantId);
+            xml.Descendants("merchant").First().SetElementValue("signature", signature);
+
+            //return xml.Declaration.ToString() +'\n'+ xml.ToString(SaveOptions.None);
+            return xml.Declaration.ToString() + xml.ToString(SaveOptions.DisableFormatting);
         }
     }
 
@@ -97,156 +64,20 @@ namespace Privat24Module
     {
         static void Main(string[] args)
         {
-            var request = new Request
-            {
-                version = "1.0",
-                merchant = new merchant
-                {
-                    id = "75482",
-                    signature = "5abf5c7524bc2a835acb3a9e24ce10bc5ba82a99"
-                },
-                data = new data
-                {
-                    oper = "cmt",
-                    wait = "0",
-                    test = "0",
-                    payment = new payment
-                    {
-                        Id = "",
-                        Properties = new List<Property>()
-                        {
-                            new Property {Name = "sd", Value = "10.11.2016" },
-                            new Property {Name = "ed", Value = "11.11.2016" },
-                            new Property {Name = "card", Value = "5168742060221193" }
-                        }
-                    }
-                }
-            };
+            var body = Privat24.GetRequest(12345, DateTime.Parse("1.10.2016"), DateTime.Parse("30.10.2016"), "...");
+            Console.WriteLine(body);
+            //Console.ReadLine();
+            //return;
 
+            var client = new RestClient("https://api.privatbank.ua/");
+            var request = new RestRequest("p24api/rest_fiz", Method.POST);
+            request.AddParameter("text/xml", body, ParameterType.RequestBody);
 
-            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
-            ns.Add(string.Empty, string.Empty);
+            IRestResponse response = client.Execute(request);
+            //var view = JsonConvert.DeserializeObject<List<FinDay>>(response.Content);
 
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
-            settings.OmitXmlDeclaration = true;
-            settings.Encoding = Encoding.UTF8;
-
-
-            XmlSerializer serializer1 = new XmlSerializer(typeof(data));
-            using (var writer = XmlWriter.Create(Console.Out, settings))
-            //using (var writer = new MyXmlTextWriter(Console.Out))
-            {
-                //XmlWriter writer = XmlWriter.Create(ms, settings);
-                serializer1.Serialize(writer, request.data, ns);
-
-                //writer.
-
-                ////ms.Position = 0;
-                //StreamReader sr = new StreamReader(ms);
-                //string str = sr.ReadToEnd();
-                //Console.WriteLine(str);
-            }
-
-            //XmlDictionaryWriter xdw = XmlDictionaryWriter.CreateTextWriter(someStream, Encoding.UTF8);
-
-
-            XmlSerializer serializer = new XmlSerializer(typeof(Request)/*, new Type[] { typeof(payment) }*/);
-            serializer.Serialize(Console.Out, request, ns);
-
-            //using (var stream = File.Create("API.xml"))
-            //{
-            //    serializer.Serialize(stream, request, ns);
-            //}
-
-            var encoding = Encoding.UTF8;
-            using (StreamWriter sw = new StreamWriter("API_UTF8.xml", false, encoding))
-            {
-                serializer.Serialize(sw, request, ns);
-            }
-
-
-            Console.WriteLine();
-            //XmlWriter writer2 = XmlWriter.Create(Console.Out);
-
-            //writer2.WriteElementString("oper", "cmt");
-            //writer2.WriteElementString("wait", "0");
-            //writer2.Flush();
-
-            //-------------------------------------------------
-            Console.WriteLine("______");
-            XDocument xml = XDocument.Parse(Resources.rest_fiz);
-            //var q = xml.Descendants("prop").Where(x => x.Attribute("name").Name == "sd").First();
-
-            //Console.WriteLine(xml.Element("request").Element("data").Element("payment").Element("prop").Attribute("name").Value);
-
-            //xml.Element("request").Element("data").Element("payment").Element("prop").Attribute("name").Value);
-
-            //xml.Descendants("prop").First(x => x.Attribute("name").Value == "sd").Attribute("value").SetValue(DateTime.Now.ToShortDateString());
-            //xml.Descendants("prop").First(x => x.Attribute("name").Value == "ed").Attribute("value").SetValue(DateTime.Now.ToShortDateString());
-
-            string s = "";
-            foreach (var x in xml.Descendants("data").First().Elements())
-                s += x.ToString(SaveOptions.DisableFormatting);
-            Console.WriteLine(s);
-
-            Console.WriteLine("______");
-            
-            Console.WriteLine(
-                string.Join("", from x in xml.Descendants("data").First().Elements() select x.ToString(SaveOptions.DisableFormatting))
-            );
-            Console.WriteLine("______");
-
-            //Console.WriteLine(xml.Descendants("data").First().ToString(SaveOptions.None));
-            Console.WriteLine(xml.Descendants("data").First().ToString(SaveOptions.DisableFormatting).Replace("<data>", "").Replace("</data>", ""));
-            Console.WriteLine("______");
-
-            //-------------------------------------------------
-            Console.WriteLine(xml.Descendants("data").First().GetXmlNode().InnerXml);
-            Console.WriteLine("______");
-
-            Console.WriteLine(xml.Descendants("data").First().InnerXml());
-            Console.WriteLine("______");
-
-            var w = xml.Descendants("data").Elements().Select(x => x.ToString(SaveOptions.DisableFormatting)).Aggregate(string.Concat);
-            Console.WriteLine(w);
-
-
+            Console.WriteLine(response.Content);
             Console.ReadLine();
         }
     }
 }
-
-//https://api.privatbank.ua/p24api/rest_fiz
-
-//<? xml version="1.0" encoding="UTF-8"?>
-//     <request version = "1.0" >
-//         < merchant >
-//             < id > 75482 </ id >
-//             < signature > 5abf5c7524bc2a835acb3a9e24ce10bc5ba82a99</signature>
-//         </merchant>
-//         <data>
-//             <oper>cmt</oper>
-//             <wait>0</wait>
-//             <test>0</test>
-//             <payment id = "" >
-//                 <prop name="sd" value="11.08.2013" />
-//                 <prop name = "ed" value="11.09.2013" />
-//                 <prop name = "card" value="5168742060221193" />
-//             </payment>
-//         </data>
-//     </request>
-
-
-//<form method = "POST" action="https://api.privatbank.ua/p24api/ishop">
-//<input type = "hidden" name="amt" value="0.00" />
-//<input type = "hidden" name="ccy" value="UAH" />
-//<input type = "hidden" name="merchant" value="123079" />
-//<input type = "hidden" name="order" value="" />
-//<input type = "hidden" name="details" value="Сторінка, що приймає клієнта після оплати" />
-//<input type = "hidden" name="ext_details" value="Опис товару №..." />
-//<input type = "hidden" name="pay_way" value="privat24" />
-//<input type = "hidden" name="return_url" value="https://..." />
-//<input type = "hidden" name="server_url" value="https://..." />
-//<button type = "submit" >< img src="img/buttons/api_logo_1.jpg" border="0" /></button>
-//</form>
