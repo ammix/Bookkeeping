@@ -9,54 +9,47 @@ namespace Privat24Module
 {
 	public static class Privat24
 	{
-        static string GetSignature(string data)
+        static string BytesToString(byte[] bytes)
         {
+            StringBuilder sBuilder = new StringBuilder();
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                sBuilder.Append(bytes[i].ToString("x2"));
+            }
+            return sBuilder.ToString();
+        }
+
+        static string GetSignature(string data, string password)
+        {
+            // PHP: $sign = sha1(md5($data.$password));
+
             using (var md5 = MD5.Create())
             using (var sha1 = SHA1.Create())
             {
-                // $sign = sha1(md5($data.$password));
-                var md5Hash = md5.ComputeHash(Encoding.UTF8.GetBytes(data));
-                StringBuilder sBuilder0 = new StringBuilder();
-                for (int i = 0; i < md5Hash.Length; i++)
-                {
-                    sBuilder0.Append(md5Hash[i].ToString("x2"));
-                }
-                var q= sBuilder0.ToString();
-                var w = Encoding.UTF8.GetBytes(q);
+                var md5Hash = BytesToString(md5.ComputeHash(Encoding.UTF8.GetBytes(data + password)));
+                var sha1Hash = BytesToString(sha1.ComputeHash(Encoding.UTF8.GetBytes(md5Hash)));
 
-                var sha1Hash = sha1.ComputeHash(w);
-
-                StringBuilder sBuilder = new StringBuilder();
-                for (int i = 0; i < sha1Hash.Length; i++)
-                {
-                    sBuilder.Append(sha1Hash[i].ToString("x2"));
-                }
-                return sBuilder.ToString(); // Return from using body? Is that Ok?
+                return sha1Hash;
+                // Return from using body? Is that Ok?
             }
         }
 
-		public static string GetRequest(int merchantId, DateTime startDate, DateTime endDate, string cardNumber)
+		public static string GetRequestBodyForAccountStatements(int merchantId, string password, DateTime startDate, DateTime endDate, string cardNumber)
         {
             XDocument xml = XDocument.Parse(Resources.rest_fiz);
+            var format = SaveOptions.DisableFormatting;
 
-            var props = xml.Descendants("prop");
-            props.First(x => x.Attribute("name").Value == "sd").SetAttributeValue("value", startDate.ToShortDateString());
-            //props.First(x => x.Attribute("name").Value == "sd").Attribute("value").SetValue(startDate.ToShortDateString());
-            props.First(x => x.Attribute("name").Value == "ed").SetAttributeValue("value", endDate.ToShortDateString());
-            props.First(x => x.Attribute("name").Value == "card").SetAttributeValue("value", cardNumber);
+            xml.Descendants("prop").First(x => x.Attribute("name").Value == "sd").SetAttributeValue("value", startDate.ToShortDateString());
+            xml.Descendants("prop").First(x => x.Attribute("name").Value == "ed").SetAttributeValue("value", endDate.ToShortDateString());
+            xml.Descendants("prop").First(x => x.Attribute("name").Value == "card").SetAttributeValue("value", cardNumber);
 
-            string data = xml.Descendants("data").Elements().Select(x => x.ToString(SaveOptions.DisableFormatting)).Aggregate(string.Concat);
-            string password = "...";
-            Console.WriteLine(data);
-
-            string signature = GetSignature(data + password);
+            string data = xml.Descendants("data").Select(x => x.ToString(format)).Aggregate(string.Concat);
+            string signature = GetSignature(data, password);
 
             xml.Descendants("merchant").First().SetElementValue("id", merchantId);
-            //xml.Descendants("id").First().SetValue(merchantId);
             xml.Descendants("merchant").First().SetElementValue("signature", signature);
 
-            //return xml.Declaration.ToString() +'\n'+ xml.ToString(SaveOptions.None);
-            return xml.Declaration.ToString() + xml.ToString(SaveOptions.DisableFormatting);
+            return xml.Declaration.ToString() + xml.ToString(format);
         }
     }
 
@@ -64,8 +57,9 @@ namespace Privat24Module
     {
         static void Main(string[] args)
         {
-            var body = Privat24.GetRequest(12345, DateTime.Parse("1.10.2016"), DateTime.Parse("30.10.2016"), "...");
-            Console.WriteLine(body);
+            var body = Privat24.GetRequestBodyForAccountStatements(12345, "", DateTime.Parse("1.10.2016"), DateTime.Parse("30.10.2016"), "...");
+
+            //Console.WriteLine(body);
             //Console.ReadLine();
             //return;
 
