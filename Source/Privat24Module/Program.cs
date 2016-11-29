@@ -4,6 +4,7 @@ using System.Xml.Linq;
 using System.Linq;
 using System.Security.Cryptography;
 using RestSharp;
+using System.Collections.Generic;
 
 namespace Privat24Module
 {
@@ -34,7 +35,7 @@ namespace Privat24Module
             }
         }
 
-		public static string GetRequestBodyForAccountStatements(int merchantId, string password, DateTime startDate, DateTime endDate, string cardNumber)
+		static string GetRequestBodyForAccountStatements(int merchantId, string password, DateTime startDate, DateTime endDate, string cardNumber)
         {
             XDocument xml = XDocument.Parse(Resources.rest_fiz);
             var format = SaveOptions.DisableFormatting;
@@ -51,17 +52,10 @@ namespace Privat24Module
 
             return xml.Declaration.ToString() + xml.ToString(format);
         }
-    }
 
-    class Program
-    {
-        static void Main(string[] args)
+        public static IEnumerable<FinTransaction> GetTransactions()
         {
             var body = Privat24.GetRequestBodyForAccountStatements(12345, "", DateTime.Parse("1.10.2016"), DateTime.Parse("30.10.2016"), "...");
-
-            //Console.WriteLine(body);
-            //Console.ReadLine();
-            //return;
 
             var client = new RestClient("https://api.privatbank.ua/");
             var request = new RestRequest("p24api/rest_fiz", Method.POST);
@@ -69,6 +63,17 @@ namespace Privat24Module
 
             IRestResponse response = client.Execute(request);
             //var view = JsonConvert.DeserializeObject<List<FinDay>>(response.Content);
+            XDocument xml = XDocument.Parse(response.Content);
+
+            return null;
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
 
             Console.WriteLine(response.Content);
             Console.ReadLine();
