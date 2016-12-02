@@ -83,6 +83,9 @@
     <Compile Include="ViewModels\FinDay.cs" />
     <Compile Include="ViewModels\FinTransaction.cs" />
     <Compile Include="ViewModels\InvoiceLine.cs" />
+    <EmbeddedResource Include="InputWindow.resx">
+      <DependentUpon>InputWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
