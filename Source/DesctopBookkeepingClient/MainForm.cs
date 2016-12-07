@@ -1,6 +1,8 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace DesktopBookkeepingClient
 {
@@ -123,6 +125,14 @@ namespace DesktopBookkeepingClient
         private void toolStripTextBox1_Click(object sender, System.EventArgs e)
         {
 
+        }
+
+        private void toolStripButton3_Click(object sender, System.EventArgs e)
+        {
+            var transact = new TransactionView { Counterparty = "8 грудня 2016", Nodes = new List<TransactionView> { new TransactionView { Counterparty="" } } };
+            treeListView.AddObject(transact);
+            treeListView.EnsureModelVisible(transact);
+            //treeListView.Sort??
         }
     }
 

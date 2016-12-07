@@ -11,8 +11,8 @@ namespace DesktopBookkeepingClient
 		public static List<TransactionView> GetTransactions()
 		{
 			var transactions = new List<TransactionView>();
-			//var connectionString = "workstation id=Bookkeeping.mssql.somee.com;packet size=4096;user id=ammix_SQLLogin_1;pwd=8h1c8vsmnk;data source=Bookkeeping.mssql.somee.com;persist security info=False;initial catalog=Bookkeeping";
-			var connectionString = "data source=localhost;initial catalog=Bookkeeping;user=sa;password=1";
+			var connectionString = "workstation id=Bookkeeping.mssql.somee.com;packet size=4096;user id=ammix_SQLLogin_1;pwd=8h1c8vsmnk;data source=Bookkeeping.mssql.somee.com;persist security info=False;initial catalog=Bookkeeping";
+			//var connectionString = "data source=localhost;initial catalog=Bookkeeping;user=sa;password=1";
 			var culture = CultureInfo.GetCultureInfo("uk-UA");
 
 			using (var connection = new SqlConnection(connectionString))

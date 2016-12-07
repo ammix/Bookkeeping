@@ -72,6 +72,7 @@
             this.treeListView.AllColumns.Add(this.olvColumn5);
             this.treeListView.AllColumns.Add(this.olvColumn6);
             this.treeListView.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.treeListView.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.F2Only;
             this.treeListView.CellEditUseWholeCell = false;
             this.treeListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumn1,
@@ -100,6 +101,7 @@
             // olvColumn1
             // 
             this.olvColumn1.AspectName = "Counterparty";
+            this.olvColumn1.CellEditUseWholeCell = true;
             this.olvColumn1.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.olvColumn1.Text = "Контрагент";
             this.olvColumn1.Width = 180;
@@ -107,6 +109,7 @@
             // olvColumn2
             // 
             this.olvColumn2.AspectName = "Amount";
+            this.olvColumn2.CellEditUseWholeCell = true;
             this.olvColumn2.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumn2.Text = "Сума";
             this.olvColumn2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -115,6 +118,7 @@
             // olvColumn3
             // 
             this.olvColumn3.AspectName = "Comment";
+            this.olvColumn3.CellEditUseWholeCell = true;
             this.olvColumn3.CellPadding = new System.Drawing.Rectangle(10, 0, 0, 0);
             this.olvColumn3.FillsFreeSpace = true;
             this.olvColumn3.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -125,6 +129,7 @@
             // olvColumn4
             // 
             this.olvColumn4.AspectName = "Balance";
+            this.olvColumn4.CellEditUseWholeCell = true;
             this.olvColumn4.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumn4.Text = "Залишок";
             this.olvColumn4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -133,6 +138,7 @@
             // olvColumn5
             // 
             this.olvColumn5.AspectName = "Acount";
+            this.olvColumn5.CellEditUseWholeCell = true;
             this.olvColumn5.CellPadding = new System.Drawing.Rectangle(10, 0, 0, 0);
             this.olvColumn5.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumn5.Text = "Рахунок";
@@ -141,6 +147,7 @@
             // olvColumn6
             // 
             this.olvColumn6.AspectName = "Time";
+            this.olvColumn6.CellEditUseWholeCell = true;
             this.olvColumn6.Text = "Час";
             // 
             // imageList
@@ -253,6 +260,7 @@
             this.toolStripButton3.Name = "toolStripButton3";
             this.toolStripButton3.Size = new System.Drawing.Size(39, 54);
             this.toolStripButton3.Text = "+";
+            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
             // 
             // toolStripComboBox1
             // 
