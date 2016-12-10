@@ -1,25 +1,32 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
 using System.Collections.Generic;
 using System.Collections;
+using System.Globalization;
 
 namespace DesktopBookkeepingClient
 {
 	public partial class MainForm : Form
 	{
+        bool flag = false;
+        List<TransactionView> model;
+
 		public MainForm()
 		{
 			InitializeComponent();
 
-			InitializeTreeListView();
+            InitializeTreeListView();
 		}
 
 		private void InitializeTreeListView()
 		{
-			treeListView.CanExpandGetter = model => ((TransactionView)model).HasChildren;
+            treeListView.AddDecoration(new EditingCellBorderDecoration { UseLightbox = true });
+
+            treeListView.CanExpandGetter = model => ((TransactionView)model).HasChildren;
 			treeListView.ChildrenGetter = model => ((TransactionView)model).Nodes;
-			treeListView.Roots = LocalDb.GetTransactions();
+			treeListView.Roots = model = MockDb.GetTransactions();
 
 			treeListView.TreeColumnRenderer.IsShowLines = false;
 			treeListView.TreeColumnRenderer.UseTriangles = true;
@@ -129,10 +136,42 @@ namespace DesktopBookkeepingClient
 
         private void toolStripButton3_Click(object sender, System.EventArgs e)
         {
-            var transact = new TransactionView { Counterparty = "8 грудня 2016", Nodes = new List<TransactionView> { new TransactionView { Counterparty="" } } };
+            DateTime date = DateTime.Now;
+            var s = $"{date.Day} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month).ToLower().Replace('ь', 'я')} {date.Year}";
+
+
+            var transact = new TransactionView { Counterparty = s, Nodes = new List<TransactionView> { new TransactionView { Id = "10"/*, Counterparty=""*/ } } };
             treeListView.AddObject(transact);
             treeListView.EnsureModelVisible(transact);
-            //treeListView.Sort??
+
+            treeListView.Sort(olvColumn7, SortOrder.Ascending);
+            treeListView.RebuildColumns();
+
+
+            treeListView.ExpandAll();
+            var x = treeListView.GetItem(1);
+
+            treeListView.StartCellEdit(x, 0);
+
+            (treeListView as FinanceTreeListView).newDayTransaction = true;
+
+            //treeListView.CancelCellEdit();
+        }
+
+        private void toolStripButton4_Click(object sender, EventArgs e)
+        {
+            flag = !flag;
+            if (flag)
+                treeListView.ExpandAll();
+            else
+                treeListView.CollapseAll();
+        }
+
+        private void toolStripButton5_Click(object sender, EventArgs e)
+        {
+            var enumerator = treeListView.Roots.GetEnumerator();
+            enumerator.MoveNext();
+            treeListView.RemoveObject(enumerator.Current);
         }
     }
 

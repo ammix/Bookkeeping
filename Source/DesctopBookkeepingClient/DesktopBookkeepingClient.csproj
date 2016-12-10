@@ -62,6 +62,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FinanceTreeListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Db\Local.cs" />
     <Compile Include="Db\Remote.cs" />
     <Compile Include="InputWindow.cs">
