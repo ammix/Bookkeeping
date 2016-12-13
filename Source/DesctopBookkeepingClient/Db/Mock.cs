@@ -10,14 +10,16 @@ namespace DesktopBookkeepingClient
 			{
 				new TransactionView
 				{
-                    Id = "0",
+                    Id = 0,
+                    NestingLevel = 0,
 					Counterparty = "2 липня 2016",
 					Nodes = new List<TransactionView>
 					{
 						new TransactionView
 						{
-                            Id = "1",
-							Counterparty = "Сільпо",
+                            Id = 1,
+                            NestingLevel = 1,
+                            Counterparty = "Сільпо",
 							Acount = "Готівка",
 							Amount = "-100.00",
 							Balance = "3568.95",
@@ -30,7 +32,8 @@ namespace DesktopBookkeepingClient
 						},
 						new TransactionView
 						{
-                            Id = "2",
+                            Id = 2,
+                            NestingLevel = 1,
                             Counterparty = "Алейка",
 							Acount = "Готівка",
 							Amount = "-52.30",
@@ -43,7 +46,8 @@ namespace DesktopBookkeepingClient
 						},
 						new TransactionView
 						{
-                            Id = "3",
+                            Id = 3,
+                            NestingLevel = 1,
                             Counterparty = "Обмін",
 							Acount = "Гаманець UAH",
 							Amount = "-2500.00",
@@ -52,7 +56,8 @@ namespace DesktopBookkeepingClient
 						},
 						new TransactionView
 						{
-                            Id = "4",
+                            Id = 4,
+                            NestingLevel = 1,
                             Counterparty = "Обмін",
 							Acount = "Гаманець $",
 							Amount = "100.00",
@@ -64,13 +69,15 @@ namespace DesktopBookkeepingClient
 
 				new TransactionView
 				{
-                    Id = "5",
-					Counterparty = "1 липня 2016",
+                    Id = 5,
+                    NestingLevel = 0,
+                    Counterparty = "1 липня 2016",
 					Nodes = new List<TransactionView>
 					{
 						new TransactionView
 						{
-                            Id = "6",
+                            Id = 6,
+                            NestingLevel = 1,
                             Counterparty = "Twinfield",
 							Acount = "2600 Агріколь",
 							Amount = "50000.00",
@@ -78,7 +85,8 @@ namespace DesktopBookkeepingClient
 						},
 						new TransactionView
 						{
-                            Id = "7",
+                            Id = 7,
+                            NestingLevel = 1,
                             Counterparty = "Ліко-Світ",
 							Acount = "Приват",
 							Amount = "-7500.00",
@@ -87,7 +95,8 @@ namespace DesktopBookkeepingClient
 						},
 						new TransactionView
 						{
-                            Id = "8",
+                            Id = 8,
+                            NestingLevel = 1,
                             Counterparty = "Метро",
 							Acount = "Картка",
 							Amount = "-52.30",
@@ -101,7 +110,8 @@ namespace DesktopBookkeepingClient
 						},
 						new TransactionView
 						{
-                            Id = "9",
+                            Id = 9,
+                            NestingLevel = 1,
                             Counterparty = "Алейка",
 							Acount = "Готівка",
 							Amount = "-152.55",

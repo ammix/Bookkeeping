@@ -46,11 +46,14 @@ namespace DesktopBookkeepingClient
 			//e.SubItem.Decoration = decoration;
 			//e.SubItem.CellPadding = 
 
-            if (e.ColumnIndex == 0)
+            if (e.Column.AspectName == "Counterparty")// ColumnIndex == 0)
             {
                 var model = (TransactionView)e.Model;
-                if (model.Balance == null && !model.HasChildren)
+                //if (model.Balance == null && !model.HasChildren)
+                if (model.NestingLevel == 3)
                     e.SubItem.Text = "• " + e.SubItem.Text;
+
+                e.ColumnIndex
             }
 
 			if (e.ColumnIndex == 1)
@@ -140,7 +143,7 @@ namespace DesktopBookkeepingClient
             var s = $"{date.Day} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month).ToLower().Replace('ь', 'я')} {date.Year}";
 
 
-            var transact = new TransactionView { Counterparty = s, Nodes = new List<TransactionView> { new TransactionView { Id = "10"/*, Counterparty=""*/ } } };
+            var transact = new TransactionView { Counterparty = s, Nodes = new List<TransactionView> { new TransactionView { Id = 10 } } };
             treeListView.AddObject(transact);
             treeListView.EnsureModelVisible(transact);
 
