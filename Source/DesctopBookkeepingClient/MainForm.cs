@@ -38,42 +38,37 @@ namespace DesktopBookkeepingClient
 		private void treeListView_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
 		{
 			var cell = (TransactionView)e.Model;
+			var font = e.Item.Font;
 
-			//var decoration = new TextDecoration("ABCDEF", 255);
-			//decoration.Font = new Font(Font.Name, Font.SizeInPoints +2);
-			//decoration.TextColor = Color.Red;
-			//decoration.Alignment = ContentAlignment.MiddleRight;
-			//e.SubItem.Decoration = decoration;
-			//e.SubItem.CellPadding = 
+			if (cell.NestingLevel == 0)
+				e.Item.BackColor = Color.Red; // LightGray; // WhiteSmoke;
 
-            if (e.Column.AspectName == "Counterparty")// ColumnIndex == 0)
+			if (e.Column.AspectName == "Counterparty")
             {
-                var model = (TransactionView)e.Model;
-                //if (model.Balance == null && !model.HasChildren)
-                if (model.NestingLevel == 3)
-                    e.SubItem.Text = "• " + e.SubItem.Text;
+	            if (cell.NestingLevel == 2)
+	            {
+		            e.SubItem.Text = "• " + e.SubItem.Text;
+					e.Item.ForeColor = Color.Gray;
+				}
 
-                e.ColumnIndex
-            }
+	            if (cell.NestingLevel == 0)
+				{
+					e.Item.Font = new Font(font.Name, font.Size, FontStyle.Regular | FontStyle.Underline);
+					e.Item.ForeColor = Color.Blue;
+					//e.Item.BackColor = Color.LightGray; // WhiteSmoke;
+				}
+			}
 
-			if (e.ColumnIndex == 1)
+			if (e.Column.AspectName == "Amount")
 			{
-				var model = (TransactionView)e.Model;
-                if (model.Amount != null && model.Acount != null)
+				if (cell.NestingLevel == 1)
+				{
+					e.SubItem.ForeColor = cell.Amount.Contains("-") ? Color.DeepPink : Color.Green;
+				}
+                else if (cell.NestingLevel == 2)
                 {
-                    e.SubItem.ForeColor = double.Parse(model.Amount) < 0 ? Color.DeepPink : Color.Green;
-                    //e.SubItem.Text += "  ";
-                }
-                else
-                {
-                    var font = e.Item.Font;
                     e.SubItem.Font = new Font(font.Name, font.Size - 1, FontStyle.Regular);
-                    //e.SubItem.Text += "   ";
-                    //e.SubItem.ForeColor = Color.Gray;
-                    //e.Item
-                    //var cellPadding = e.SubItem.CellPadding;
-                    //cellPadding.Value.X += 10;
-                    //e.SubItem.CellPadding = cellPadding;
+                    e.SubItem.ForeColor = Color.Gray;
                 }
 			}
 
@@ -90,16 +85,18 @@ namespace DesktopBookkeepingClient
             //	e.SubItem.Font = new Font(font.Name, font.Size, FontStyle.Bold);
             //}
 
-            if (e.ColumnIndex == 4)
+            //if (e.ColumnIndex == 4)
+			if (e.Column.AspectName == "Acount")
             {
-                var font = e.Item.Font;
+                //var font = e.Item.Font;
                 //e.SubItem.Font = new Font(font.Name, font.Size, FontStyle.Bold);
-                e.SubItem.ForeColor = Color.Gray;
+	            e.SubItem.ForeColor = Color.Gray;
             }
 
-            if (e.ColumnIndex == 5)
+            //if (e.ColumnIndex == 5)
+			if (e.Column.AspectName == "Time")
             {
-                var font = e.Item.Font;
+                //var font = e.Item.Font;
                 //e.SubItem.Font = new Font(font.Name, font.Size, FontStyle.Bold);
                 e.SubItem.ForeColor = Color.LightGray;
             }
@@ -108,28 +105,28 @@ namespace DesktopBookkeepingClient
 		private void treeListView_FormatRow(object sender, FormatRowEventArgs e)
 		{
 			var row = (TransactionView)e.Model;
-			var font = e.Item.Font;
+			//var font = e.Item.Font;
 
             //if (row.Acount != null)
             //{
             //	e.Item.Font = new Font(font.Name, font.Size, FontStyle.Bold);
             //}
 
-            if (row.Balance == null && !row.HasChildren)
-            {
-                e.Item.ForeColor = Color.Gray;
-            }
+            //if (row.Balance == null && !row.HasChildren)
+            //{
+            //    e.Item.ForeColor = Color.Gray;
+            //}
 
-            if (row.Balance == null && row.HasChildren)
-            {
-                e.Item.BackColor = Color.LightGray; // WhiteSmoke;
-            }
+            //if (row.Balance == null && row.HasChildren)
+            //{
+	           // e.Item.BackColor = Color.LightGray; // WhiteSmoke;
+            //}
 
-            if (row.Amount == null)
-			{
-				e.Item.Font = new Font(font.Name, font.Size, FontStyle.Regular | FontStyle.Underline);
-				e.Item.ForeColor = Color.Blue;
-			}
+   //         if (row.Amount == null)
+			//{
+			//	e.Item.Font = new Font(font.Name, font.Size, FontStyle.Regular | FontStyle.Underline);
+			//	e.Item.ForeColor = Color.Blue;
+			//}
 		}
 
         private void toolStripTextBox1_Click(object sender, System.EventArgs e)

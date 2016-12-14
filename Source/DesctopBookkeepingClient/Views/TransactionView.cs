@@ -5,7 +5,7 @@ namespace DesktopBookkeepingClient
 	class TransactionView
 	{
         public int Id;
-        public int NestingLevel = 3;
+        public int NestingLevel = 2;
 
         public string Time;
         public string Counterparty;        // Date, Counterparty, InvoiceLine
