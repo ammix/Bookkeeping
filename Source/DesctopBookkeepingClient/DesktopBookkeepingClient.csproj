@@ -82,7 +82,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Db\Mock.cs" />
-    <Compile Include="Views\TransactionView.cs" />
+    <Compile Include="Views\TreeListViewModel.cs" />
     <Compile Include="ViewModels\FinDay.cs" />
     <Compile Include="ViewModels\FinTransaction.cs" />
     <Compile Include="ViewModels\InvoiceLine.cs" />

@@ -4,121 +4,130 @@ namespace DesktopBookkeepingClient
 {
 	class MockDb
 	{
-		public static List<TransactionView> GetTransactions()
+		public static List<TreeListViewModel> GetTransactions()
 		{
-			var trs = new List<TransactionView>
-			{
-				new TransactionView
-				{
-                    Id = 0,
-                    NestingLevel = 0,
-					Counterparty = "2 липня 2016",
-					Nodes = new List<TransactionView>
-					{
-						new TransactionView
-						{
-                            Id = 1,
-                            NestingLevel = 1,
-                            Counterparty = "Сільпо",
-							Acount = "Готівка",
-							Amount = "-100.00",
-							Balance = "3568.95",
-							Nodes = new List<TransactionView>
-							{
-								new TransactionView {Counterparty = "молоко", Amount = "      10.50"},
-								new TransactionView {Counterparty = "хліб", Amount = "      15.20"},
-								new TransactionView {Counterparty = "черешні", Amount = "      50.50", Comment = "60 грн/кг"}
-							}
-						},
-						new TransactionView
-						{
-                            Id = 2,
-                            NestingLevel = 1,
-                            Counterparty = "Алейка",
-							Acount = "Готівка",
-							Amount = "-52.30",
-							Balance = "3668.95",
-							Nodes = new List<TransactionView>
-							{
-								new TransactionView {Counterparty = "помідори", Amount = "      30.49", Comment = "25 грн/кг"},
-								new TransactionView {Counterparty = "яблука", Amount = "      25.25", Comment = "15 грн/кг"}
-							}
-						},
-						new TransactionView
-						{
-                            Id = 3,
-                            NestingLevel = 1,
-                            Counterparty = "Обмін",
-							Acount = "Гаманець UAH",
-							Amount = "-2500.00",
-							Comment = "25.00 UAH/$",
-							Balance = "2150.00"
-						},
-						new TransactionView
-						{
-                            Id = 4,
-                            NestingLevel = 1,
-                            Counterparty = "Обмін",
-							Acount = "Гаманець $",
-							Amount = "100.00",
-							Balance = "100.00",
-							Currency = "$"
-						}
-					}
-				},
+			var trs = new List<TreeListViewModel>
+            {
+                new TreeListViewModel
+                (
+                    //Id = 0,
+                    //NestingLevel = 0,
+					date: "2 липня 2016",
+                    transactions: new List<TreeListViewModel>
+                    {
+                        new TreeListViewModel
+                        (
+                            //Id = 1,
+                            //NestingLevel = (NestingLevel)1,
+                            counterparty: "Сільпо",
+                            amount: "-100.00",
+                            account: "Готівка",
+                            balance: "3568.95",
+                            time: "12:00",
+                            articles: new List<TreeListViewModel>
+                            {
+                                new TreeListViewModel (article: "молоко", price: "10.50"),
+                                new TreeListViewModel (article: "хліб", price: "15.20"),
+                                new TreeListViewModel (article: "черешні", price: "50.50", note: "60 грн/кг")
+                            }
+                        ),
+                        new TreeListViewModel
+                        (
+                            //Id = 2,
+                            //NestingLevel = (NestingLevel)1,
+                            counterparty: "Алейка",
+                            amount: "-52.30",
+                            account: "Готівка",
+                            balance: "3668.95",
+                            time: "13:01",
+                            articles: new List<TreeListViewModel>
+                            {
+                                new TreeListViewModel (article: "помідори", price: "30.49", note: "25 грн/кг"),
+                                new TreeListViewModel (article: "яблука", price: "25.25", note: "15 грн/кг")
+                            }
 
-				new TransactionView
-				{
-                    Id = 5,
-                    NestingLevel = 0,
-                    Counterparty = "1 липня 2016",
-					Nodes = new List<TransactionView>
-					{
-						new TransactionView
-						{
-                            Id = 6,
-                            NestingLevel = 1,
-                            Counterparty = "Twinfield",
-							Acount = "2600 Агріколь",
-							Amount = "50000.00",
-							Balance = "75 000.00",
-						},
-						new TransactionView
-						{
-                            Id = 7,
-                            NestingLevel = 1,
-                            Counterparty = "Ліко-Світ",
-							Acount = "Приват",
-							Amount = "-7500.00",
-							Balance = "14 569.00",
-							Comment = "Аванс за послуги Інтернет, червень 2016, згідно договору №2525"
-						},
-						new TransactionView
-						{
-                            Id = 8,
-                            NestingLevel = 1,
-                            Counterparty = "Метро",
-							Acount = "Картка",
-							Amount = "-52.30",
-							Balance = "5 890.85",
-							Nodes = new List<TransactionView>
-							{
-								new TransactionView {Counterparty = "ікра", Amount = "      100.50"},
-								new TransactionView {Counterparty = "торт", Amount = "      150.75"},
-								new TransactionView {Counterparty = "серветки", Amount = "      30.00"}
-							}
-						},
-						new TransactionView
-						{
-                            Id = 9,
-                            NestingLevel = 1,
-                            Counterparty = "Алейка",
-							Acount = "Готівка",
-							Amount = "-152.55",
-							Balance = "3 700.00"
-						}
-					}
-				}
+                        ),
+                        new TreeListViewModel
+                        (
+                            //Id = 3,
+                            //NestingLevel = (NestingLevel)1,
+                            articles: null,
+                            counterparty: "Обмін",
+                            amount: "-2500.00",
+                            account: "Гаманець UAH",
+                            comment: "25.00 UAH/$",
+                            balance: "2150.00",
+                            time: "14:30"
+                        ),
+                        new TreeListViewModel
+                        (
+                            //Id = 4,
+                            //NestingLevel = (NestingLevel)1,
+                            articles: null,
+                            counterparty: "Обмін",
+                            amount: "100.00",
+                            account: "Гаманець $",
+                            balance: "100.00 $"
+                        )
+
+                    }
+				),
+
+				new TreeListViewModel
+				(
+                    //Id = 5,
+                    //NestingLevel = 0,
+                    date: "1 липня 2016",
+					transactions: new List<TreeListViewModel>
+                    {
+                        new TreeListViewModel
+                        (
+                            //Id = 6,
+                            //NestingLevel = (NestingLevel)1,
+                            articles: null,
+                            counterparty: "Twinfield",
+                            amount: "50000.00",
+                            account: "2600 Агріколь",
+                            balance: "75 000.00"
+                        ),
+                        new TreeListViewModel
+                        (
+                            //Id = 7,
+                            //NestingLevel = (NestingLevel)1,
+                            articles: null,
+                            counterparty: "Ліко-Світ",
+                            amount: "-7500.00",
+                            account: "Приват",
+                            balance: "14 569.00",
+                            comment: "Аванс за послуги Інтернет, червень 2016, згідно договору №2525"
+                        ),
+                        new TreeListViewModel
+                        (
+                            //Id = 8,
+                            //NestingLevel = (NestingLevel)1,
+                            counterparty: "Метро",
+                            amount: "-52.30",
+                            account: "Картка",
+                            balance: "5 890.85",
+                            articles: new List<TreeListViewModel>
+                            {
+                                new TreeListViewModel (article: "ікра", price: "100.50"),
+                                new TreeListViewModel (article: "торт", price: "150.75"),
+                                new TreeListViewModel (article: "серветки", price: "30.00")
+                            }
+                        ),
+                        new TreeListViewModel
+                        (
+                            //Id = 9,
+                            //NestingLevel = (NestingLevel)1,
+                            articles: null,
+                            counterparty: "Алейка",
+                            amount: "-152.55",
+                            account: "Готівка",
+                            balance: "3 700.00"
+                        )
+                    }
+				)
 			};
 
 			return trs;

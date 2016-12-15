@@ -52,8 +52,8 @@
             this.olvColumn1 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumn2 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumn3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumn4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumn5 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumn4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumn6 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -248,8 +248,8 @@
             this.treeListView.AllColumns.Add(this.olvColumn1);
             this.treeListView.AllColumns.Add(this.olvColumn2);
             this.treeListView.AllColumns.Add(this.olvColumn3);
-            this.treeListView.AllColumns.Add(this.olvColumn4);
             this.treeListView.AllColumns.Add(this.olvColumn5);
+            this.treeListView.AllColumns.Add(this.olvColumn4);
             this.treeListView.AllColumns.Add(this.olvColumn6);
             this.treeListView.AllColumns.Add(this.olvColumn7);
             this.treeListView.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -259,8 +259,8 @@
             this.olvColumn1,
             this.olvColumn2,
             this.olvColumn3,
-            this.olvColumn4,
             this.olvColumn5,
+            this.olvColumn4,
             this.olvColumn6});
             this.treeListView.Cursor = System.Windows.Forms.Cursors.Default;
             this.treeListView.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -278,10 +278,11 @@
             this.treeListView.VirtualMode = true;
             this.treeListView.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.treeListView_FormatCell);
             this.treeListView.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.treeListView_FormatRow);
+            this.treeListView.SelectedIndexChanged += new System.EventHandler(this.treeListView_SelectedIndexChanged);
             // 
             // olvColumn1
             // 
-            this.olvColumn1.AspectName = "Counterparty";
+            this.olvColumn1.AspectName = "Tree";
             this.olvColumn1.CellEditUseWholeCell = true;
             this.olvColumn1.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.olvColumn1.Text = "Контрагент";
@@ -307,23 +308,25 @@
             this.olvColumn3.Width = 460;
             this.olvColumn3.WordWrap = true;
             // 
+            // olvColumn5
+            // 
+            this.olvColumn5.AspectName = "Account";
+            this.olvColumn5.CellEditUseWholeCell = true;
+            this.olvColumn5.CellPadding = new System.Drawing.Rectangle(10, 0, 0, 0);
+            this.olvColumn5.DisplayIndex = 4;
+            this.olvColumn5.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.olvColumn5.Text = "Рахунок";
+            this.olvColumn5.Width = 180;
+            // 
             // olvColumn4
             // 
             this.olvColumn4.AspectName = "Balance";
             this.olvColumn4.CellEditUseWholeCell = true;
+            this.olvColumn4.DisplayIndex = 3;
             this.olvColumn4.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumn4.Text = "Залишок";
             this.olvColumn4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.olvColumn4.Width = 150;
-            // 
-            // olvColumn5
-            // 
-            this.olvColumn5.AspectName = "Acount";
-            this.olvColumn5.CellEditUseWholeCell = true;
-            this.olvColumn5.CellPadding = new System.Drawing.Rectangle(10, 0, 0, 0);
-            this.olvColumn5.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.olvColumn5.Text = "Рахунок";
-            this.olvColumn5.Width = 180;
             // 
             // olvColumn6
             // 

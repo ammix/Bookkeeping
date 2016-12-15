@@ -8,9 +8,9 @@ namespace DesktopBookkeepingClient
 {
 	class LocalDb
 	{
-		public static List<TransactionView> GetTransactions()
+		public static List<TreeListViewModel> GetTransactions()
 		{
-			var transactions = new List<TransactionView>();
+			var transactions = new List<TreeListViewModel>();
 			var connectionString = "workstation id=Bookkeeping.mssql.somee.com;packet size=4096;user id=ammix_SQLLogin_1;pwd=8h1c8vsmnk;data source=Bookkeeping.mssql.somee.com;persist security info=False;initial catalog=Bookkeeping";
 			//var connectionString = "data source=localhost;initial catalog=Bookkeeping;user=sa;password=1";
 			var culture = CultureInfo.GetCultureInfo("uk-UA");
@@ -35,14 +35,14 @@ namespace DesktopBookkeepingClient
 						var balance = $"{dr["Balance"]:N}";
                         var currency = ""; // dr["Currency"].ToString();
 
-						if (transactions.Exists(trs => trs.Counterparty == date))
+						if (transactions.Exists(trs => trs.Tree == date))
 						{
-							var transaction = transactions.Find(trs => trs.Counterparty == date);
-							if (transaction.Nodes.Exists(x => x.Counterparty == counterparty && x.Amount == amount))
+							var transaction = transactions.Find(trs => trs.Tree == date);
+							if (transaction.Nodes.Exists(x => x.Tree == counterparty && x.Amount == amount))
 							{
 								if (article != null)
 								{
-									var invoiceLine = transaction.Nodes.Find(x => x.Counterparty == counterparty);
+									var invoiceLine = transaction.Nodes.Find(x => x.Tree == counterparty);
 									invoiceLine.Nodes.Add(GetItem(article, price, lineNote));
 								}
 							}
@@ -62,35 +62,35 @@ namespace DesktopBookkeepingClient
 			return transactions;
 		}
 
-		static TransactionView GetItem(string date, string counterparty, string article, string price, string lineNote, string note, string amount, string acount, string balance, string currency)
+		static TreeListViewModel GetItem(string date, string counterparty, string article, string price, string lineNote, string note, string amount, string acount, string balance, string currency)
 		{
-			return new TransactionView
+			return new TreeListViewModel
 			{
-				Counterparty = date,
-				Nodes = new List<TransactionView> { GetItem(counterparty, article, price, lineNote, note, amount, acount, balance, currency) }
+				Tree = date,
+				Nodes = new List<TreeListViewModel> { GetItem(counterparty, article, price, lineNote, note, amount, acount, balance, currency) }
 			};
 		}
 
-		static TransactionView GetItem(string counterparty, string article, string price, string lineNote, string note, string amount, string acount, string balance, string currency)
+		static TreeListViewModel GetItem(string counterparty, string article, string price, string lineNote, string note, string amount, string acount, string balance, string currency)
 		{
-			return new TransactionView
+			return new TreeListViewModel
 			{
-				Counterparty = counterparty,
+				Tree = counterparty,
                 Time = "12:00",
 				Amount = amount,
-				Acount = acount,
+				Account = acount,
 				Balance = balance,
-				Currency = currency,
+				//Currency = currency,
 				Comment = note,
-				Nodes = (article != null) ? new List<TransactionView> { GetItem(article, price, lineNote) } : null
+				Nodes = (article != null) ? new List<TreeListViewModel> { GetItem(article, price, lineNote) } : null
 			};
 		}
 
-		static TransactionView GetItem(string article, string price, string lineNote)
+		static TreeListViewModel GetItem(string article, string price, string lineNote)
 		{
-			return new TransactionView
+			return new TreeListViewModel
 			{
-				Counterparty = article,
+				Tree = article,
 				Amount = price,
 				Comment = lineNote
 			};

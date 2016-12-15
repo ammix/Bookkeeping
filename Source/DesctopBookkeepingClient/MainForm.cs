@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
 using System.Collections.Generic;
-using System.Collections;
 using System.Globalization;
 
 namespace DesktopBookkeepingClient
@@ -11,7 +10,7 @@ namespace DesktopBookkeepingClient
 	public partial class MainForm : Form
 	{
         bool flag = false;
-        List<TransactionView> model;
+        public List<TreeListViewModel> model;
 
 		public MainForm()
 		{
@@ -24,8 +23,8 @@ namespace DesktopBookkeepingClient
 		{
             treeListView.AddDecoration(new EditingCellBorderDecoration { UseLightbox = true });
 
-            treeListView.CanExpandGetter = model => ((TransactionView)model).HasChildren;
-			treeListView.ChildrenGetter = model => ((TransactionView)model).Nodes;
+            treeListView.CanExpandGetter = model => ((TreeListViewModel)model).HasChildren;
+			treeListView.ChildrenGetter = model => ((TreeListViewModel)model).Nodes;
 			treeListView.Roots = model = MockDb.GetTransactions();
 
 			treeListView.TreeColumnRenderer.IsShowLines = false;
@@ -34,100 +33,64 @@ namespace DesktopBookkeepingClient
 			treeListView.UseCellFormatEvents = true;
 		}
 
-
-		private void treeListView_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
+		private void treeListView_FormatCell(object sender, FormatCellEventArgs e)
 		{
-			var cell = (TransactionView)e.Model;
-			var font = e.Item.Font;
+            var cell = (TreeListViewModel)e.Model;
+            var item = e.SubItem; // use SubItem in cell, Item in cell is like first cell in row
 
-			if (cell.NestingLevel == 0)
-				e.Item.BackColor = Color.Red; // LightGray; // WhiteSmoke;
-
-			if (e.Column.AspectName == "Counterparty")
+            var font = e.Item.Font;
+            switch (e.Column.AspectName)
             {
-	            if (cell.NestingLevel == 2)
-	            {
-		            e.SubItem.Text = "• " + e.SubItem.Text;
-					e.Item.ForeColor = Color.Gray;
-				}
+                case "Tree":
+                    switch(cell.NestingLevel)
+                    {
+                        case NestingLevel.FinDay:
+                            item.Font = new Font(font.Name, font.Size, FontStyle.Underline);
+                            item.ForeColor = Color.Blue;
+                            break;
+                        case NestingLevel.InvoiceLine:
+                            item.Text = "• " + item.Text;
+                            break;
+                    }
+                    break;
 
-	            if (cell.NestingLevel == 0)
-				{
-					e.Item.Font = new Font(font.Name, font.Size, FontStyle.Regular | FontStyle.Underline);
-					e.Item.ForeColor = Color.Blue;
-					//e.Item.BackColor = Color.LightGray; // WhiteSmoke;
-				}
-			}
+                case "Amount":
+                    switch(cell.NestingLevel)
+                    {
+                        case NestingLevel.Transaction:
+                            item.ForeColor = cell.Amount.Contains("-") ? Color.DeepPink : Color.Green;
+                            break;
+                        case NestingLevel.InvoiceLine:
+                            item.Font = new Font(font.Name, font.Size - 1, FontStyle.Regular);
+                            break;
+                    }
+                    break;
 
-			if (e.Column.AspectName == "Amount")
-			{
-				if (cell.NestingLevel == 1)
-				{
-					e.SubItem.ForeColor = cell.Amount.Contains("-") ? Color.DeepPink : Color.Green;
-				}
-                else if (cell.NestingLevel == 2)
-                {
-                    e.SubItem.Font = new Font(font.Name, font.Size - 1, FontStyle.Regular);
-                    e.SubItem.ForeColor = Color.Gray;
-                }
-			}
+                case "Account":
+                    item.ForeColor = Color.Gray;
+                    break;
 
-            //if (e.ColumnIndex == 5)
-            //{
-            //    var font = e.Item.Font;
-            //    //e.SubItem.Font = new Font(font.Name, font.Size, FontStyle.Regular);
-            //    e.SubItem.ForeColor = Color.Gray;
-            //}
-
-            //if (e.ColumnIndex == 3)
-            //{
-            //	var font = e.Item.Font;
-            //	e.SubItem.Font = new Font(font.Name, font.Size, FontStyle.Bold);
-            //}
-
-            //if (e.ColumnIndex == 4)
-			if (e.Column.AspectName == "Acount")
-            {
-                //var font = e.Item.Font;
-                //e.SubItem.Font = new Font(font.Name, font.Size, FontStyle.Bold);
-	            e.SubItem.ForeColor = Color.Gray;
-            }
-
-            //if (e.ColumnIndex == 5)
-			if (e.Column.AspectName == "Time")
-            {
-                //var font = e.Item.Font;
-                //e.SubItem.Font = new Font(font.Name, font.Size, FontStyle.Bold);
-                e.SubItem.ForeColor = Color.LightGray;
+                case "Time":
+                    item.ForeColor = Color.LightGray;
+                    break;
             }
         }
 
 		private void treeListView_FormatRow(object sender, FormatRowEventArgs e)
 		{
-			var row = (TransactionView)e.Model;
-			//var font = e.Item.Font;
+            var cell = (TreeListViewModel)e.Model;
+            var item = e.Item;
 
-            //if (row.Acount != null)
-            //{
-            //	e.Item.Font = new Font(font.Name, font.Size, FontStyle.Bold);
-            //}
-
-            //if (row.Balance == null && !row.HasChildren)
-            //{
-            //    e.Item.ForeColor = Color.Gray;
-            //}
-
-            //if (row.Balance == null && row.HasChildren)
-            //{
-	           // e.Item.BackColor = Color.LightGray; // WhiteSmoke;
-            //}
-
-   //         if (row.Amount == null)
-			//{
-			//	e.Item.Font = new Font(font.Name, font.Size, FontStyle.Regular | FontStyle.Underline);
-			//	e.Item.ForeColor = Color.Blue;
-			//}
-		}
+            switch (cell.NestingLevel)
+            {
+                case NestingLevel.FinDay:
+                    item.BackColor = Color.LightGray; // WhiteSmoke;
+                    break;
+                case NestingLevel.InvoiceLine:
+                    item.ForeColor = Color.Gray;
+                    break;
+            }
+        }
 
         private void toolStripTextBox1_Click(object sender, System.EventArgs e)
         {
@@ -140,11 +103,11 @@ namespace DesktopBookkeepingClient
             var s = $"{date.Day} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month).ToLower().Replace('ь', 'я')} {date.Year}";
 
 
-            var transact = new TransactionView { Counterparty = s, Nodes = new List<TransactionView> { new TransactionView { Id = 10 } } };
+            var transact = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel() });
             treeListView.AddObject(transact);
             treeListView.EnsureModelVisible(transact);
 
-            treeListView.Sort(olvColumn7, SortOrder.Ascending);
+            treeListView.Sort(olvColumn7, SortOrder.Descending); //Ascending);
             treeListView.RebuildColumns();
 
 
@@ -172,6 +135,11 @@ namespace DesktopBookkeepingClient
             var enumerator = treeListView.Roots.GetEnumerator();
             enumerator.MoveNext();
             treeListView.RemoveObject(enumerator.Current);
+        }
+
+        private void treeListView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 
