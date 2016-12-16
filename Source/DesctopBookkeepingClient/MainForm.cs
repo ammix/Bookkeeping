@@ -10,7 +10,6 @@ namespace DesktopBookkeepingClient
 	public partial class MainForm : Form
 	{
         bool flag = false;
-        public List<TreeListViewModel> model;
 
 		public MainForm()
 		{
@@ -25,7 +24,9 @@ namespace DesktopBookkeepingClient
 
             treeListView.CanExpandGetter = model => ((TreeListViewModel)model).HasChildren;
 			treeListView.ChildrenGetter = model => ((TreeListViewModel)model).Nodes;
-			treeListView.Roots = model = MockDb.GetTransactions();
+
+			treeListView.AddModel(MockDb.GetTransactions());
+			//treeListView.Roots = model = MockDb.GetTransactions();
 
 			treeListView.TreeColumnRenderer.IsShowLines = false;
 			treeListView.TreeColumnRenderer.UseTriangles = true;
@@ -103,22 +104,24 @@ namespace DesktopBookkeepingClient
             var s = $"{date.Day} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month).ToLower().Replace('ь', 'я')} {date.Year}";
 
 
-            var transact = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel() });
-            treeListView.AddObject(transact);
-            treeListView.EnsureModelVisible(transact);
+            var transact = new TreeListViewModel(id: 3, date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel() });
+            //treeListView.AddObject(transact);
+            //treeListView.EnsureModelVisible(transact);
+			(treeListView as FinanceTreeListView).Model.Add(transact);
+			treeListView.EnsureModelVisible(transact);
 
-            treeListView.Sort(olvColumn7, SortOrder.Descending); //Ascending);
-            treeListView.RebuildColumns();
+			treeListView.Sort(olvColumn7, SortOrder.Descending); // Ascending);
+            //treeListView.RebuildColumns();
 
 
             treeListView.ExpandAll();
             var x = treeListView.GetItem(1);
 
-            treeListView.StartCellEdit(x, 0);
+            //treeListView.StartCellEdit(x, 0);
 
-            (treeListView as FinanceTreeListView).newDayTransaction = true;
+            //(treeListView as FinanceTreeListView).newDayTransaction = true;
 
-            //treeListView.CancelCellEdit();
+            ////treeListView.CancelCellEdit();
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)
@@ -132,9 +135,15 @@ namespace DesktopBookkeepingClient
 
         private void toolStripButton5_Click(object sender, EventArgs e)
         {
-            var enumerator = treeListView.Roots.GetEnumerator();
-            enumerator.MoveNext();
-            treeListView.RemoveObject(enumerator.Current);
+			//var enumerator = treeListView.Roots.GetEnumerator();
+			//enumerator.MoveNext();
+			//treeListView.RemoveObject(enumerator.Current);
+
+	        //var q = treeListView.GetSubItem(0, 0);
+			//q.Text = "Hello, world!";
+	        //model[0].Tree = "Hello, world!";
+
+	        //e.ListViewItem.SubItems[0].Text = "Hello, world!";
         }
 
         private void treeListView_SelectedIndexChanged(object sender, EventArgs e)

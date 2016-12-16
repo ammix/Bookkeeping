@@ -10,15 +10,13 @@ namespace DesktopBookkeepingClient
             {
                 new TreeListViewModel
                 (
-                    //Id = 0,
-                    //NestingLevel = 0,
+                    id: 2,
 					date: "2 липня 2016",
                     transactions: new List<TreeListViewModel>
                     {
                         new TreeListViewModel
                         (
-                            //Id = 1,
-                            //NestingLevel = (NestingLevel)1,
+                            id: 1,
                             counterparty: "Сільпо",
                             amount: "-100.00",
                             account: "Готівка",
@@ -33,8 +31,7 @@ namespace DesktopBookkeepingClient
                         ),
                         new TreeListViewModel
                         (
-                            //Id = 2,
-                            //NestingLevel = (NestingLevel)1,
+                            id: 2,
                             counterparty: "Алейка",
                             amount: "-52.30",
                             account: "Готівка",
@@ -49,8 +46,7 @@ namespace DesktopBookkeepingClient
                         ),
                         new TreeListViewModel
                         (
-                            //Id = 3,
-                            //NestingLevel = (NestingLevel)1,
+                            id: 3,
                             articles: null,
                             counterparty: "Обмін",
                             amount: "-2500.00",
@@ -61,8 +57,7 @@ namespace DesktopBookkeepingClient
                         ),
                         new TreeListViewModel
                         (
-                            //Id = 4,
-                            //NestingLevel = (NestingLevel)1,
+                            id: 4,
                             articles: null,
                             counterparty: "Обмін",
                             amount: "100.00",
@@ -75,15 +70,13 @@ namespace DesktopBookkeepingClient
 
 				new TreeListViewModel
 				(
-                    //Id = 5,
-                    //NestingLevel = 0,
+                    id: 1,
                     date: "1 липня 2016",
 					transactions: new List<TreeListViewModel>
                     {
                         new TreeListViewModel
                         (
-                            //Id = 6,
-                            //NestingLevel = (NestingLevel)1,
+                            id: 6,
                             articles: null,
                             counterparty: "Twinfield",
                             amount: "50000.00",
@@ -92,8 +85,7 @@ namespace DesktopBookkeepingClient
                         ),
                         new TreeListViewModel
                         (
-                            //Id = 7,
-                            //NestingLevel = (NestingLevel)1,
+                            id: 7,
                             articles: null,
                             counterparty: "Ліко-Світ",
                             amount: "-7500.00",
@@ -103,8 +95,7 @@ namespace DesktopBookkeepingClient
                         ),
                         new TreeListViewModel
                         (
-                            //Id = 8,
-                            //NestingLevel = (NestingLevel)1,
+                            id: 8,
                             counterparty: "Метро",
                             amount: "-52.30",
                             account: "Картка",
@@ -118,8 +109,7 @@ namespace DesktopBookkeepingClient
                         ),
                         new TreeListViewModel
                         (
-                            //Id = 9,
-                            //NestingLevel = (NestingLevel)1,
+                            id: 9,
                             articles: null,
                             counterparty: "Алейка",
                             amount: "-152.55",

@@ -11,29 +11,43 @@ namespace DesktopBookkeepingClient
     public class FinanceTreeListView: TreeListView
     {
         public bool newDayTransaction;
-        private ComboBox cb;
+        //private ComboBox cb;
+		public List<TreeListViewModel> Model;
 
-        public FinanceTreeListView()
+		public FinanceTreeListView()
         {
-            cb = new ComboBox();
+			//treeListView.Roots = model = MockDb.GetTransactions();
+
+			//cb = new ComboBox();
             //cb.Bounds = e.CellBounds;
             //cb.Font = ((ObjectListView)sender).Font;
-            cb.DropDownStyle = ComboBoxStyle.DropDown; // DropDownList;
-            cb.Items.AddRange(new object[] { "Pay to eat out", "Suggest take-away", "Passable", "Seek dinner invitation", "Hire as chef" });
+            //cb.DropDownStyle = ComboBoxStyle.DropDown; // DropDownList;
+            //cb.Items.AddRange(new object[] { "Pay to eat out", "Suggest take-away", "Passable", "Seek dinner invitation", "Hire as chef" });
 
             CellEditStarting += financeTreeListView_CellEditStarting;
             CellEditFinished += FinanceTreeListView_CellEditFinished;
         }
 
+	    public void AddModel(List<TreeListViewModel> model)
+	    {
+		    Roots = model;
+		    this.Model = model;
+	    }
+
         private void FinanceTreeListView_CellEditFinished(object sender, CellEditEventArgs e)
         {
             //var q = Roots.GetEnumerator().Current; //cb.Text
-            var cell = GetSubItem(1,0); // (e.ListViewItem.Index, e.SubItemIndex);
-            cell.Text = "Hello, world"; // cb.Text;
+            //var cell = GetSubItem(1,0); // (e.ListViewItem.Index, e.SubItemIndex);
+            //cell.Text = "Hello, world"; // cb.Text;
             
-        }
+	        //e.ListViewItem.SubItems[0].Text = "Hello, world!";
+			//e.ListViewItem.SubItems[0].Text = e.Control.Text;
+			//Model[0].Nodes[0].Tree = "Hello, world!";
+			//Model[0].Nodes[0].Tree = e.Control.Text;
+			//Model.Add();
+		}
 
-        public override void CancelCellEdit()
+		public override void CancelCellEdit()
         {
             base.CancelCellEdit();
 
@@ -54,11 +68,11 @@ namespace DesktopBookkeepingClient
             //    return;
 
             //Person personBeingEdited = (Person)e.RowObject;
-            //ComboBox cb = new ComboBox();
+            ComboBox cb = new ComboBox();
             cb.Bounds = e.CellBounds;
             cb.Font = ((ObjectListView)sender).Font;
-            //cb.DropDownStyle = ComboBoxStyle.DropDown; // DropDownList;
-            //cb.Items.AddRange(new object[] { "Pay to eat out", "Suggest take-away", "Passable", "Seek dinner invitation", "Hire as chef" });
+            cb.DropDownStyle = ComboBoxStyle.DropDown; // DropDownList;
+            cb.Items.AddRange(new object[] { "Pay to eat out", "Suggest take-away", "Passable", "Seek dinner invitation", "Hire as chef" });
             //cb.SelectedIndex = Math.Max(0, Math.Min(cb.Items.Count - 1, ((int)e.Value) / 10));
             //cb.SelectedIndexChanged += delegate (object o, EventArgs args) {
             //    personBeingEdited.CulinaryRating = cb.SelectedIndex * 10;

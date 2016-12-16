@@ -22,13 +22,14 @@ namespace DesktopBookkeepingClient
 
         public TreeListViewModel()
         {
-            Id = NewId();
+	        //Id = NewId();
         }
 
-        public TreeListViewModel(List<TreeListViewModel> transactions, string date)
+        public TreeListViewModel(List<TreeListViewModel> transactions, string date, int id)
         {
-            Id = NewId();
-            NestingLevel = NestingLevel.FinDay;
+			//Id = NewId();
+			Id = id;
+			NestingLevel = NestingLevel.FinDay;
             Nodes = transactions;
 
             Tree = date;
@@ -39,10 +40,12 @@ namespace DesktopBookkeepingClient
             string amount,
             string account,
             string balance,
+			int id,
             string comment = null,
             string time = null)
         {
-            Id = NewId();
+            //Id = NewId();
+	        //Id = id;
             NestingLevel = NestingLevel.Transaction;
             Nodes = articles;
 
@@ -56,7 +59,7 @@ namespace DesktopBookkeepingClient
 
         public TreeListViewModel(string article, string price, string note = null)
         {
-            Id = NewId();
+            //Id = NewId();
             NestingLevel = NestingLevel.InvoiceLine;
 
             Tree = article;
