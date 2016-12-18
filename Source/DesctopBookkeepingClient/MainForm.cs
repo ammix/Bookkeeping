@@ -104,11 +104,11 @@ namespace DesktopBookkeepingClient
             var s = $"{date.Day} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month).ToLower().Replace('ь', 'я')} {date.Year}";
 
 
-            var transact = new TreeListViewModel(id: 3, date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel() });
-            //treeListView.AddObject(transact);
-            //treeListView.EnsureModelVisible(transact);
-			(treeListView as FinanceTreeListView).Model.Add(transact);
-			treeListView.EnsureModelVisible(transact);
+            var transact = new TreeListViewModel(id: 3, date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel(null, "", "", "", "", 0) });
+            treeListView.AddObject(transact);
+            treeListView.EnsureModelVisible(transact);
+			//(treeListView as FinanceTreeListView).Model.Add(transact);
+			//treeListView.EnsureModelVisible(transact);
 
 			treeListView.Sort(olvColumn7, SortOrder.Descending); // Ascending);
             //treeListView.RebuildColumns();
@@ -117,11 +117,11 @@ namespace DesktopBookkeepingClient
             treeListView.ExpandAll();
             var x = treeListView.GetItem(1);
 
-            //treeListView.StartCellEdit(x, 0);
+            treeListView.StartCellEdit(x, 0);
 
-            //(treeListView as FinanceTreeListView).newDayTransaction = true;
+            (treeListView as FinanceTreeListView).newDayTransaction = true;
 
-            ////treeListView.CancelCellEdit();
+            //treeListView.CancelCellEdit();
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)
