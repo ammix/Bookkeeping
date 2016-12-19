@@ -25,8 +25,8 @@ namespace DesktopBookkeepingClient
             treeListView.CanExpandGetter = model => ((TreeListViewModel)model).HasChildren;
 			treeListView.ChildrenGetter = model => ((TreeListViewModel)model).Nodes;
 
-			treeListView.AddModel(MockDb.GetTransactions());
-			//treeListView.Roots = model = MockDb.GetTransactions();
+			//treeListView.AddModel(MockDb.GetTransactions());
+			treeListView.Roots = MockDb.GetTransactions();
 
 			treeListView.TreeColumnRenderer.IsShowLines = false;
 			treeListView.TreeColumnRenderer.UseTriangles = true;
@@ -100,9 +100,14 @@ namespace DesktopBookkeepingClient
 
         private void toolStripButton3_Click(object sender, System.EventArgs e)
         {
+			if(treeListView.CurrentItem !=null)
+				return;
+
             DateTime date = DateTime.Now;
             var s = $"{date.Day} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month).ToLower().Replace('ь', 'я')} {date.Year}";
 
+			if ((treeListView.GetItem(0).RowObject as TreeListViewModel).Tree == s)
+				return;
 
             var transact = new TreeListViewModel(id: 3, date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel(null, "", "", "", "", 0) });
             treeListView.AddObject(transact);
@@ -113,14 +118,10 @@ namespace DesktopBookkeepingClient
 			treeListView.Sort(olvColumn7, SortOrder.Descending); // Ascending);
             //treeListView.RebuildColumns();
 
-
             treeListView.ExpandAll();
-            var x = treeListView.GetItem(1);
 
-            treeListView.StartCellEdit(x, 0);
-
-            (treeListView as FinanceTreeListView).newDayTransaction = true;
-
+            treeListView.CurrentItem = transact;
+            treeListView.StartCellEdit(treeListView.GetItem(1), 0);
             //treeListView.CancelCellEdit();
         }
 
@@ -135,12 +136,15 @@ namespace DesktopBookkeepingClient
 
         private void toolStripButton5_Click(object sender, EventArgs e)
         {
-			//var enumerator = treeListView.Roots.GetEnumerator();
-			//enumerator.MoveNext();
-			//treeListView.RemoveObject(enumerator.Current);
+	        var q = treeListView.GetItem(0).RowObject as TreeListViewModel;
+			treeListView.RemoveObject(q);
+
+	        //var enumerator = treeListView.Roots.GetEnumerator();
+	        //enumerator.MoveNext();
+	        //treeListView.RemoveObject(enumerator.Current);
 
 	        //var q = treeListView.GetSubItem(0, 0);
-			//q.Text = "Hello, world!";
+	        //q.Text = "Hello, world!";
 	        //model[0].Tree = "Hello, world!";
 
 	        //e.ListViewItem.SubItems[0].Text = "Hello, world!";
@@ -150,6 +154,6 @@ namespace DesktopBookkeepingClient
         {
 
         }
-    }
+	}
 
 }

@@ -1,106 +1,98 @@
-﻿using BrightIdeasSoftware;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using BrightIdeasSoftware;
 using System.Windows.Forms;
 
 namespace DesktopBookkeepingClient
 {
     public class FinanceTreeListView: TreeListView
     {
-        public bool newDayTransaction;
-        private ComboBox cb;
-		public List<TreeListViewModel> Model;
+	    public TreeListViewModel CurrentItem;
+	    readonly ComboBox treeComboBox;
+	    readonly TextBox amountTextBox;
+	    readonly ComboBox accountComboBox;
 
-		public FinanceTreeListView()
-        {
-			//treeListView.Roots = model = MockDb.GetTransactions();
+	    public FinanceTreeListView()
+	    {
+		    treeComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/ };
+		    treeComboBox.Items.AddRange(new object[] { "Сільпо", "Алейка", "Кишеня", "Твінфілд", "Аптека" });
 
-			cb = new ComboBox();
-            //cb.Bounds = e.CellBounds;
-            //cb.Font = ((ObjectListView)sender).Font;
-            //cb.DropDownStyle = ComboBoxStyle.DropDown; // DropDownList;
-            //cb.Items.AddRange(new object[] { "Pay to eat out", "Suggest take-away", "Passable", "Seek dinner invitation", "Hire as chef" });
+			amountTextBox = new TextBox();
 
-            CellEditStarting += financeTreeListView_CellEditStarting;
-            CellEditFinished += FinanceTreeListView_CellEditFinished;
+			accountComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/ };
+			accountComboBox.Items.AddRange(new object[] { "Готівка", "Картка", "Ничка" });
         }
 
-	    public void AddModel(List<TreeListViewModel> model)
+	    protected override void OnCellEditFinishing(CellEditEventArgs e)
+		{
+			base.OnCellEditFinishing(e);
+
+			RefreshItem(e.ListViewItem);
+
+			e.Cancel = true;
+		    e.AutoDispose = false;
+		}
+
+	    protected override void OnCellEditFinished(CellEditEventArgs e)
 	    {
-		    Roots = model;
-		    this.Model = model;
+		    //base.OnCellEditFinished(e);
+
+			//if (e.Column.AspectName == "Amount" && string.IsNullOrEmpty(((TreeListViewModel)e.RowObject).Amount))
+			//	StartCellEdit(GetItem(1), 1);	
+
+		    //if (string.IsNullOrEmpty(((TreeListViewModel) e.RowObject).Amount))
+			   // StartCellEdit(GetItem(1), 1);
+		    //else if (string.IsNullOrEmpty(((TreeListViewModel) e.RowObject).Account))
+			   // StartCellEdit(GetItem(1), 4);
+		    //else
+		    //{
+			   // CurrentItem = null;
+		    //}
 	    }
 
-        private void FinanceTreeListView_CellEditFinished(object sender, CellEditEventArgs e)
-        {
-            //var q = Roots.GetEnumerator().Current; //cb.Text
-            //var cell = GetSubItem(1,0); // (e.ListViewItem.Index, e.SubItemIndex);
-            //cell.Text = "Hello, world"; // cb.Text;
+	    public override void CancelCellEdit()
+		{
+			base.CancelCellEdit();
 
-            //e.ListViewItem.SubItems[0].Text = "Hello, world!";
-            //e.ListViewItem.SubItems[0].Text = e.Control.Text;
-            //Model[0].Nodes[0].Tree = "Hello, world!";
-            //Model[0].Nodes[0].Tree = e.Control.Text;
-            //Model.Add();
+			if (CurrentItem != null)
+			{
+				RemoveObject(CurrentItem);
+				CurrentItem = null;
+			}
+		}
 
-            var enumerator = Objects.GetEnumerator();
-            enumerator.MoveNext();
-            TreeListViewModel test = (TreeListViewModel)enumerator.Current;
-            test.Nodes[0].Tree = _text; // e.Control.Text;
-        }
+		protected override void OnCellEditStarting(CellEditEventArgs e)
+	    {
+			base.OnCellEditStarting(e);
 
-		public override void CancelCellEdit()
-        {
-            base.CancelCellEdit();
+			switch (e.Column.AspectName)
+		    {
+				case "Tree":
+					treeComboBox.Font = Font;
+					treeComboBox.Bounds = e.CellBounds;
+					treeComboBox.Text = (string)e.Value;
+					treeComboBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Tree = treeComboBox.Text;
+					e.Control = treeComboBox;
+					break;
 
-            if (newDayTransaction)
-            {
-                var enumerator = Roots.GetEnumerator();
-                enumerator.MoveNext();
+				case "Amount":
+					amountTextBox.Font = Font;
+					amountTextBox.Bounds = e.CellBounds;
+					amountTextBox.Text = (string)e.Value;
+					amountTextBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Amount = amountTextBox.Text;
+					e.Control = amountTextBox;
+					break;
 
-                RemoveObject(enumerator.Current);
-                newDayTransaction = false;
-            }
-        }
+				case "Account":
+					accountComboBox.Font = Font;
+					accountComboBox.Bounds = e.CellBounds;
+					accountComboBox.Text = (string)e.Value;
+					accountComboBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Account = accountComboBox.Text;
+					e.Control = accountComboBox;
+					break;
+			}
+	    }
 
-        private void financeTreeListView_CellEditStarting(object sender, CellEditEventArgs e)
-        {
-            // We only want to mess with the Cooking Skill column
-            //if (e.Column.AspectName != "Tree")
-            //    return;
-
-            //Person personBeingEdited = (Person)e.RowObject;
-            //ComboBox cb = new ComboBox();
-            //cb.SelectedValueChanged += Cb_SelectedValueChanged;
-            //cb.SelectedIndexChanged += Cb_SelectedIndexChanged;
-            cb.Bounds = e.CellBounds;
-            cb.Font = ((ObjectListView)sender).Font;
-            cb.DropDownStyle = ComboBoxStyle.DropDown; // DropDownList;
-            cb.Items.AddRange(new object[] { "Pay to eat out", "Suggest take-away", "Passable", "Seek dinner invitation", "Hire as chef" });
-            //cb.Text = (string)e.Value;
-            //cb.SelectedIndex = Math.Max(0, Math.Min(cb.Items.Count - 1, ((int)e.Value) / 10));
-            //cb.SelectedIndexChanged += delegate (object o, EventArgs args) {
-            //    personBeingEdited.CulinaryRating = cb.SelectedIndex * 10;
-            //};
-            e.Control = cb;
-        }
-
-        private void Cb_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        string _text;
-        private void Cb_SelectedValueChanged(object sender, EventArgs e)
-        {
-
-            _text = ((ComboBox)sender).SelectedItem.ToString();
-        }
-
-        //Known issues:
+	    //Known issues:
         // 1. Коли контрол, то починається з нуля, інакше починається із відступом так як в дереві
         // 2. Контрол працює лише після другого кліка
     }
