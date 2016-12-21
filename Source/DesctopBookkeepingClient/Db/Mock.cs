@@ -18,9 +18,9 @@ namespace DesktopBookkeepingClient
                         (
                             id: 1,
                             counterparty: "Сільпо",
-                            amount: "-100.00",
+                            amount: "- 100.00",
                             account: "Готівка",
-                            balance: "3568.95",
+                            balance: "3 568.95",
                             time: "12:00",
                             articles: new List<TreeListViewModel>
                             {
@@ -33,9 +33,9 @@ namespace DesktopBookkeepingClient
                         (
                             id: 2,
                             counterparty: "Алейка",
-                            amount: "-52.30",
+                            amount: "- 52.30",
                             account: "Готівка",
-                            balance: "3668.95",
+                            balance: "3 668.95",
                             time: "13:01",
                             articles: new List<TreeListViewModel>
                             {
@@ -49,10 +49,10 @@ namespace DesktopBookkeepingClient
                             id: 3,
                             articles: null,
                             counterparty: "Обмін",
-                            amount: "-2500.00",
+                            amount: "-2 500.00",
                             account: "Гаманець UAH",
                             comment: "25.00 UAH/$",
-                            balance: "2150.00",
+                            balance: "2 150.00",
                             time: "14:30"
                         ),
                         new TreeListViewModel
@@ -62,7 +62,7 @@ namespace DesktopBookkeepingClient
                             counterparty: "Обмін",
                             amount: "100.00",
                             account: "Гаманець $",
-                            balance: "100.00 $"
+                            balance: "$ 100.00"
                         )
 
                     }
@@ -79,7 +79,7 @@ namespace DesktopBookkeepingClient
                             id: 6,
                             articles: null,
                             counterparty: "Twinfield",
-                            amount: "50000.00",
+                            amount: "50 000.00",
                             account: "2600 Агріколь",
                             balance: "75 000.00"
                         ),
@@ -88,7 +88,7 @@ namespace DesktopBookkeepingClient
                             id: 7,
                             articles: null,
                             counterparty: "Ліко-Світ",
-                            amount: "-7500.00",
+                            amount: "-7 500.00",
                             account: "Приват",
                             balance: "14 569.00",
                             comment: "Аванс за послуги Інтернет, червень 2016, згідно договору №2525"

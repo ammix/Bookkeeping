@@ -32,6 +32,10 @@ namespace DesktopBookkeepingClient
 			treeListView.TreeColumnRenderer.UseTriangles = true;
 			treeListView.FullRowSelect = true;
 			treeListView.UseCellFormatEvents = true;
+
+			//treeListView.CellEditUseWholeCell = true;
+			//treeListView.CellEditKeyEngine.
+			//treeListView.PossibleFinishCellEditing();
 		}
 
 		private void treeListView_FormatCell(object sender, FormatCellEventArgs e)
@@ -59,15 +63,20 @@ namespace DesktopBookkeepingClient
                     switch(cell.NestingLevel)
                     {
                         case NestingLevel.Transaction:
-                            item.ForeColor = cell.Amount.Contains("-") ? Color.DeepPink : Color.Green;
-                            break;
+                            item.ForeColor = cell.Amount.Contains("-") ? Color.Black : Color.Green; //DeepPink
+							item.Font = new Font(font.Name, font.Size + 0, FontStyle.Bold);
+							break;
                         case NestingLevel.InvoiceLine:
-                            item.Font = new Font(font.Name, font.Size - 1, FontStyle.Regular);
+                            item.Font = new Font(font.Name, font.Size - 0, FontStyle.Regular);
                             break;
                     }
                     break;
 
-                case "Account":
+				case "Balance":
+					item.Font = new Font(font.Name, font.Size, FontStyle.Bold);
+					break;
+
+				case "Account":
                     item.ForeColor = Color.Gray;
                     break;
 

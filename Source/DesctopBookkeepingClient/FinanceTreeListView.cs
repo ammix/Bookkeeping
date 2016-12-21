@@ -34,7 +34,7 @@ namespace DesktopBookkeepingClient
 
 	    protected override void OnCellEditFinished(CellEditEventArgs e)
 	    {
-		    //base.OnCellEditFinished(e);
+		    base.OnCellEditFinished(e);
 
 			//if (e.Column.AspectName == "Amount" && string.IsNullOrEmpty(((TreeListViewModel)e.RowObject).Amount))
 			//	StartCellEdit(GetItem(1), 1);	
