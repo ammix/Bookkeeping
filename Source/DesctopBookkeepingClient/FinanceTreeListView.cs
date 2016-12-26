@@ -1,9 +1,21 @@
-﻿using System;
-using BrightIdeasSoftware;
+﻿using BrightIdeasSoftware;
 using System.Windows.Forms;
 
 namespace DesktopBookkeepingClient
 {
+    public class FinanceCellEditKeyEngine: CellEditKeyEngine
+    {
+        protected override void HandleEndEdit()
+        {
+            var row = (TreeListViewModel)ItemBeingEdited.RowObject;
+
+            if (string.IsNullOrEmpty(row.Amount) || string.IsNullOrEmpty(row.Account))
+                return;
+
+            base.HandleEndEdit();
+        }
+    }
+
     public class FinanceTreeListView: TreeListView
     {
 	    public TreeListViewModel CurrentItem;
@@ -20,9 +32,23 @@ namespace DesktopBookkeepingClient
 
 			accountComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/ };
 			accountComboBox.Items.AddRange(new object[] { "Готівка", "Картка", "Ничка" });
+
+            CellEditValidating += FinanceTreeListView_CellEditValidating;
         }
 
-	    protected override void OnCellEditFinishing(CellEditEventArgs e)
+        private void FinanceTreeListView_CellEditValidating(object sender, CellEditEventArgs e)
+        {
+            string s1 = ((TreeListViewModel)e.RowObject).Amount;
+            string s2 = ((TreeListViewModel)e.RowObject).Account;
+            //e.Cancel = true;
+        }
+
+        //protected override OnValidating(CancelEventArgs e)
+        //{
+        //    base.OnValidating(e);
+        //}
+
+        protected override void OnCellEditFinishing(CellEditEventArgs e)
 		{
 			base.OnCellEditFinishing(e);
 

@@ -33,10 +33,10 @@ namespace DesktopBookkeepingClient
 			treeListView.FullRowSelect = true;
 			treeListView.UseCellFormatEvents = true;
 
-			//treeListView.CellEditUseWholeCell = true;
-			//treeListView.CellEditKeyEngine.
-			//treeListView.PossibleFinishCellEditing();
-		}
+            //treeListView.CellEditUseWholeCell = true;
+            treeListView.CellEditKeyEngine = new FinanceCellEditKeyEngine();
+            //treeListView.PossibleFinishCellEditing();
+        }
 
 		private void treeListView_FormatCell(object sender, FormatCellEventArgs e)
 		{
@@ -72,9 +72,9 @@ namespace DesktopBookkeepingClient
                     }
                     break;
 
-				case "Balance":
-					item.Font = new Font(font.Name, font.Size, FontStyle.Bold);
-					break;
+				//case "Balance":
+				//	item.Font = new Font(font.Name, font.Size, FontStyle.Bold);
+				//	break;
 
 				case "Account":
                     item.ForeColor = Color.Gray;
@@ -132,6 +132,8 @@ namespace DesktopBookkeepingClient
             treeListView.CurrentItem = transact;
             treeListView.StartCellEdit(treeListView.GetItem(1), 0);
             //treeListView.CancelCellEdit();
+
+            //treeListView.PossibleFinishCellEditing
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)
