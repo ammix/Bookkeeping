@@ -10,10 +10,15 @@ namespace DesktopBookkeepingClient
             var row = (TreeListViewModel)ItemBeingEdited.RowObject;
 
             if (string.IsNullOrEmpty(row.Amount) || string.IsNullOrEmpty(row.Account))
+            {
+                MessageBox.Show("Ціна і рахунок мають бути заповнені", "Помилка створення транзакції",
+                MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 return;
+            }
 
             base.HandleEndEdit();
-        }
+
+            LocalDb.PostTransaction(row);
     }
 
     public class FinanceTreeListView: TreeListView

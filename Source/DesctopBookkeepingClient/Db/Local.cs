@@ -8,6 +8,19 @@ namespace DesktopBookkeepingClient
 {
 	class LocalDb
 	{
+        public static void PostTransaction(TreeListViewModel viewModel)
+        {
+            var connectionString = "workstation id=Bookkeeping.mssql.somee.com;packet size=4096;user id=ammix_SQLLogin_1;pwd=8h1c8vsmnk;data source=Bookkeeping.mssql.somee.com;persist security info=False;initial catalog=Bookkeeping";
+            //var connectionString = "data source=localhost;initial catalog=Bookkeeping;user=sa;password=1";
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var cmdText = "SELECT * FROM MainView ORDER BY [Id] DESC";
+                var command = new SqlCommand(cmdText, connection);
+                command.ExecuteNonQuery();
+            }
+        }
+
 		public static List<TreeListViewModel> GetTransactions()
 		{
 			var transactions = new List<TreeListViewModel>();
