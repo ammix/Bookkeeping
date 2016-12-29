@@ -15,7 +15,8 @@ namespace DesktopBookkeepingClient
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                var cmdText = "SELECT * FROM MainView ORDER BY [Id] DESC";
+                //var cmdText = "SELECT * FROM MainView ORDER BY [Id] DESC";
+	            var cmdText = $"INSERT INTO [Transactions] VALUES({1},{2},{3})";
                 var command = new SqlCommand(cmdText, connection);
                 command.ExecuteNonQuery();
             }

@@ -5,20 +5,21 @@ namespace DesktopBookkeepingClient
 {
     public class FinanceCellEditKeyEngine: CellEditKeyEngine
     {
-        protected override void HandleEndEdit()
-        {
-            var row = (TreeListViewModel)ItemBeingEdited.RowObject;
+	    protected override void HandleEndEdit()
+	    {
+		    var row = (TreeListViewModel) ItemBeingEdited.RowObject;
 
-            if (string.IsNullOrEmpty(row.Amount) || string.IsNullOrEmpty(row.Account))
-            {
-                MessageBox.Show("Ціна і рахунок мають бути заповнені", "Помилка створення транзакції",
-                MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                return;
-            }
+		    if (string.IsNullOrEmpty(row.Amount) || string.IsNullOrEmpty(row.Account))
+		    {
+			    MessageBox.Show("Ціна і рахунок мають бути заповнені", "Помилка створення транзакції",
+				    MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+			    return;
+		    }
 
-            base.HandleEndEdit();
+		    base.HandleEndEdit();
 
-            LocalDb.PostTransaction(row);
+		    LocalDb.PostTransaction(row);
+	    }
     }
 
     public class FinanceTreeListView: TreeListView
