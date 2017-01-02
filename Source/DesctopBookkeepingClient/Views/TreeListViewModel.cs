@@ -22,7 +22,7 @@ namespace DesktopBookkeepingClient
 
         public TreeListViewModel()
         {
-	        //Id = NewId();
+            //Id = NewId();
         }
 
         public TreeListViewModel(List<TreeListViewModel> transactions, string date, int id)

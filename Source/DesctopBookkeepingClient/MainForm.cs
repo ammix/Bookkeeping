@@ -119,12 +119,13 @@ namespace DesktopBookkeepingClient
 				return;
 
             var transact = new TreeListViewModel(id: 3, date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel(null, "", "", "", "", 0) });
-            treeListView.AddObject(transact);
+            //treeListView.AddObject(transact);
+            treeListView.InsertObjects(0, new[] { transact });
             treeListView.EnsureModelVisible(transact);
 			//(treeListView as FinanceTreeListView).Model.Add(transact);
 			//treeListView.EnsureModelVisible(transact);
 
-			treeListView.Sort(olvColumn7, SortOrder.Descending); // Ascending);
+			//treeListView.Sort(olvColumn7, SortOrder.Descending); // Ascending);
             //treeListView.RebuildColumns();
 
             treeListView.ExpandAll();

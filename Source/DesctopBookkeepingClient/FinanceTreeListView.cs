@@ -18,7 +18,7 @@ namespace DesktopBookkeepingClient
 
 		    base.HandleEndEdit();
 
-		    LocalDb.PostTransaction(row);
+		    //LocalDb.PostTransaction(row);
 	    }
     }
 
