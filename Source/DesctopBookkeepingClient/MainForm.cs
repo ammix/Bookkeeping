@@ -26,7 +26,8 @@ namespace DesktopBookkeepingClient
 			treeListView.ChildrenGetter = model => ((TreeListViewModel)model).Nodes;
 
 			//treeListView.AddModel(MockDb.GetTransactions());
-			treeListView.Roots = MockDb.GetTransactions();
+			var localDb = new LocalDb();
+			treeListView.Roots = localDb.GetTransactions();
 
 			treeListView.TreeColumnRenderer.IsShowLines = false;
 			treeListView.TreeColumnRenderer.UseTriangles = true;
@@ -118,15 +119,10 @@ namespace DesktopBookkeepingClient
 			if ((treeListView.GetItem(0).RowObject as TreeListViewModel).Tree == s)
 				return;
 
-            var transact = new TreeListViewModel(id: 3, date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel(null, "", "", "", "", 0) });
-            //treeListView.AddObject(transact);
+            var transact = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel(null, "", "", "", "") });
+
             treeListView.InsertObjects(0, new[] { transact });
             treeListView.EnsureModelVisible(transact);
-			//(treeListView as FinanceTreeListView).Model.Add(transact);
-			//treeListView.EnsureModelVisible(transact);
-
-			//treeListView.Sort(olvColumn7, SortOrder.Descending); // Ascending);
-            //treeListView.RebuildColumns();
 
             treeListView.ExpandAll();
 

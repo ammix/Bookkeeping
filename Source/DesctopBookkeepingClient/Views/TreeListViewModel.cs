@@ -4,8 +4,14 @@ namespace DesktopBookkeepingClient
 {
     public class TreeListViewModel
     {
-        public int Id;
-        public NestingLevel NestingLevel = NestingLevel.InvoiceLine;
+		//public int Id;
+		public int UserId = 1;
+		public int TransacId;
+		public int CounterId;
+		public int ArticleId;
+		public int AccountId;
+
+		public NestingLevel NestingLevel = NestingLevel.InvoiceLine;
         public List<TreeListViewModel> Nodes;
 
         public string Tree;   // Date, Counterparty, Article
@@ -20,15 +26,8 @@ namespace DesktopBookkeepingClient
 
         public bool HasChildren => Nodes != null && Nodes.Count != 0;
 
-        public TreeListViewModel()
+        public TreeListViewModel(List<TreeListViewModel> transactions, string date)
         {
-            //Id = NewId();
-        }
-
-        public TreeListViewModel(List<TreeListViewModel> transactions, string date, int id)
-        {
-			//Id = NewId();
-			Id = id;
 			NestingLevel = NestingLevel.FinDay;
             Nodes = transactions;
 
@@ -40,12 +39,9 @@ namespace DesktopBookkeepingClient
             string amount,
             string account,
             string balance,
-			int id,
             string comment = null,
             string time = null)
         {
-            //Id = NewId();
-	        //Id = id;
             NestingLevel = NestingLevel.Transaction;
             Nodes = articles;
 
@@ -59,7 +55,6 @@ namespace DesktopBookkeepingClient
 
         public TreeListViewModel(string article, string price, string note = null)
         {
-            //Id = NewId();
             NestingLevel = NestingLevel.InvoiceLine;
 
             Tree = article;
@@ -74,4 +69,10 @@ namespace DesktopBookkeepingClient
         Transaction,
         InvoiceLine
     }
+
+	public class AccountModel
+	{
+		public int Id;
+		public string Account;
+	}
 }

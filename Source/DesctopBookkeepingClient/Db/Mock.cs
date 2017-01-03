@@ -10,13 +10,13 @@ namespace DesktopBookkeepingClient
             {
                 new TreeListViewModel
                 (
-                    id: 2,
+                    //id: 2,
 					date: "2 липня 2016",
                     transactions: new List<TreeListViewModel>
                     {
                         new TreeListViewModel
                         (
-                            id: 1,
+                            //id: 1,
                             counterparty: "Сільпо",
                             amount: "- 100.00",
                             account: "Готівка",
@@ -31,7 +31,7 @@ namespace DesktopBookkeepingClient
                         ),
                         new TreeListViewModel
                         (
-                            id: 2,
+                            //id: 2,
                             counterparty: "Алейка",
                             amount: "- 52.30",
                             account: "Готівка",
@@ -46,7 +46,7 @@ namespace DesktopBookkeepingClient
                         ),
                         new TreeListViewModel
                         (
-                            id: 3,
+                            //id: 3,
                             articles: null,
                             counterparty: "Обмін",
                             amount: "-2 500.00",
@@ -57,7 +57,7 @@ namespace DesktopBookkeepingClient
                         ),
                         new TreeListViewModel
                         (
-                            id: 4,
+                            //id: 4,
                             articles: null,
                             counterparty: "Обмін",
                             amount: "100.00",
@@ -70,13 +70,13 @@ namespace DesktopBookkeepingClient
 
 				new TreeListViewModel
 				(
-                    id: 1,
+                    //id: 1,
                     date: "1 липня 2016",
 					transactions: new List<TreeListViewModel>
                     {
                         new TreeListViewModel
                         (
-                            id: 6,
+                            //id: 6,
                             articles: null,
                             counterparty: "Twinfield",
                             amount: "50 000.00",
@@ -85,7 +85,7 @@ namespace DesktopBookkeepingClient
                         ),
                         new TreeListViewModel
                         (
-                            id: 7,
+                            //id: 7,
                             articles: null,
                             counterparty: "Ліко-Світ",
                             amount: "-7 500.00",
@@ -95,7 +95,7 @@ namespace DesktopBookkeepingClient
                         ),
                         new TreeListViewModel
                         (
-                            id: 8,
+                            //id: 8,
                             counterparty: "Метро",
                             amount: "-52.30",
                             account: "Картка",
@@ -109,7 +109,7 @@ namespace DesktopBookkeepingClient
                         ),
                         new TreeListViewModel
                         (
-                            id: 9,
+                            //id: 9,
                             articles: null,
                             counterparty: "Алейка",
                             amount: "-152.55",

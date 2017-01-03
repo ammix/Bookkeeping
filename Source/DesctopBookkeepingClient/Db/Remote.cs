@@ -17,7 +17,7 @@ namespace DesktopBookkeepingClient
 			var transactions = new List<TreeListViewModel>();
 			foreach (var finDay in view)
 			{
-				transactions.Add(new TreeListViewModel { Tree = finDay.Date, Nodes = ToView(finDay.FinTransactions) });
+				transactions.Add(new TreeListViewModel(date: finDay.Date, transactions: ToView(finDay.FinTransactions)));
 			}
 			return transactions;
 		}
@@ -27,7 +27,13 @@ namespace DesktopBookkeepingClient
 			var transaction = new List<TreeListViewModel>();
 			foreach (var t in trs)
 			{
-				transaction.Add(new TreeListViewModel { Tree = t.Counterparty, Amount = t.Amount, Comment = t.Note, Account = t.Account, Balance = t.Balance, /*Currency = t.Currency,*/ Nodes = ToView(t.InvoiceLines) });
+				transaction.Add(new TreeListViewModel(
+					counterparty: t.Counterparty,
+					amount: t.Amount,
+					comment: t.Note,
+					account: t.Account,
+					balance: t.Balance, /*Currency = t.Currency,*/
+					articles: ToView(t.InvoiceLines)));
 			}
 			return transaction;
 		}
@@ -38,7 +44,7 @@ namespace DesktopBookkeepingClient
 			var transaction = new List<TreeListViewModel>();
 			foreach (var i in ils)
 			{
-				transaction.Add(new TreeListViewModel { Tree = i.Article, Amount = i.Price, Comment = i.Note });
+				transaction.Add(new TreeListViewModel(article: i.Article, price: i.Price, note: i.Note));
 			}
 			return transaction;
 		}

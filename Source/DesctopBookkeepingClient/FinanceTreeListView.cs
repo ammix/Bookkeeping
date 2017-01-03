@@ -1,5 +1,6 @@
 ﻿using BrightIdeasSoftware;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace DesktopBookkeepingClient
 {
@@ -18,7 +19,7 @@ namespace DesktopBookkeepingClient
 
 		    base.HandleEndEdit();
 
-		    //LocalDb.PostTransaction(row);
+		    LocalDb.PostTransaction(row);
 	    }
     }
 
@@ -29,10 +30,20 @@ namespace DesktopBookkeepingClient
 	    readonly TextBox amountTextBox;
 	    readonly ComboBox accountComboBox;
 
+		//public struct A
+		//{
+		//	public string Coun;
+		//	int id;
+		//}
+
 	    public FinanceTreeListView()
 	    {
-		    treeComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/ };
-		    treeComboBox.Items.AddRange(new object[] { "Сільпо", "Алейка", "Кишеня", "Твінфілд", "Аптека" });
+			//LocalDb.GetAccount().ToArray();
+
+
+			treeComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/ };
+			treeComboBox.Items.AddRange(new object[] { "Сільпо", "Алейка", "Кишеня", "Твінфілд", "Аптека" });
+			//treeComboBox.Items.AddRange(LocalDb.GetAccount().ToArray());
 
 			amountTextBox = new TextBox();
 

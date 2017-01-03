@@ -6,126 +6,145 @@ using System.Globalization;
 
 namespace DesktopBookkeepingClient
 {
-	class LocalDb
+	public class LocalDb
 	{
-		public static void PostTransaction(TreeListViewModel viewModel)
+		string date;
+		string time;
+		string counterparty;
+		string article;
+		string price;
+		string note;
+		string comment;
+		string amount;
+		string account;
+		string balance;
+		string currency;
+
+		//var connectionString = "workstation id=Bookkeeping.mssql.somee.com;packet size=4096;user id=ammix_SQLLogin_1;pwd=8h1c8vsmnk;data source=Bookkeeping.mssql.somee.com;persist security info=False;initial catalog=Bookkeeping";
+		const string connectionString = "data source=localhost;initial catalog=Bookkeeping;user=sa;password=1";
+
+		public static List<AccountModel> GetAccount()
 		{
-			//var connectionString = "workstation id=Bookkeeping.mssql.somee.com;packet size=4096;user id=ammix_SQLLogin_1;pwd=8h1c8vsmnk;data source=Bookkeeping.mssql.somee.com;persist security info=False;initial catalog=Bookkeeping";
-			////var connectionString = "data source=localhost;initial catalog=Bookkeeping;user=sa;password=1";
-			//using (var connection = new SqlConnection(connectionString))
-			//{
-			//    connection.Open();
-			//    var cmdText = $"SELECT [Id] FROM [Accounts] WHERE [Name] = {viewModel.Account}";
+			var accounts = new List<AccountModel>();
 
-
-			//    //INSERT INTO[Transactions] (Id, UserId, AccountId, CounterpartyId, Amount, TransactionDate, Note)
-			//    //VALUES(1, 1, 1, 1, -100, '2016-06-01', NULL)
-			//    var cmdText = $"INSERT INTO [Transactions] VALUES({1},{2},{3})";
-			//    var command = new SqlCommand(cmdText, connection);
-			//    command.ExecuteNonQuery();
-			//}
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				var cmdText = "SELECT [Id], [Name] FROM [Accounts]";
+				var command = new SqlCommand(cmdText, connection);
+				using (var dr = command.ExecuteReader())
+				{
+					while(dr.Read())
+					{
+						accounts.Add(new AccountModel { Id = (int)dr["Id"], Account = (string)dr["Name"] });
+					}
+				}
+			}
+			return accounts;
 		}
 
-		public static List<TreeListViewModel> GetTransactions()
+		public static void PostTransaction(TreeListViewModel viewModel)
 		{
-			var transactions = new List<TreeListViewModel>();
-			//var connectionString = "workstation id=Bookkeeping.mssql.somee.com;packet size=4096;user id=ammix_SQLLogin_1;pwd=8h1c8vsmnk;data source=Bookkeeping.mssql.somee.com;persist security info=False;initial catalog=Bookkeeping";
-			var connectionString = "data source=localhost;initial catalog=Bookkeeping;user=sa;password=1";
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				//var cmdText = $"SELECT [Id] FROM [Accounts] WHERE [Name] = {viewModel.Account}";
+
+				//INSERT INTO[Transactions] (Id, UserId, AccountId, CounterpartyId, Amount, TransactionDate, Note)
+				//VALUES(1, 1, 1, 1, -100, '2016-06-01', NULL)
+				var cmdText = "INSERT INTO [Transactions](Id, UserId, AccountId, CounterpartyId, Amount, TransactionDate, Note)" +
+					$"VALUES({viewModel.TransacId}, {viewModel.UserId}, {viewModel.AccountId}, {viewModel.CounterId}, {viewModel.Amount}, {viewModel.Tree}, {viewModel.Comment})";
+				var command = new SqlCommand(cmdText, connection);
+				command.ExecuteNonQuery();
+			}
+		}
+
+		public List<TreeListViewModel> GetTransactions()
+		{
+			var finDays = new List<TreeListViewModel>();
 			var culture = CultureInfo.GetCultureInfo("uk-UA");
 
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				var cmdText = "SELECT * FROM MainView ORDER BY [Id] DESC";
+				var cmdText = "SELECT * FROM [MainView] ORDER BY [Id] DESC";
 				var command = new SqlCommand(cmdText, connection);
 				using (var dr = command.ExecuteReader())
 				{
 					while (dr.Read())
 					{
-						var id = (int)dr["Id"]; // <<<----------------
-						var date = ((DateTime)dr["Date"]).ToString(culture.DateTimeFormat.ShortDatePattern, culture);
-						var counterparty = dr["Counterparty"].ToString();
-						var article = GetValue(dr, "Article");
-						var price = GetValue(dr, "Price");
-						var lineNote = GetValue(dr, "Note");
-						var note = GetValue(dr, "Comment");
-						var amount = $"{dr["Amount"]:N}";
-						var account = dr["Account"].ToString();
-						var balance = $"{dr["Balance"]:N}";
-						var currency = ""; // dr["Currency"].ToString();
+						//transactionId = (int)dr["Id"];
+						var dateTime = (DateTime)dr["Date"];
+						date = dateTime.ToString(culture.DateTimeFormat.ShortDatePattern, culture);
+						time = dateTime.ToString(culture.DateTimeFormat.ShortTimePattern, culture);
+						counterparty = dr["Counterparty"].ToString();
+						article = GetValue(dr, "Article");
+						price = GetValue(dr, "Price");
+						note = GetValue(dr, "Note");
+						comment = GetValue(dr, "Comment");
+						amount = $"{dr["Amount"]:N}";
+						account = dr["Account"].ToString();
+						balance = $"{dr["Balance"]:N}";
+						currency = GetValue(dr, "Currency");
 
-						if (transactions.Exists(trs => trs.Tree == date))
+						if (finDays.Exists(trs => trs.Tree == date))
 						{
-							var transaction = transactions.Find(trs => trs.Tree == date);
-							if (transaction.Nodes.Exists(x => x.Tree == counterparty && x.Amount == amount))
+							var finDay = finDays.Find(trs => trs.Tree == date);
+							if (finDay.Nodes.Exists(x => x.Tree == counterparty && x.Amount == amount))
 							{
 								if (article != null)
 								{
-									var invoiceLine = transaction.Nodes.Find(x => x.Tree == counterparty);
-									invoiceLine.Nodes.Add(GetItem(article, price, lineNote));
+									var invoiceLine = finDay.Nodes.Find(x => x.Tree == counterparty);
+									invoiceLine.Nodes.Add(CreateInvoiceLineView());
 								}
 							}
 							else
 							{
-								transaction.Nodes.Add(GetItem(counterparty, article, price, lineNote, note, amount, account, balance, currency));
+								finDay.Nodes.Add(CreateFinTransactionView());
 							}
 						}
 						else
 						{
-							transactions.Add(GetItem(date, counterparty, article, price, lineNote, note, amount, account, balance, currency));
+							finDays.Add(CreateFinDayView());
 						}
 					}
 				}
 			}
 
-			return transactions;
+			return finDays;
 		}
 
-		static TreeListViewModel GetItem(
-			//int id,
-			string date,
-			string counterparty,
-			string article,
-			string price,
-			string lineNote,
-			string note,
-			string amount,
-			string acount,
-			string balance,
-			string currency)
+		TreeListViewModel CreateFinDayView()
 		{
 			return new TreeListViewModel
-			{
-				//id: id,
-				Tree = date,
-				Nodes = new List<TreeListViewModel>(GetItem(counterparty, article, price, lineNote, note, amount, acount, balance, currency))
-			};
+			(
+				date: date,
+				transactions: new List<TreeListViewModel> { CreateFinTransactionView() }
+			);
 		}
 
-		static TreeListViewModel GetItem(string counterparty, string article, string price, string lineNote, string note, string amount, string acount, string balance, string currency)
+		TreeListViewModel CreateFinTransactionView()
 		{
 			return new TreeListViewModel
-			{
-				//id: id,
-				//counterparty: counterparty,
-				Time = "12:00",
-				Amount = amount,
-				Account = acount,
-				Balance = balance,
-				//Currency = currency,
-				Comment = note,
-				Nodes = (article != null) ? new List<TreeListViewModel> { GetItem(article, price, lineNote) } : null
-			};
+			(
+				counterparty: counterparty,
+				amount: amount,
+				comment: note,
+				account: account,
+				balance: balance,
+				time: time,
+				articles: (article != null) ? new List<TreeListViewModel> { CreateInvoiceLineView() } : null
+			);
 		}
 
-		static TreeListViewModel GetItem(string article, string price, string lineNote)
+		TreeListViewModel CreateInvoiceLineView()
 		{
 			return new TreeListViewModel
-			{
-				Tree = article,
-				Amount = price,
-				Comment = lineNote
-			};
+			(
+				article: article,
+				price: price,
+				note: note
+			);
 		}
 
 		static string GetValue(IDataReader dr, string fieldName)

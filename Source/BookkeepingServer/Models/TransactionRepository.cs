@@ -5,7 +5,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using BookkeepingServer.Views;
-using BookkeepingServer.Controllers;
 
 namespace BookkeepingServer.Models
 {
@@ -42,7 +41,7 @@ namespace BookkeepingServer.Models
 					while (dr.Read())
 					{
 						id = (int) dr["Id"];
-						var dateTime = ((DateTime)dr["Date"]);
+						var dateTime = (DateTime)dr["Date"];
 						date = dateTime.ToString(culture.DateTimeFormat.ShortDatePattern, culture);
 						time = dateTime.ToString(culture.DateTimeFormat.ShortTimePattern, culture);
 						counterparty = GetValue("Counterparty");
