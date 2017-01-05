@@ -129,7 +129,7 @@ namespace DesktopBookkeepingClient
 			(
 				counterparty: counterparty,
 				amount: amount,
-				comment: note,
+				comment: comment,
 				account: account,
 				balance: balance,
 				time: time,
