@@ -4,6 +4,8 @@ namespace DesktopBookkeepingClient
 {
 	public class FinTransaction
 	{
+		public int Id;
+		public string Time;
 		public string Counterparty;
 		public string Account;
 		public string Amount;

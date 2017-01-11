@@ -25,7 +25,6 @@ namespace DesktopBookkeepingClient
             treeListView.CanExpandGetter = model => ((TreeListViewModel)model).HasChildren;
 			treeListView.ChildrenGetter = model => ((TreeListViewModel)model).Nodes;
 
-			//treeListView.AddModel(MockDb.GetTransactions());
 			var localDb = new LocalDb();
 			treeListView.Roots = localDb.GetTransactions();
 

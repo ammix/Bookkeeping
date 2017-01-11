@@ -8,8 +8,8 @@ namespace DesktopBookkeepingClient
 	{
 		public static List<TreeListViewModel> GetTransactions()
 		{
-			var client = new RestClient("http://money.somee.com/");
-			var request = new RestRequest("api/transactions/6");
+			var client = new RestClient("http://localhost"); //http://money.somee.com/
+			var request = new RestRequest("api/transactions/1");
 
 			IRestResponse response = client.Get(request);
 			var view = JsonConvert.DeserializeObject<List<FinDay>>(response.Content);

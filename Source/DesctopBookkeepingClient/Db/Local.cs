@@ -67,7 +67,14 @@ namespace DesktopBookkeepingClient
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				var cmdText = "SELECT * FROM [MainView] ORDER BY [Id] DESC";
+
+				var command1 = new SqlCommand("SELECT [Amount] FROM [Snapshots]", connection);
+				using (var dr = command1.ExecuteReader())
+				{
+
+				}
+
+					var cmdText = "SELECT * FROM [MainView] ORDER BY [Id] DESC";
 				var command = new SqlCommand(cmdText, connection);
 				using (var dr = command.ExecuteReader())
 				{
