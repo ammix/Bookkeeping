@@ -15,9 +15,9 @@ namespace DesktopBookkeepingClient
 		string price;
 		string note;
 		string comment;
-		string amount;
+		decimal amount;
 		string account;
-		string balance;
+		decimal balance = 0;
 		string currency;
 
 		//var connectionString = "workstation id=Bookkeeping.mssql.somee.com;packet size=4096;user id=ammix_SQLLogin_1;pwd=8h1c8vsmnk;data source=Bookkeeping.mssql.somee.com;persist security info=False;initial catalog=Bookkeeping";
@@ -71,10 +71,11 @@ namespace DesktopBookkeepingClient
 				var command1 = new SqlCommand("SELECT [Amount] FROM [Snapshots]", connection);
 				using (var dr = command1.ExecuteReader())
 				{
-
+					dr.Read();
+					balance = (decimal)dr["Amount"];
 				}
 
-					var cmdText = "SELECT * FROM [MainView] ORDER BY [Id] DESC";
+				var cmdText = "SELECT * FROM [MainView] ORDER BY [Id] ASC";
 				var command = new SqlCommand(cmdText, connection);
 				using (var dr = command.ExecuteReader())
 				{
@@ -89,15 +90,15 @@ namespace DesktopBookkeepingClient
 						price = GetValue(dr, "Price");
 						note = GetValue(dr, "Note");
 						comment = GetValue(dr, "Comment");
-						amount = $"{dr["Amount"]:N}";
+						amount = (decimal)dr["Amount"]; //$"{dr["Amount"]:N}";
 						account = dr["Account"].ToString();
-						balance = $"{dr["Balance"]:N}";
+						//balance = $"{dr["Balance"]:N}";
 						currency = GetValue(dr, "Currency");
 
 						if (finDays.Exists(trs => trs.Tree == date))
 						{
 							var finDay = finDays.Find(trs => trs.Tree == date);
-							if (finDay.Nodes.Exists(x => x.Tree == counterparty && x.Amount == amount))
+							if (finDay.Nodes.Exists(x => x.Tree == counterparty && decimal.Parse(x.Amount) == amount))
 							{
 								if (article != null)
 								{
@@ -118,6 +119,10 @@ namespace DesktopBookkeepingClient
 				}
 			}
 
+			finDays.Reverse();
+			foreach (var day in finDays)
+				day.Nodes.Reverse();
+
 			return finDays;
 		}
 
@@ -132,13 +137,16 @@ namespace DesktopBookkeepingClient
 
 		TreeListViewModel CreateFinTransactionView()
 		{
+			if (account == "Готівка")
+				balance += amount;
+
 			return new TreeListViewModel
 			(
 				counterparty: counterparty,
-				amount: amount,
+				amount: amount.ToString("N"),
 				comment: comment,
 				account: account,
-				balance: balance,
+				balance: account == "Готівка"? balance.ToString("N"): "",
 				time: time,
 				articles: (article != null) ? new List<TreeListViewModel> { CreateInvoiceLineView() } : null
 			);

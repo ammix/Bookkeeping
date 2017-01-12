@@ -161,6 +161,13 @@ namespace DesktopBookkeepingClient
         {
 
         }
+
+		private void toolStripButton6_Click(object sender, EventArgs e)
+		{
+			var localDb = new LocalDb();
+			treeListView.Roots = localDb.GetTransactions();
+			treeListView.ExpandAll();
+		}
 	}
 
 }
