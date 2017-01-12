@@ -24,7 +24,6 @@ CREATE TABLE Accounts
 	UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
 	IsActive BIT NOT NULL,
 	Name NVARCHAR(32) NOT NULL,
-	Balance MONEY NOT NULL,
 	Currency NCHAR(3) NOT NULL,
 	Note NVARCHAR(255)
 )
@@ -93,7 +92,6 @@ i.Note AS Note,
 t.Note AS Comment,
 t.Amount,
 ac.Name AS Account,
-ac.Balance,
 ac.Currency
 
 FROM Transactions t 
