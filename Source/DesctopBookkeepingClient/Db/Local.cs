@@ -6,31 +6,51 @@ using System.Globalization;
 
 namespace DesktopBookkeepingClient
 {
+	//public static class Balance
+	//{
+	//	static Dictionary<string, Dictionary<int, decimal>> balance = new Dictionary<string, Dictionary<int, decimal>>();
+
+	//	public static decimal GetValue(string account, int transactionId)
+	//	{
+	//		return balance[account][transactionId];
+	//	}
+	//}
+
 	// Rule: snapshot must be on 00:00 of a new day
-	public class SnapshotReader
-	{
-		Dictionary<string, Dictionary<DateTime, decimal>> snapshots = new Dictionary<string, Dictionary<DateTime, decimal>>();
+	//public class SnapshotReader
+	//{
+	//	Dictionary<string, Dictionary<DateTime, decimal>> snapshots = new Dictionary<string, Dictionary<DateTime, decimal>>();
+	//	Dictionary<string, decimal> balance = new Dictionary<string, decimal>();
 
-		public void AddSnapshot(string account, DateTime date, decimal value)
-		{
-			if (!snapshots.ContainsKey(account))
-				snapshots.Add(account, new Dictionary<DateTime, decimal>());
+	//	public void AddSnapshot(string account, DateTime date, decimal value)
+	//	{
+	//		if (!snapshots.ContainsKey(account))
+	//			snapshots.Add(account, new Dictionary<DateTime, decimal>());
 
-			snapshots[account].Add(date, value);
-			// TODO: sort by date
-		}
+	//		snapshots[account].Add(date, value);
+	//		// TODO: sort by date
+	//	}
 
-		public decimal GetInitialAccountValue(string account, DateTime date)
-		{
-			//snapshots[account][]
-			return 0m;
-		}
-	}
+	//	public void ConsiderTransaction(string account, decimal value)
+	//	{
+
+	//	}
+
+	//	public decimal GetBalance(string account)
+	//	{
+	//		return 0;
+	//	}
+
+	//	//public decimal GetInitialAccountValue(string account, DateTime date)
+	//	//{
+	//	//	//snapshots[account][]
+	//	//	return 0m;
+	//	//}
+	//}
 
 	public class LocalDb
 	{
-		SnapshotReader snapshotReader = new SnapshotReader();
-
+		//int transactionId;
 		string date;
 		string time;
 		string counterparty;
@@ -40,11 +60,11 @@ namespace DesktopBookkeepingClient
 		string comment;
 		decimal amount;
 		string account;
-		decimal balance;
+		Dictionary<string, decimal> balance = new Dictionary<string, decimal>();
 		string currency;
 
 		//var connectionString = "workstation id=Bookkeeping.mssql.somee.com;packet size=4096;user id=ammix_SQLLogin_1;pwd=8h1c8vsmnk;data source=Bookkeeping.mssql.somee.com;persist security info=False;initial catalog=Bookkeeping";
-		const string connectionString = "data source=localhost;initial catalog=Bookkeeping;user=sa;password=sys1nt3rn@ls";
+		const string connectionString = "data source=localhost;initial catalog=Bookkeeping;user=sa;password=1";
 
 		public static List<AccountModel> GetAccount()
 		{
@@ -82,7 +102,7 @@ namespace DesktopBookkeepingClient
 			}
 		}
 
-		public List<TreeListViewModel> GetTransactions()
+		public List<TreeListViewModel> GetTransactions(int month)
 		{
 			var finDays = new List<TreeListViewModel>();
 			var culture = CultureInfo.GetCultureInfo("uk-UA");
@@ -91,14 +111,14 @@ namespace DesktopBookkeepingClient
 			{
 				connection.Open();
 
-				var getSnapshotsSql = new SqlCommand("SELECT a.[Name] AS [Account], s.[Amount], s.[SnapshotDate] AS [Date] FROM [Snapshots] s INNER JOIN [Accounts] a ON s.AccountId = a.Id", connection);
+				var getSnapshotsSql = new SqlCommand($"SELECT [Account], [Amount] FROM [SnapshotsView] WHERE DATEPART(month, [Date]) = {month}", connection);
 				using (var dr = getSnapshotsSql.ExecuteReader())
 				{
 					while (dr.Read())
-						snapshotReader.AddSnapshot((string) dr["Account"], (DateTime) dr["Date"], (decimal) dr["Amount"]);
+						balance.Add((string)dr["Account"], (decimal)dr["Amount"]);
 				}
 
-				var cmdText = "SELECT * FROM [MainView] ORDER BY [Id] ASC";
+				var cmdText = $"SELECT * FROM [MainView] WHERE DATEPART(month, [DATE]) = {month} ORDER BY [Id] ASC";
 				var command = new SqlCommand(cmdText, connection);
 				using (var dr = command.ExecuteReader())
 				{
@@ -117,6 +137,7 @@ namespace DesktopBookkeepingClient
 						account = dr["Account"].ToString();
 						//balance = $"{dr["Balance"]:N}";
 						//balance = snapshotReader.GetInitialAccountValue(account, dateTime);
+						//balance = Balance.GetValue(account, transactionId).ToString("N");
 						currency = GetValue(dr, "Currency");
 
 						if (finDays.Exists(trs => trs.Tree == date))
@@ -161,8 +182,8 @@ namespace DesktopBookkeepingClient
 
 		TreeListViewModel CreateFinTransactionView()
 		{
-			if (account == "Готівка")
-				balance += amount;
+			if (balance.ContainsKey(account))
+				balance[account] += amount;
 
 			return new TreeListViewModel
 			(
@@ -170,7 +191,7 @@ namespace DesktopBookkeepingClient
 				amount: amount.ToString("N"),
 				comment: comment,
 				account: account,
-				balance: account == "Готівка"? balance.ToString("N"): "",
+				balance: balance.ContainsKey(account)? balance[account].ToString("N"): "",
 				time: time,
 				articles: (article != null) ? new List<TreeListViewModel> { CreateInvoiceLineView() } : null
 			);

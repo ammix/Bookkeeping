@@ -100,3 +100,12 @@ FROM Transactions t
 	INNER JOIN CounterParties c ON c.Id = t.CounterpartyId
 	INNER JOIN Accounts ac ON ac.Id = t.AccountId
 
+CREATE VIEW [SnapshotsView]
+AS SELECT
+a.[Name] AS [Account],
+s.[Amount],
+s.[SnapShotDate] AS [Date]
+
+FROM [Snapshots] s
+	INNER JOIN [Accounts] a ON s.AccountId = a.Id
+	WHERE DATEPART(day, s.[SnapshotDate]) = 1
