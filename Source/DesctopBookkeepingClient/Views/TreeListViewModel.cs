@@ -2,14 +2,15 @@
 
 namespace DesktopBookkeepingClient
 {
+	// Model for TreeListView control
     public class TreeListViewModel
     {
 		//public int Id;
-		public int UserId = 1;
-		public int TransacId;
-		public int CounterId;
-		public int ArticleId;
-		public int AccountId;
+		//public int UserId = 1;
+		//public int TransacId;
+		//public int CounterId;
+		//public int ArticleId;
+		//public int AccountId;
 
 		public NestingLevel NestingLevel = NestingLevel.InvoiceLine;
         public List<TreeListViewModel> Nodes;

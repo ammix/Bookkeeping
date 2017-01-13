@@ -6,48 +6,6 @@ using System.Globalization;
 
 namespace DesktopBookkeepingClient
 {
-	//public static class Balance
-	//{
-	//	static Dictionary<string, Dictionary<int, decimal>> balance = new Dictionary<string, Dictionary<int, decimal>>();
-
-	//	public static decimal GetValue(string account, int transactionId)
-	//	{
-	//		return balance[account][transactionId];
-	//	}
-	//}
-
-	// Rule: snapshot must be on 00:00 of a new day
-	//public class SnapshotReader
-	//{
-	//	Dictionary<string, Dictionary<DateTime, decimal>> snapshots = new Dictionary<string, Dictionary<DateTime, decimal>>();
-	//	Dictionary<string, decimal> balance = new Dictionary<string, decimal>();
-
-	//	public void AddSnapshot(string account, DateTime date, decimal value)
-	//	{
-	//		if (!snapshots.ContainsKey(account))
-	//			snapshots.Add(account, new Dictionary<DateTime, decimal>());
-
-	//		snapshots[account].Add(date, value);
-	//		// TODO: sort by date
-	//	}
-
-	//	public void ConsiderTransaction(string account, decimal value)
-	//	{
-
-	//	}
-
-	//	public decimal GetBalance(string account)
-	//	{
-	//		return 0;
-	//	}
-
-	//	//public decimal GetInitialAccountValue(string account, DateTime date)
-	//	//{
-	//	//	//snapshots[account][]
-	//	//	return 0m;
-	//	//}
-	//}
-
 	public class LocalDb
 	{
 		//int transactionId;
@@ -95,8 +53,8 @@ namespace DesktopBookkeepingClient
 
 				//INSERT INTO[Transactions] (Id, UserId, AccountId, CounterpartyId, Amount, TransactionDate, Note)
 				//VALUES(1, 1, 1, 1, -100, '2016-06-01', NULL)
-				var cmdText = "INSERT INTO [Transactions](Id, UserId, AccountId, CounterpartyId, Amount, TransactionDate, Note)" +
-					$"VALUES({viewModel.TransacId}, {viewModel.UserId}, {viewModel.AccountId}, {viewModel.CounterId}, {viewModel.Amount}, {viewModel.Tree}, {viewModel.Comment})";
+				var cmdText = "INSERT INTO [Transactions](UserId, AccountId, CounterpartyId, Amount, TransactionDate, Note)" +
+					$"VALUES({viewModel.UserId}, {viewModel.AccountId}, {viewModel.CounterId}, {viewModel.Amount}, {viewModel.Tree}, {viewModel.Comment})";
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
 			}
@@ -111,6 +69,7 @@ namespace DesktopBookkeepingClient
 			{
 				connection.Open();
 
+				// Rule: snapshots must be on 00:00 of 1-st new month (and day if exist)
 				var getSnapshotsSql = new SqlCommand($"SELECT [Account], [Amount] FROM [SnapshotsView] WHERE DATEPART(month, [Date]) = {month}", connection);
 				using (var dr = getSnapshotsSql.ExecuteReader())
 				{
