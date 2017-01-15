@@ -143,8 +143,9 @@ namespace DesktopBookkeepingClient
 
         private void toolStripButton5_Click(object sender, EventArgs e)
         {
-	        var q = treeListView.GetItem(0).RowObject as TreeListViewModel;
-			treeListView.RemoveObject(q);
+			//var model = treeListView.GetItem(0).RowObject as TreeListViewModel;
+			var model = (TreeListViewModel)treeListView.SelectedObject;
+			treeListView.RemoveObject(model);
 
 	        //var enumerator = treeListView.Roots.GetEnumerator();
 	        //enumerator.MoveNext();
@@ -167,6 +168,15 @@ namespace DesktopBookkeepingClient
 			var localDb = new LocalDb();
 			treeListView.Roots = localDb.GetTransactions(1);
 			treeListView.ExpandAll();
+		}
+
+		private void toolStripButton7_Click(object sender, EventArgs e)
+		{
+			//var roots = treeListView.Roots;
+
+			//var model = (TreeListViewModel)treeListView.SelectedObject;
+			//var index = treeListView.SelectedIndex;
+			//treeListView.MoveObjects(index--, new[] { model });
 		}
 	}
 

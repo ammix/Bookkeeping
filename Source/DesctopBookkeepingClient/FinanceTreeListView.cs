@@ -1,6 +1,5 @@
 ﻿using BrightIdeasSoftware;
 using System.Windows.Forms;
-using System.Linq;
 
 namespace DesktopBookkeepingClient
 {

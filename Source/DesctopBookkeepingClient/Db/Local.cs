@@ -53,8 +53,11 @@ namespace DesktopBookkeepingClient
 
 				//INSERT INTO[Transactions] (Id, UserId, AccountId, CounterpartyId, Amount, TransactionDate, Note)
 				//VALUES(1, 1, 1, 1, -100, '2016-06-01', NULL)
-				var cmdText = "INSERT INTO [Transactions](UserId, AccountId, CounterpartyId, Amount, TransactionDate, Note)" +
-					$"VALUES({viewModel.UserId}, {viewModel.AccountId}, {viewModel.CounterId}, {viewModel.Amount}, {viewModel.Tree}, {viewModel.Comment})";
+				//var cmdText = "INSERT INTO [Transactions](UserId, AccountId, CounterpartyId, Amount, TransactionDate, Note)" +
+				//	$"VALUES({viewModel.UserId}, {viewModel.AccountId}, {viewModel.CounterId}, {viewModel.Amount}, {viewModel.Tree}, {viewModel.Comment})";
+				var cmdText = "INSERT INTO [Transactions](UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note)" +
+					$"SELECT 1, a.ID, c.ID, {viewModel.Amount}, GETDATE(), NULL, NULL FROM[Accounts] a INNER JOIN [Counterparties] c ON a.[Name] = '{viewModel.Account}' AND c.[Name] = '{viewModel.Tree}'";
+				   //SELECT 1, a.ID, c.ID, -1000, GETDATE(), NULL, NULL FROM[Accounts] a INNER JOIN[Counterparties] c ON a.[Name] = 'Готівка' AND c.[Name] = 'Касіяна 2/1'
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
 			}
@@ -77,7 +80,7 @@ namespace DesktopBookkeepingClient
 						balance.Add((string)dr["Account"], (decimal)dr["Amount"]);
 				}
 
-				var cmdText = $"SELECT * FROM [MainView] WHERE DATEPART(month, [DATE]) = {month} ORDER BY [Id] ASC";
+				var cmdText = $"SELECT * FROM [MainView] WHERE DATEPART(month, [DATE]) = {month} ORDER BY [Date] ASC";
 				var command = new SqlCommand(cmdText, connection);
 				using (var dr = command.ExecuteReader())
 				{
