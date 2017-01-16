@@ -64,7 +64,7 @@ namespace DesktopBookkeepingClient
 			return accounts.ToArray();
 		}
 
-		public static void PostTransaction(TreeListViewModel viewModel)
+		public static void InsertTransaction(TreeListViewModel viewModel)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -74,6 +74,22 @@ namespace DesktopBookkeepingClient
 					$" SELECT 1, a.ID, c.ID, {viewModel.Amount}, GETDATE(), NULL, N'{viewModel.Comment}'" +
 				    " FROM[Accounts] a INNER JOIN [Counterparties] c" +
 				    $" ON a.[Name] = N'{viewModel.Account}' AND c.[Name] = N'{viewModel.Tree}'";
+
+				var command = new SqlCommand(cmdText, connection);
+				command.ExecuteNonQuery();
+			}
+		}
+
+		public static void UpdateTransaction(TreeListViewModel viewModel)
+		{
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				var cmdText =
+					"UPDATE [Transactions]" +
+					$" SELECT 1, a.ID, c.ID, {viewModel.Amount}, GETDATE(), NULL, N'{viewModel.Comment}'" +
+					" FROM[Accounts] a INNER JOIN [Counterparties] c" +
+					$" ON a.[Name] = N'{viewModel.Account}' AND c.[Name] = N'{viewModel.Tree}'";
 
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
