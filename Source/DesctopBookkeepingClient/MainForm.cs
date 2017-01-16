@@ -26,7 +26,7 @@ namespace DesktopBookkeepingClient
 			treeListView.ChildrenGetter = model => ((TreeListViewModel)model).Nodes;
 
 			var localDb = new LocalDb();
-			treeListView.Roots = localDb.GetTransactions(1);
+			treeListView.Roots = localDb.GetTransactions();
 
 			treeListView.TreeColumnRenderer.IsShowLines = false;
 			treeListView.TreeColumnRenderer.UseTriangles = true;
@@ -166,7 +166,7 @@ namespace DesktopBookkeepingClient
 		private void toolStripButton6_Click(object sender, EventArgs e)
 		{
 			var localDb = new LocalDb();
-			treeListView.Roots = localDb.GetTransactions(1);
+			treeListView.Roots = localDb.GetTransactions();
 			treeListView.ExpandAll();
 		}
 

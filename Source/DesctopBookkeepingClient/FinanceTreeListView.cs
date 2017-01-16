@@ -27,7 +27,8 @@ namespace DesktopBookkeepingClient
 	    public TreeListViewModel CurrentItem;
 	    readonly ComboBox treeComboBox;
 	    readonly TextBox amountTextBox;
-	    readonly ComboBox accountComboBox;
+		readonly TextBox commentTextBox;
+		readonly ComboBox accountComboBox;
 
 		//public struct A
 		//{
@@ -37,19 +38,16 @@ namespace DesktopBookkeepingClient
 
 	    public FinanceTreeListView()
 	    {
-			//LocalDb.GetAccount().ToArray();
-
-
 			treeComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/ };
-			treeComboBox.Items.AddRange(new object[] { "Сільпо", "Алейка", "Кишеня", "Твінфілд", "Аптека" });
-			//treeComboBox.Items.AddRange(LocalDb.GetAccount().ToArray());
+			treeComboBox.Items.AddRange(LocalDb.GetCounterparties());
 
 			amountTextBox = new TextBox();
+			commentTextBox = new TextBox();
 
 			accountComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/ };
-			accountComboBox.Items.AddRange(new object[] { "Готівка", "Картка", "Ничка" });
+			accountComboBox.Items.AddRange(LocalDb.GetAccounts());
 
-            CellEditValidating += FinanceTreeListView_CellEditValidating;
+			CellEditValidating += FinanceTreeListView_CellEditValidating;
         }
 
         private void FinanceTreeListView_CellEditValidating(object sender, CellEditEventArgs e)
@@ -122,6 +120,14 @@ namespace DesktopBookkeepingClient
 					amountTextBox.Text = (string)e.Value;
 					amountTextBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Amount = amountTextBox.Text;
 					e.Control = amountTextBox;
+					break;
+
+				case "Comment":
+					commentTextBox.Font = Font;
+					commentTextBox.Bounds = e.CellBounds;
+					commentTextBox.Text = (string)e.Value;
+					commentTextBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Comment = commentTextBox.Text;
+					e.Control = commentTextBox;
 					break;
 
 				case "Account":

@@ -24,24 +24,44 @@ namespace DesktopBookkeepingClient
 		//var connectionString = "workstation id=Bookkeeping.mssql.somee.com;packet size=4096;user id=ammix_SQLLogin_1;pwd=8h1c8vsmnk;data source=Bookkeeping.mssql.somee.com;persist security info=False;initial catalog=Bookkeeping";
 		const string connectionString = "data source=localhost;initial catalog=Bookkeeping;user=sa;password=1";
 
-		public static List<AccountModel> GetAccount()
+		public static string[] GetCounterparties()
 		{
-			var accounts = new List<AccountModel>();
+			var counterparties = new List<string>();
 
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				var cmdText = "SELECT [Id], [Name] FROM [Accounts]";
+				var cmdText = "SELECT [Name] FROM [Counterparties]";
 				var command = new SqlCommand(cmdText, connection);
 				using (var dr = command.ExecuteReader())
 				{
-					while(dr.Read())
+					while (dr.Read())
 					{
-						accounts.Add(new AccountModel { Id = (int)dr["Id"], Account = (string)dr["Name"] });
+						counterparties.Add((string)dr["Name"]);
 					}
 				}
 			}
-			return accounts;
+			return counterparties.ToArray();
+		}
+
+		public static string[] GetAccounts()
+		{
+			var accounts = new List<string>();
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				var cmdText = "SELECT [Name] FROM [Accounts]";
+				var command = new SqlCommand(cmdText, connection);
+				using (var dr = command.ExecuteReader())
+				{
+					while (dr.Read())
+					{
+						accounts.Add((string)dr["Name"]);
+					}
+				}
+			}
+			return accounts.ToArray();
 		}
 
 		public static void PostTransaction(TreeListViewModel viewModel)
@@ -49,21 +69,19 @@ namespace DesktopBookkeepingClient
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				//var cmdText = $"SELECT [Id] FROM [Accounts] WHERE [Name] = {viewModel.Account}";
+				var cmdText = 
+					"INSERT INTO [Transactions](UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note)" +
+					$" SELECT 1, a.ID, c.ID, {viewModel.Amount}, GETDATE(), NULL, N'{viewModel.Comment}'" +
+				    " FROM[Accounts] a INNER JOIN [Counterparties] c" +
+				    $" ON a.[Name] = N'{viewModel.Account}' AND c.[Name] = N'{viewModel.Tree}'";
 
-				//INSERT INTO[Transactions] (Id, UserId, AccountId, CounterpartyId, Amount, TransactionDate, Note)
-				//VALUES(1, 1, 1, 1, -100, '2016-06-01', NULL)
-				//var cmdText = "INSERT INTO [Transactions](UserId, AccountId, CounterpartyId, Amount, TransactionDate, Note)" +
-				//	$"VALUES({viewModel.UserId}, {viewModel.AccountId}, {viewModel.CounterId}, {viewModel.Amount}, {viewModel.Tree}, {viewModel.Comment})";
-				var cmdText = "INSERT INTO [Transactions](UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note)" +
-					$"SELECT 1, a.ID, c.ID, {viewModel.Amount}, GETDATE(), NULL, NULL FROM[Accounts] a INNER JOIN [Counterparties] c ON a.[Name] = '{viewModel.Account}' AND c.[Name] = '{viewModel.Tree}'";
-				   //SELECT 1, a.ID, c.ID, -1000, GETDATE(), NULL, NULL FROM[Accounts] a INNER JOIN[Counterparties] c ON a.[Name] = 'Готівка' AND c.[Name] = 'Касіяна 2/1'
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
 			}
 		}
 
-		public List<TreeListViewModel> GetTransactions(int month)
+		// Months have to be in order (without gaps)
+		public List<TreeListViewModel> GetTransactions(/*int month*/)
 		{
 			var finDays = new List<TreeListViewModel>();
 			var culture = CultureInfo.GetCultureInfo("uk-UA");
@@ -73,14 +91,16 @@ namespace DesktopBookkeepingClient
 				connection.Open();
 
 				// Rule: snapshots must be on 00:00 of 1-st new month (and day if exist)
-				var getSnapshotsSql = new SqlCommand($"SELECT [Account], [Amount] FROM [SnapshotsView] WHERE DATEPART(month, [Date]) = {month}", connection);
+				//var getSnapshotsSql = new SqlCommand($"SELECT [Account], [Amount] FROM [SnapshotsView] WHERE DATEPART(month, [Date]) = {month}", connection);
+				var getSnapshotsSql = new SqlCommand("SELECT [Account], [Amount] FROM [SnapshotsView]", connection);
 				using (var dr = getSnapshotsSql.ExecuteReader())
 				{
 					while (dr.Read())
 						balance.Add((string)dr["Account"], (decimal)dr["Amount"]);
 				}
 
-				var cmdText = $"SELECT * FROM [MainView] WHERE DATEPART(month, [DATE]) = {month} ORDER BY [Date] ASC";
+				//var cmdText = $"SELECT * FROM [MainView] WHERE DATEPART(month, [DATE]) = {month} ORDER BY [Date] ASC";
+				var cmdText = "SELECT * FROM [MainView] ORDER BY [Date] ASC";
 				var command = new SqlCommand(cmdText, connection);
 				using (var dr = command.ExecuteReader())
 				{
