@@ -58,6 +58,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DateDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DateDialog.Designer.cs">
+      <DependentUpon>DateDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="FinanceTreeListView.cs" />
     <Compile Include="Db\Local.cs" />
     <Compile Include="Db\Remote.cs" />
@@ -80,6 +86,9 @@
     <Compile Include="ViewModels\FinDay.cs" />
     <Compile Include="ViewModels\FinTransaction.cs" />
     <Compile Include="ViewModels\InvoiceLine.cs" />
+    <EmbeddedResource Include="DateDialog.resx">
+      <DependentUpon>DateDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InputWindow.resx">
       <DependentUpon>InputWindow.cs</DependentUpon>
     </EmbeddedResource>

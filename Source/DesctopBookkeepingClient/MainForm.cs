@@ -109,10 +109,24 @@ namespace DesktopBookkeepingClient
 
         private void toolStripButton3_Click(object sender, System.EventArgs e)
         {
+			DateTime date;
+
+			using (DateDialog dateDialog = new DateDialog())
+			{
+				DialogResult result = dateDialog.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					date = dateDialog.Date;
+				}
+				else
+				{
+					return;
+				}
+			}
+
 			if(treeListView.CurrentItem !=null)
 				return;
 
-            DateTime date = DateTime.Now;
             var s = $"{date.Day} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month).ToLower().Replace('ь', 'я')} {date.Year}";
 
 			if ((treeListView.GetItem(0).RowObject as TreeListViewModel).Tree == s)

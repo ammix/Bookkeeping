@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DesktopBookkeepingClient
 {
@@ -11,6 +12,10 @@ namespace DesktopBookkeepingClient
 		//public int CounterId;
 		//public int ArticleId;
 		//public int AccountId;
+
+		public DateTime Date;
+		string _counterparty;
+		string _article;
 
 		public NestingLevel NestingLevel = NestingLevel.InvoiceLine;
         public List<TreeListViewModel> Nodes;
@@ -33,6 +38,8 @@ namespace DesktopBookkeepingClient
             Nodes = transactions;
 
             Tree = date;
+
+			DateTime.TryParse(date, out Date);
         }
 
         public TreeListViewModel(List<TreeListViewModel> articles,

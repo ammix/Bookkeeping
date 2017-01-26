@@ -71,7 +71,7 @@ namespace DesktopBookkeepingClient
 				connection.Open();
 				var cmdText = 
 					"INSERT INTO [Transactions](UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note)" +
-					$" SELECT 1, a.ID, c.ID, {viewModel.Amount}, GETDATE(), NULL, N'{viewModel.Comment}'" +
+					$" SELECT 1, a.ID, c.ID, {viewModel.Amount}, {viewModel}, NULL, N'{viewModel.Comment}'" +
 				    " FROM[Accounts] a INNER JOIN [Counterparties] c" +
 				    $" ON a.[Name] = N'{viewModel.Account}' AND c.[Name] = N'{viewModel.Tree}'";
 
