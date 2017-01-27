@@ -127,7 +127,8 @@ namespace DesktopBookkeepingClient
 			if(treeListView.CurrentItem !=null)
 				return;
 
-            var s = $"{date.Day} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month).ToLower().Replace('ь', 'я')} {date.Year}";
+            //var s = $"{date.Day} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month).ToLower().Replace('ь', 'я')} {date.Year}";
+	        var s = date.ToShortDateString();
 
 			if ((treeListView.GetItem(0).RowObject as TreeListViewModel).Tree == s)
 				return;

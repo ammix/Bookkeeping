@@ -110,7 +110,7 @@ namespace DesktopBookkeepingClient
 					treeComboBox.Font = Font;
 					treeComboBox.Bounds = e.CellBounds;
 					treeComboBox.Text = (string)e.Value;
-					treeComboBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Tree = treeComboBox.Text;
+					treeComboBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Counterparty = treeComboBox.Text; //Tree
 					e.Control = treeComboBox;
 					break;
 

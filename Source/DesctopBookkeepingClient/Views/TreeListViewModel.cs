@@ -11,9 +11,16 @@ namespace DesktopBookkeepingClient
 		//public int CounterId;
 		//public int ArticleId;
 		//public int AccountId;
+	    string _date;
+	    TreeListViewModel Parent;
 
-		public string Date;
-		public string Counterparty;
+	    public string Date
+	    {
+		    get { return !string.IsNullOrEmpty(_date) ? _date : Parent.Date; }
+		    set { _date = value; }
+	    }
+
+	    public string Counterparty;
 		public string Article;
 
 		public NestingLevel NestingLevel = NestingLevel.InvoiceLine;
@@ -37,11 +44,10 @@ namespace DesktopBookkeepingClient
             Nodes = transactions;
 
             Date = date;
-
-			//DateTime.TryParse(date, out Date);
         }
 
         public TreeListViewModel(List<TreeListViewModel> articles,
+			TreeListViewModel parent,
             string counterparty,
             string amount,
             string account,

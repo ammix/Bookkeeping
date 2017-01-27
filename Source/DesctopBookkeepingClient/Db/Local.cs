@@ -22,7 +22,7 @@ namespace DesktopBookkeepingClient
 		string currency;
 
 		//var connectionString = "workstation id=Bookkeeping.mssql.somee.com;packet size=4096;user id=ammix_SQLLogin_1;pwd=8h1c8vsmnk;data source=Bookkeeping.mssql.somee.com;persist security info=False;initial catalog=Bookkeeping";
-		const string connectionString = "data source=localhost;initial catalog=Bookkeeping;user=sa;password=1";
+		const string connectionString = "data source=localhost;initial catalog=Bookkeeping;user=sa;password=sys1nt3rn@ls";
 
 		public static string[] GetCounterparties()
 		{
@@ -69,14 +69,15 @@ namespace DesktopBookkeepingClient
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				var cmdText = 
-					"INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note) " +
+				var cmdText =
+					"INSERT INTO [Transactions] " +
+					"(UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note) " +
 					$"SELECT 1, " +
-					$"(SELECT[Id] FROM [Accounts] WHERE[Name] = N'{viewModel.Account}'), " +
-					$"(SELECT[Id] FROM[Counterparties] WHERE[Name] = N'{viewModel.Counterparty}'), " +
+					$"(SELECT [Id] FROM [Accounts] WHERE [Name] = N'{viewModel.Account}'), " +
+					$"(SELECT [Id] FROM [Counterparties] WHERE [Name] = N'{viewModel.Counterparty}'), " +
 					$"{viewModel.Amount}, " +
 					$"{viewModel.Date}, " +
-					"NULL, " +
+					$"NULL, " +
 					$"N'{viewModel.Comment}'";
 
 				var command = new SqlCommand(cmdText, connection);
@@ -86,18 +87,20 @@ namespace DesktopBookkeepingClient
 
 		public static void UpdateTransaction(TreeListViewModel viewModel)
 		{
-			using (var connection = new SqlConnection(connectionString))
-			{
-				connection.Open();
-				var cmdText =
-					"UPDATE [Transactions]" +
-					$" SELECT 1, a.ID, c.ID, {viewModel.Amount}, GETDATE(), NULL, N'{viewModel.Comment}'" +
-					" FROM[Accounts] a INNER JOIN [Counterparties] c" +
-					$" ON a.[Name] = N'{viewModel.Account}' AND c.[Name] = N'{viewModel.Tree}'";
+			throw new NotImplementedException();
 
-				var command = new SqlCommand(cmdText, connection);
-				command.ExecuteNonQuery();
-			}
+			//using (var connection = new SqlConnection(connectionString))
+			//{
+			//	connection.Open();
+			//	var cmdText =
+			//		"UPDATE [Transactions]" +
+			//		$" SELECT 1, a.ID, c.ID, {viewModel.Amount}, GETDATE(), NULL, N'{viewModel.Comment}'" +
+			//		" FROM[Accounts] a INNER JOIN [Counterparties] c" +
+			//		$" ON a.[Name] = N'{viewModel.Account}' AND c.[Name] = N'{viewModel.Tree}'";
+
+			//	var command = new SqlCommand(cmdText, connection);
+			//	command.ExecuteNonQuery();
+			//}
 		}
 
 		// Months have to be in order (without gaps)
