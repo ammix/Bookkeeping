@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DesktopBookkeepingClient
 {
@@ -13,14 +12,14 @@ namespace DesktopBookkeepingClient
 		//public int ArticleId;
 		//public int AccountId;
 
-		public DateTime Date;
-		string _counterparty;
-		string _article;
+		public string Date;
+		public string Counterparty;
+		public string Article;
 
 		public NestingLevel NestingLevel = NestingLevel.InvoiceLine;
         public List<TreeListViewModel> Nodes;
 
-        public string Tree;   // Date, Counterparty, Article
+		public string Tree => Date + Counterparty + Article;
         public string Amount;
         public string Comment;
         public string Account;
@@ -37,9 +36,9 @@ namespace DesktopBookkeepingClient
 			NestingLevel = NestingLevel.FinDay;
             Nodes = transactions;
 
-            Tree = date;
+            Date = date;
 
-			DateTime.TryParse(date, out Date);
+			//DateTime.TryParse(date, out Date);
         }
 
         public TreeListViewModel(List<TreeListViewModel> articles,
@@ -53,7 +52,7 @@ namespace DesktopBookkeepingClient
             NestingLevel = NestingLevel.Transaction;
             Nodes = articles;
 
-            Tree = counterparty;
+            Counterparty = counterparty;
             Amount = amount;
             Comment = comment;
             Account = account;
@@ -65,7 +64,7 @@ namespace DesktopBookkeepingClient
         {
             NestingLevel = NestingLevel.InvoiceLine;
 
-            Tree = article;
+            Article = article;
             Amount = price;
             Comment = note;
         }

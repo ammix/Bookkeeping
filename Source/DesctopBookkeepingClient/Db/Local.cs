@@ -70,10 +70,14 @@ namespace DesktopBookkeepingClient
 			{
 				connection.Open();
 				var cmdText = 
-					"INSERT INTO [Transactions](UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note)" +
-					$" SELECT 1, a.ID, c.ID, {viewModel.Amount}, {viewModel}, NULL, N'{viewModel.Comment}'" +
-				    " FROM[Accounts] a INNER JOIN [Counterparties] c" +
-				    $" ON a.[Name] = N'{viewModel.Account}' AND c.[Name] = N'{viewModel.Tree}'";
+					"INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note) " +
+					$"SELECT 1, " +
+					$"(SELECT[Id] FROM [Accounts] WHERE[Name] = N'{viewModel.Account}'), " +
+					$"(SELECT[Id] FROM[Counterparties] WHERE[Name] = N'{viewModel.Counterparty}'), " +
+					$"{viewModel.Amount}, " +
+					$"{viewModel.Date}, " +
+					"NULL, " +
+					$"N'{viewModel.Comment}'";
 
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
