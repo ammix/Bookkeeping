@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DesktopBookkeepingClient
 {
@@ -11,13 +12,24 @@ namespace DesktopBookkeepingClient
 		//public int CounterId;
 		//public int ArticleId;
 		//public int AccountId;
-	    string _date;
-	    TreeListViewModel Parent;
+	    public string _date;
+	    public TreeListViewModel _parent;
 
 	    public string Date
 	    {
-		    get { return !string.IsNullOrEmpty(_date) ? _date : Parent.Date; }
-		    set { _date = value; }
+			get
+			{
+				string q = !string.IsNullOrEmpty(_date) ? _date : _parent != null ? _parent.Date : null;
+				if (q == null)
+					return q;
+				if (Nodes != null)
+				{
+					DateTime d = DateTime.Parse(q);
+					return d.AddHours(Nodes.Count).ToString();
+				}
+				return q;
+			}
+			set { _date = value; }
 	    }
 
 	    public string Counterparty;
@@ -26,7 +38,7 @@ namespace DesktopBookkeepingClient
 		public NestingLevel NestingLevel = NestingLevel.InvoiceLine;
         public List<TreeListViewModel> Nodes;
 
-		public string Tree => Date + Counterparty + Article;
+		public string Tree => _date + Counterparty + Article;
         public string Amount;
         public string Comment;
         public string Account;
@@ -42,12 +54,13 @@ namespace DesktopBookkeepingClient
         {
 			NestingLevel = NestingLevel.FinDay;
             Nodes = transactions;
-
             Date = date;
+
+			foreach (var tr in transactions)
+				tr._parent = this;
         }
 
         public TreeListViewModel(List<TreeListViewModel> articles,
-			TreeListViewModel parent,
             string counterparty,
             string amount,
             string account,
@@ -64,7 +77,11 @@ namespace DesktopBookkeepingClient
             Account = account;
             Balance = balance;
             Time = time;
-        }
+			
+			if (articles != null)
+				foreach (var ar in articles)
+					ar._parent = this;
+		}
 
         public TreeListViewModel(string article, string price, string note = null)
         {

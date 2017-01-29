@@ -97,7 +97,7 @@ ac.Currency
 FROM Transactions t 
 	LEFT OUTER JOIN InvoiceLines i ON i.TransactionId = t.Id
 	LEFT OUTER JOIN Articles ar ON ar.Id = i.ArticleId
-	INNER JOIN CounterParties c ON c.Id = t.CounterpartyId
+	LEFT OUTER JOIN CounterParties c ON c.Id = t.CounterpartyId
 	INNER JOIN Accounts ac ON ac.Id = t.AccountId
 
 GO

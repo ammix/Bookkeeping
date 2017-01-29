@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using BrightIdeasSoftware;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Collections;
 
 namespace DesktopBookkeepingClient
 {
@@ -35,8 +36,10 @@ namespace DesktopBookkeepingClient
 
             //treeListView.CellEditUseWholeCell = true;
             treeListView.CellEditKeyEngine = new FinanceCellEditKeyEngine();
-            //treeListView.PossibleFinishCellEditing();
-        }
+			//treeListView.PossibleFinishCellEditing();
+
+			treeListView.ExpandAll();
+		}
 
 		private void treeListView_FormatCell(object sender, FormatCellEventArgs e)
 		{
@@ -132,19 +135,35 @@ namespace DesktopBookkeepingClient
 
 			if ((treeListView.GetItem(0).RowObject as TreeListViewModel).Tree == s)
 				return;
+			
+				var transact = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel(null, "", "", "", "") });
 
-            var transact = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel(null, "", "", "", "") });
+				treeListView.InsertObjects(0, new[] { transact });
+				treeListView.EnsureModelVisible(transact);
 
-            treeListView.InsertObjects(0, new[] { transact });
-            treeListView.EnsureModelVisible(transact);
+				treeListView.ExpandAll();
 
-            treeListView.ExpandAll();
+				treeListView.CurrentItem = transact;
+				treeListView.StartCellEdit(treeListView.GetItem(1), 0);
+				//treeListView.CancelCellEdit();
 
-            treeListView.CurrentItem = transact;
-            treeListView.StartCellEdit(treeListView.GetItem(1), 0);
-            //treeListView.CancelCellEdit();
+				//treeListView.PossibleFinishCellEditing
+			
+			//else
+			//{
+			//	var transact = (TreeListViewModel)treeListView.GetItem(0).RowObject;
+			//	transact.A
 
-            //treeListView.PossibleFinishCellEditing
+			//	//var transact = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel(null, "", "", "", "") });
+
+			//	treeListView.InsertObjects(0, new[] { transact });
+			//	treeListView.EnsureModelVisible(transact);
+
+			//	treeListView.ExpandAll();
+
+			//	treeListView.CurrentItem = transact;
+			//	treeListView.StartCellEdit(treeListView.GetItem(1), 0);
+			//}
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)
@@ -192,6 +211,55 @@ namespace DesktopBookkeepingClient
 			//var model = (TreeListViewModel)treeListView.SelectedObject;
 			//var index = treeListView.SelectedIndex;
 			//treeListView.MoveObjects(index--, new[] { model });
+		}
+
+		TreeListViewModel clickedRow;
+
+		private void treeListView_CellRightClick(object sender, CellRightClickEventArgs e)
+		{
+			var row = (TreeListViewModel)e.Model;
+
+			if (row.NestingLevel == NestingLevel.FinDay)
+			{
+				e.MenuStrip = contextMenuStrip1; //this.DecideRightClickMenu(e.Model, e.Column);
+				clickedRow = row;
+
+				//var transact = (TreeListViewModel)treeListView.GetItem(0).RowObject;
+				//transact.A
+
+				//	//var transact = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel(null, "", "", "", "") });
+
+				//treeListView.InsertObjects(0, new[] { transact });
+				//treeListView.EnsureModelVisible(transact);
+
+				//treeListView.ExpandAll();
+
+				//treeListView.CurrentItem = transact;
+				//treeListView.StartCellEdit(treeListView.GetItem(1), 0);
+			}
+		}
+
+		private void додатиТрансакціюToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			var newRow = new TreeListViewModel(null, "", "", "", "");
+			newRow._parent = clickedRow;
+			//DateTime d = DateTime.Parse(newRow.Date);
+			//newRow._date = d.AddMinutes(1).ToString();
+
+			clickedRow.Nodes.Insert(0, newRow);
+
+			//treeListView.InsertObjects(1, new[] { newRow } ); //clickedRow
+			////ArrayList newRoots = ObjectListView.EnumerableToArray(treeListView.Roots, true);
+			////var firstElem = (TreeListViewModel)newRoots[0];
+			////firstElem.Nodes.Insert(0, newRow);
+			////treeListView.SetObjects(newRoots);
+			//treeListView.EnsureModelVisible(clickedRow);
+			treeListView.RebuildAll(true);
+
+			//treeListView.ExpandAll();
+
+			treeListView.CurrentItem = newRow;
+			treeListView.StartCellEdit(treeListView.GetItem(1), 0);
 		}
 	}
 

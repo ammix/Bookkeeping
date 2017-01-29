@@ -22,7 +22,7 @@ namespace DesktopBookkeepingClient
 		string currency;
 
 		//var connectionString = "workstation id=Bookkeeping.mssql.somee.com;packet size=4096;user id=ammix_SQLLogin_1;pwd=8h1c8vsmnk;data source=Bookkeeping.mssql.somee.com;persist security info=False;initial catalog=Bookkeeping";
-		const string connectionString = "data source=localhost;initial catalog=Bookkeeping;user=sa;password=sys1nt3rn@ls";
+		const string connectionString = "data source=localhost;initial catalog=Bookkeeping;user=sa;password=1";
 
 		public static string[] GetCounterparties()
 		{
@@ -75,8 +75,8 @@ namespace DesktopBookkeepingClient
 					$"SELECT 1, " +
 					$"(SELECT [Id] FROM [Accounts] WHERE [Name] = N'{viewModel.Account}'), " +
 					$"(SELECT [Id] FROM [Counterparties] WHERE [Name] = N'{viewModel.Counterparty}'), " +
-					$"{viewModel.Amount}, " +
-					$"{viewModel.Date}, " +
+					$"{viewModel.Amount.Replace(',', '.')}, " +
+					$"CONVERT(DATETIME, '{viewModel.Date}', 104), " +
 					$"NULL, " +
 					$"N'{viewModel.Comment}'";
 

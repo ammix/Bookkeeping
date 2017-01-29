@@ -1640,19 +1640,31 @@ namespace BrightIdeasSoftware
             /// <param name="index"></param>
             /// <param name="modelObjects"></param>
             public void InsertObjects(int index, ICollection modelObjects) {
-                //throw new NotImplementedException();
-                ArrayList newRoots = ObjectListView.EnumerableToArray(this.treeView.Roots, true);
-                foreach (Object x in modelObjects)
-                    newRoots.Insert(0, x);
-                this.SetObjects(newRoots);
+				//throw new NotImplementedException();
+				ArrayList newRoots = ObjectListView.EnumerableToArray(this.treeView.Roots, true);
+				//ArrayList firstElem = ObjectListView.EnumerableToArray(newRoots[0].Nodes, true);
+
+				foreach (Object x in modelObjects)
+				{
+					newRoots.Insert(index, x);
+				}
+				this.SetObjects(newRoots);
             }
 
-            /// <summary>
-            /// Remove all of the given objects from the roots of the tree.
-            /// Any objects that is not already in the roots collection is ignored.
-            /// </summary>
-            /// <param name="modelObjects"></param>
-            public virtual void RemoveObjects(ICollection modelObjects) {
+			//public void InsertObject(object modelObject)
+			//{
+			//	//throw new NotImplementedException();
+			//	ArrayList newRoots = ObjectListView.EnumerableToArray(this.treeView.Roots, true);
+			//		newRoots.Insert(1, modelObject);
+			//	this.SetObjects(newRoots);
+			//}
+
+			/// <summary>
+			/// Remove all of the given objects from the roots of the tree.
+			/// Any objects that is not already in the roots collection is ignored.
+			/// </summary>
+			/// <param name="modelObjects"></param>
+			public virtual void RemoveObjects(ICollection modelObjects) {
                 ArrayList newRoots = new ArrayList();
                 foreach (Object x in this.treeView.Roots)
                     newRoots.Add(x);

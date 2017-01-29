@@ -79,15 +79,18 @@ namespace DesktopBookkeepingClient
 			//if (e.Column.AspectName == "Amount" && string.IsNullOrEmpty(((TreeListViewModel)e.RowObject).Amount))
 			//	StartCellEdit(GetItem(1), 1);	
 
-		    //if (string.IsNullOrEmpty(((TreeListViewModel) e.RowObject).Amount))
-			   // StartCellEdit(GetItem(1), 1);
-		    //else if (string.IsNullOrEmpty(((TreeListViewModel) e.RowObject).Account))
-			   // StartCellEdit(GetItem(1), 4);
-		    //else
-		    //{
-			   // CurrentItem = null;
-		    //}
-	    }
+			//if (string.IsNullOrEmpty(((TreeListViewModel) e.RowObject).Amount))
+			// StartCellEdit(GetItem(1), 1);
+			//else if (string.IsNullOrEmpty(((TreeListViewModel) e.RowObject).Account))
+			// StartCellEdit(GetItem(1), 4);
+			//else
+			//{
+			// CurrentItem = null;
+			//}
+
+			CurrentItem = null;
+			RebuildAll(true);
+		}
 
 	    public override void CancelCellEdit()
 		{
@@ -98,6 +101,8 @@ namespace DesktopBookkeepingClient
 				RemoveObject(CurrentItem);
 				CurrentItem = null;
 			}
+
+			RebuildAll(true);
 		}
 
 		protected override void OnCellEditStarting(CellEditEventArgs e)
