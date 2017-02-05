@@ -98,7 +98,7 @@ namespace DesktopBookkeepingClient
 
 			if (CurrentItem != null)
 			{
-				RemoveObject(CurrentItem);
+				CurrentItem._parent.Nodes.Remove(CurrentItem);
 				CurrentItem = null;
 			}
 

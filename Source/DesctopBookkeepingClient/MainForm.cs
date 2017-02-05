@@ -138,9 +138,11 @@ namespace DesktopBookkeepingClient
 			
 				var transact = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel(null, "", "", "", "") });
 
-				treeListView.InsertObjects(0, new[] { transact });
-				treeListView.EnsureModelVisible(transact);
+				ArrayList roots = ObjectListView.EnumerableToArray(treeListView.Roots, true);
+				roots.Insert(0, transact);
+				treeListView.SetObjects(roots);
 
+				treeListView.EnsureModelVisible(transact);
 				treeListView.ExpandAll();
 
 				treeListView.CurrentItem = transact;
@@ -241,6 +243,8 @@ namespace DesktopBookkeepingClient
 
 		private void додатиТрансакціюToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+			var n = treeListView.IndexOf(clickedRow);
+
 			var newRow = new TreeListViewModel(null, "", "", "", "");
 			newRow._parent = clickedRow;
 			//DateTime d = DateTime.Parse(newRow.Date);
@@ -259,7 +263,7 @@ namespace DesktopBookkeepingClient
 			//treeListView.ExpandAll();
 
 			treeListView.CurrentItem = newRow;
-			treeListView.StartCellEdit(treeListView.GetItem(1), 0);
+			treeListView.StartCellEdit(treeListView.GetItem(n + 1), 0);
 		}
 	}
 
