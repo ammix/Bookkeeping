@@ -8,7 +8,7 @@ namespace DesktopBookkeepingClient
 {
 	public class LocalDb
 	{
-		//int transactionId;
+		int transactionId;
 		string date;
 		string time;
 		string counterparty;
@@ -103,6 +103,19 @@ namespace DesktopBookkeepingClient
 			//}
 		}
 
+		public static void RemoveTransaction(TreeListViewModel viewModel)
+		{
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				var cmdText =
+					$"DELETE FROM [Transactions] WHERE Id = {viewModel.Id}";
+
+				var command = new SqlCommand(cmdText, connection);
+				command.ExecuteNonQuery();
+			}
+		}
+
 		// Months have to be in order (without gaps)
 		public List<TreeListViewModel> GetTransactions(/*int month*/)
 		{
@@ -129,7 +142,7 @@ namespace DesktopBookkeepingClient
 				{
 					while (dr.Read())
 					{
-						//transactionId = (int)dr["Id"];
+						transactionId = (int)dr["Id"];
 						var dateTime = (DateTime)dr["Date"];
 						date = dateTime.ToString(culture.DateTimeFormat.ShortDatePattern, culture);
 						time = dateTime.ToString(culture.DateTimeFormat.ShortTimePattern, culture);
@@ -158,7 +171,7 @@ namespace DesktopBookkeepingClient
 							}
 							else
 							{
-								finDay.Nodes.Add(CreateFinTransactionView());
+								finDay.Add(CreateFinTransactionView());
 							}
 						}
 						else
@@ -192,6 +205,7 @@ namespace DesktopBookkeepingClient
 
 			return new TreeListViewModel
 			(
+				id: transactionId,
 				counterparty: counterparty,
 				amount: amount.ToString("N"),
 				comment: comment,

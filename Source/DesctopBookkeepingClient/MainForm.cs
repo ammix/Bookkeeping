@@ -136,7 +136,7 @@ namespace DesktopBookkeepingClient
 			if ((treeListView.GetItem(0).RowObject as TreeListViewModel).Tree == s)
 				return;
 			
-				var transact = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel(null, "", "", "", "") });
+				var transact = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel(null, 0, "", "", "", "") });
 
 				ArrayList roots = ObjectListView.EnumerableToArray(treeListView.Roots, true);
 				roots.Insert(0, transact);
@@ -239,13 +239,19 @@ namespace DesktopBookkeepingClient
 				//treeListView.CurrentItem = transact;
 				//treeListView.StartCellEdit(treeListView.GetItem(1), 0);
 			}
+
+			if (row.NestingLevel == NestingLevel.Transaction)
+			{
+				e.MenuStrip = contextMenuStrip2;
+				clickedRow = row;
+			}
 		}
 
 		private void додатиТрансакціюToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			var n = treeListView.IndexOf(clickedRow);
 
-			var newRow = new TreeListViewModel(null, "", "", "", "");
+			var newRow = new TreeListViewModel(null, 0, "", "", "", "");
 			newRow._parent = clickedRow;
 			//DateTime d = DateTime.Parse(newRow.Date);
 			//newRow._date = d.AddMinutes(1).ToString();
@@ -264,6 +270,14 @@ namespace DesktopBookkeepingClient
 
 			treeListView.CurrentItem = newRow;
 			treeListView.StartCellEdit(treeListView.GetItem(n + 1), 0);
+		}
+
+		private void виToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			clickedRow._parent.Nodes.Remove(clickedRow);
+			treeListView.RebuildAll(true);
+
+			LocalDb.RemoveTransaction(clickedRow);
 		}
 	}
 

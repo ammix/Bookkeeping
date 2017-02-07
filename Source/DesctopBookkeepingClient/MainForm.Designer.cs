@@ -59,6 +59,8 @@
 			this.валютиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.додатиТрансакціюToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.виToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -69,6 +71,7 @@
 			this.toolStrip1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.contextMenuStrip1.SuspendLayout();
+			this.contextMenuStrip2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// olvColumn7
@@ -367,7 +370,7 @@
 			this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.додатиТрансакціюToolStripMenuItem});
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new System.Drawing.Size(180, 48);
+			this.contextMenuStrip1.Size = new System.Drawing.Size(180, 26);
 			// 
 			// додатиТрансакціюToolStripMenuItem
 			// 
@@ -375,6 +378,20 @@
 			this.додатиТрансакціюToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
 			this.додатиТрансакціюToolStripMenuItem.Text = "Додати трансакцію";
 			this.додатиТрансакціюToolStripMenuItem.Click += new System.EventHandler(this.додатиТрансакціюToolStripMenuItem_Click);
+			// 
+			// contextMenuStrip2
+			// 
+			this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.виToolStripMenuItem});
+			this.contextMenuStrip2.Name = "contextMenuStrip2";
+			this.contextMenuStrip2.Size = new System.Drawing.Size(193, 48);
+			// 
+			// виToolStripMenuItem
+			// 
+			this.виToolStripMenuItem.Name = "виToolStripMenuItem";
+			this.виToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.виToolStripMenuItem.Text = "Видалити трансакцію";
+			this.виToolStripMenuItem.Click += new System.EventHandler(this.виToolStripMenuItem_Click);
 			// 
 			// MainForm
 			// 
@@ -399,6 +416,7 @@
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
 			this.contextMenuStrip1.ResumeLayout(false);
+			this.contextMenuStrip2.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -434,6 +452,8 @@
 		private System.Windows.Forms.ToolStripButton toolStripButton7;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem додатиТрансакціюToolStripMenuItem;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
+		private System.Windows.Forms.ToolStripMenuItem виToolStripMenuItem;
 	}
 }
 

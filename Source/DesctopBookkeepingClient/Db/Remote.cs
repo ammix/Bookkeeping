@@ -28,6 +28,7 @@ namespace DesktopBookkeepingClient
 			foreach (var t in trs)
 			{
 				transaction.Add(new TreeListViewModel(
+					id: t.Id,
 					counterparty: t.Counterparty,
 					amount: t.Amount,
 					comment: t.Note,

@@ -6,7 +6,7 @@ namespace DesktopBookkeepingClient
 	// Model for TreeListView control
     public class TreeListViewModel
     {
-		//public int Id;
+		public int Id;
 		//public int UserId = 1;
 		//public int TransacId;
 		//public int CounterId;
@@ -45,8 +45,8 @@ namespace DesktopBookkeepingClient
         public string Balance;
         public string Time;
 
-        static int id = 0;
-        static int NewId() => id++;
+        //static int id = 0;
+        //static int NewId() => id++;
 
         public bool HasChildren => Nodes != null && Nodes.Count != 0;
 
@@ -61,6 +61,7 @@ namespace DesktopBookkeepingClient
         }
 
         public TreeListViewModel(List<TreeListViewModel> articles,
+			int id,
             string counterparty,
             string amount,
             string account,
@@ -91,6 +92,12 @@ namespace DesktopBookkeepingClient
             Amount = price;
             Comment = note;
         }
+
+		public void Add(TreeListViewModel model)
+		{
+			model._parent = this;
+			Nodes.Add(model);
+		}
     }
 
     public enum NestingLevel
