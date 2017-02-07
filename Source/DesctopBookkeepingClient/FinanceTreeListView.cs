@@ -18,7 +18,10 @@ namespace DesktopBookkeepingClient
 
 		    base.HandleEndEdit();
 
-		    LocalDb.InsertTransaction(row);
+			if (row.Id == 0)
+				LocalDb.InsertTransaction(row);
+			else
+				LocalDb.UpdateTransaction(row);
 	    }
     }
 

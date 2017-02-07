@@ -71,6 +71,7 @@ namespace DesktopBookkeepingClient
         {
             NestingLevel = NestingLevel.Transaction;
             Nodes = articles;
+			Id = id;
 
             Counterparty = counterparty;
             Amount = amount;

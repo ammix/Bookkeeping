@@ -87,20 +87,19 @@ namespace DesktopBookkeepingClient
 
 		public static void UpdateTransaction(TreeListViewModel viewModel)
 		{
-			throw new NotImplementedException();
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				var cmdText =
+					$"UPDATE [Transactions] SET AccountId = (SELECT [Id] FROM [Accounts] WHERE [Name] = N'{viewModel.Account}')" +
 
-			//using (var connection = new SqlConnection(connectionString))
-			//{
-			//	connection.Open();
-			//	var cmdText =
-			//		"UPDATE [Transactions]" +
-			//		$" SELECT 1, a.ID, c.ID, {viewModel.Amount}, GETDATE(), NULL, N'{viewModel.Comment}'" +
-			//		" FROM[Accounts] a INNER JOIN [Counterparties] c" +
-			//		$" ON a.[Name] = N'{viewModel.Account}' AND c.[Name] = N'{viewModel.Tree}'";
+					$" SELECT 1, a.ID, c.ID, {viewModel.Amount}, GETDATE(), NULL, N'{viewModel.Comment}'" +
+					" FROM[Accounts] a INNER JOIN [Counterparties] c" +
+					$" ON a.[Name] = N'{viewModel.Account}' AND c.[Name] = N'{viewModel.Tree}'";
 
-			//	var command = new SqlCommand(cmdText, connection);
-			//	command.ExecuteNonQuery();
-			//}
+				var command = new SqlCommand(cmdText, connection);
+				command.ExecuteNonQuery();
+			}
 		}
 
 		public static void RemoveTransaction(TreeListViewModel viewModel)
@@ -108,8 +107,7 @@ namespace DesktopBookkeepingClient
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				var cmdText =
-					$"DELETE FROM [Transactions] WHERE Id = {viewModel.Id}";
+				var cmdText = $"DELETE FROM [Transactions] WHERE Id = {viewModel.Id}";
 
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
