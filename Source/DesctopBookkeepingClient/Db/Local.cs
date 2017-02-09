@@ -91,11 +91,12 @@ namespace DesktopBookkeepingClient
 			{
 				connection.Open();
 				var cmdText =
-					$"UPDATE [Transactions] SET AccountId = (SELECT [Id] FROM [Accounts] WHERE [Name] = N'{viewModel.Account}')" +
-
-					$" SELECT 1, a.ID, c.ID, {viewModel.Amount}, GETDATE(), NULL, N'{viewModel.Comment}'" +
-					" FROM[Accounts] a INNER JOIN [Counterparties] c" +
-					$" ON a.[Name] = N'{viewModel.Account}' AND c.[Name] = N'{viewModel.Tree}'";
+					$"UPDATE [Transactions] " +
+					$"SET AccountId = a.Id, " +
+					$"Note = {viewModel.Comment}, " +
+					$"Amount = { viewModel.Amount.Replace(',', '.')}, " +
+					$"FROM [Accounts] AS a WHERE [Name] = N'{viewModel.Account}' " +
+					$"WHERE Id = {viewModel.Id}";
 
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
