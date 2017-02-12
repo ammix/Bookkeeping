@@ -34,8 +34,20 @@ namespace DesktopBookkeepingClient
 			treeListView.FullRowSelect = true;
 			treeListView.UseCellFormatEvents = true;
 
-            //treeListView.CellEditUseWholeCell = true;
-            treeListView.CellEditKeyEngine = new FinanceCellEditKeyEngine();
+			treeListView.GetColumn(2).AspectPutter = delegate (object model, object newValue)
+			{
+				TreeListViewModel m = (TreeListViewModel)model;
+				m.Comment = (string)newValue;
+			};
+
+							//this.columnHeaderSalaryRate.AspectPutter = delegate (object model, object newValue) {
+							//	Person p = (Person)model;
+							//	p.SetRate((double)newValue);
+							//};
+
+
+			//treeListView.CellEditUseWholeCell = true;
+			treeListView.CellEditKeyEngine = new FinanceCellEditKeyEngine();
 			//treeListView.PossibleFinishCellEditing();
 
 			treeListView.ExpandAll();
@@ -135,8 +147,11 @@ namespace DesktopBookkeepingClient
 
 			if ((treeListView.GetItem(0).RowObject as TreeListViewModel).Tree == s)
 				return;
-			
-				var transact = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel(null, 0, "", "", "", "") });
+
+			var newRow = new TreeListViewModel(null, 0, "", "", "", "");
+			var transact = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel>() );
+			transact.Add(newRow);
+
 
 				ArrayList roots = ObjectListView.EnumerableToArray(treeListView.Roots, true);
 				roots.Insert(0, transact);
@@ -145,7 +160,7 @@ namespace DesktopBookkeepingClient
 				treeListView.EnsureModelVisible(transact);
 				treeListView.ExpandAll();
 
-				treeListView.CurrentItem = transact;
+				treeListView.CurrentItem = newRow; // transact;
 				treeListView.StartCellEdit(treeListView.GetItem(1), 0);
 				//treeListView.CancelCellEdit();
 

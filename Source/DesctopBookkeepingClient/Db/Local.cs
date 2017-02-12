@@ -70,8 +70,8 @@ namespace DesktopBookkeepingClient
 			{
 				connection.Open();
 				var cmdText =
-					"INSERT INTO [Transactions] " +
-					"(UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note) " +
+					$"INSERT INTO [Transactions] " +
+					$"(UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note) " +
 					$"SELECT 1, " +
 					$"(SELECT [Id] FROM [Accounts] WHERE [Name] = N'{viewModel.Account}'), " +
 					$"(SELECT [Id] FROM [Counterparties] WHERE [Name] = N'{viewModel.Counterparty}'), " +
@@ -91,12 +91,15 @@ namespace DesktopBookkeepingClient
 			{
 				connection.Open();
 				var cmdText =
-					$"UPDATE [Transactions] " +
-					$"SET AccountId = a.Id, " +
-					$"Note = {viewModel.Comment}, " +
-					$"Amount = { viewModel.Amount.Replace(',', '.')}, " +
-					$"FROM [Accounts] AS a WHERE [Name] = N'{viewModel.Account}' " +
-					$"WHERE Id = {viewModel.Id}";
+					$"UPDATE t SET " +
+					$"AccountId = a.Id, " +
+					$"CounterpartyId = c.Id, " +
+					$"Note = N'{viewModel.Comment}', " +
+					$"Amount = {viewModel.Amount.Replace(',', '.')} " +
+					$"FROM [Transactions] t " +
+					$"INNER JOIN [Accounts] a ON a.Name = N'{viewModel.Account}' " +
+					$"INNER JOIN [Counterparties] c ON c.Name = N'{viewModel.Counterparty}' " +
+					$"WHERE t.Id = {viewModel.Id}";
 
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
