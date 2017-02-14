@@ -39,7 +39,7 @@ namespace DesktopBookkeepingClient
         public List<TreeListViewModel> Nodes;
 
 		public string Tree => _date + Counterparty + Article;
-        public string Amount;
+	    public string Amount;
 		public string Comment;
         public string Account;
         public string Balance;

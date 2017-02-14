@@ -33,12 +33,6 @@ namespace DesktopBookkeepingClient
 		TextBox commentTextBox;
 		ComboBox accountComboBox;
 
-		//public struct A
-		//{
-		//	public string Coun;
-		//	int id;
-		//}
-
 	    public FinanceTreeListView()
 	    {
 			//treeComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/ };
@@ -60,22 +54,23 @@ namespace DesktopBookkeepingClient
             //e.Cancel = true;
         }
 
-        //protected override OnValidating(CancelEventArgs e)
-        //{
-        //    base.OnValidating(e);
-        //}
+		//protected override OnValidating(CancelEventArgs e)
+		//{
+		//    base.OnValidating(e);
+		//}
 
-        protected override void OnCellEditFinishing(CellEditEventArgs e)
+
+		protected override void OnCellEditFinishing(CellEditEventArgs e)
 		{
 			base.OnCellEditFinishing(e);
 
 			RefreshItem(e.ListViewItem);
 
 			e.Cancel = true;
-		    e.AutoDispose = false;
+			e.AutoDispose = false;
 		}
 
-	    protected override void OnCellEditFinished(CellEditEventArgs e)
+		protected override void OnCellEditFinished(CellEditEventArgs e)
 	    {
 		    base.OnCellEditFinished(e);
 
@@ -109,11 +104,11 @@ namespace DesktopBookkeepingClient
 		}
 
 		protected override void OnCellEditStarting(CellEditEventArgs e)
-	    {
+		{
 			base.OnCellEditStarting(e);
 
 			switch (e.Column.AspectName)
-		    {
+			{
 				case "Tree":
 					treeComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/ };
 					treeComboBox.Items.AddRange(LocalDb.GetCounterparties());
@@ -135,15 +130,15 @@ namespace DesktopBookkeepingClient
 					e.Control = amountTextBox;
 					break;
 
-				//case "Comment":
-				//	//commentTextBox = new TextBox();
+				case "Comment":
+					commentTextBox = new TextBox();
 
-				//	commentTextBox.Font = Font;
-				//	commentTextBox.Bounds = e.CellBounds;
-				//	commentTextBox.Text = (string)e.Value;
-				//	commentTextBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Comment = commentTextBox.Text;
-				//	e.Control = commentTextBox;
-				//	break;
+					commentTextBox.Font = Font;
+					commentTextBox.Bounds = e.CellBounds;
+					commentTextBox.Text = (string)e.Value;
+					commentTextBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Comment = commentTextBox.Text;
+					e.Control = commentTextBox;
+					break;
 
 				case "Account":
 					accountComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/ };
@@ -156,10 +151,10 @@ namespace DesktopBookkeepingClient
 					e.Control = accountComboBox;
 					break;
 			}
-	    }
+		}
 
-	    //Known issues:
-        // 1. Коли контрол, то починається з нуля, інакше починається із відступом так як в дереві
-        // 2. Контрол працює лише після другого кліка
-    }
+		//Known issues:
+		// 1. Коли контрол, то починається з нуля, інакше починається із відступом так як в дереві
+		// 2. Контрол працює лише після другого кліка
+	}
 }

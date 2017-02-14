@@ -294,6 +294,11 @@ namespace DesktopBookkeepingClient
 
 			LocalDb.RemoveTransaction(clickedRow);
 		}
+
+		private void додатиЛініюІнвойсаToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 
 }
