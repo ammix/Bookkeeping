@@ -35,6 +35,13 @@
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			this.treeListView = new DesktopBookkeepingClient.FinanceTreeListView();
+			this.olvColumn1 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn2 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn5 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn6 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -52,28 +59,21 @@
 			this.валютиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.додатиТрансакціюToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.додатиПрибутокToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.виToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.додатиПрибутокToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.додатиЛініюІнвойсаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.treeListView = new DesktopBookkeepingClient.FinanceTreeListView();
-			this.olvColumn1 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn2 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn5 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn6 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.treeListView)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.contextMenuStrip1.SuspendLayout();
 			this.contextMenuStrip2.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.treeListView)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// olvColumn7
@@ -131,6 +131,99 @@
 			this.splitContainer1.Size = new System.Drawing.Size(1153, 494);
 			this.splitContainer1.SplitterDistance = 399;
 			this.splitContainer1.TabIndex = 2;
+			// 
+			// treeListView
+			// 
+			this.treeListView.AllColumns.Add(this.olvColumn1);
+			this.treeListView.AllColumns.Add(this.olvColumn2);
+			this.treeListView.AllColumns.Add(this.olvColumn3);
+			this.treeListView.AllColumns.Add(this.olvColumn5);
+			this.treeListView.AllColumns.Add(this.olvColumn4);
+			this.treeListView.AllColumns.Add(this.olvColumn6);
+			this.treeListView.AllColumns.Add(this.olvColumn7);
+			this.treeListView.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.treeListView.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.F2Only;
+			this.treeListView.CellEditUseWholeCell = false;
+			this.treeListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumn1,
+            this.olvColumn2,
+            this.olvColumn3,
+            this.olvColumn5,
+            this.olvColumn4,
+            this.olvColumn6});
+			this.treeListView.Cursor = System.Windows.Forms.Cursors.Default;
+			this.treeListView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.treeListView.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.treeListView.FullRowSelect = true;
+			this.treeListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+			this.treeListView.Location = new System.Drawing.Point(0, 0);
+			this.treeListView.Name = "treeListView";
+			this.treeListView.ShowGroups = false;
+			this.treeListView.Size = new System.Drawing.Size(1153, 399);
+			this.treeListView.SmallImageList = this.imageList;
+			this.treeListView.TabIndex = 1;
+			this.treeListView.UseCompatibleStateImageBehavior = false;
+			this.treeListView.View = System.Windows.Forms.View.Details;
+			this.treeListView.VirtualMode = true;
+			this.treeListView.CellRightClick += new System.EventHandler<BrightIdeasSoftware.CellRightClickEventArgs>(this.treeListView_CellRightClick);
+			this.treeListView.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.treeListView_FormatCell);
+			this.treeListView.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.treeListView_FormatRow);
+			// 
+			// olvColumn1
+			// 
+			this.olvColumn1.AspectName = "Tree";
+			this.olvColumn1.CellEditUseWholeCell = true;
+			this.olvColumn1.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+			this.olvColumn1.Text = "Контрагент";
+			this.olvColumn1.Width = 180;
+			// 
+			// olvColumn2
+			// 
+			this.olvColumn2.AspectName = "Amount";
+			this.olvColumn2.CellEditUseWholeCell = true;
+			this.olvColumn2.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.olvColumn2.Text = "Сума";
+			this.olvColumn2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.olvColumn2.Width = 100;
+			// 
+			// olvColumn3
+			// 
+			this.olvColumn3.AspectName = "Comment";
+			this.olvColumn3.CellEditUseWholeCell = true;
+			this.olvColumn3.CellPadding = new System.Drawing.Rectangle(10, 0, 0, 0);
+			this.olvColumn3.FillsFreeSpace = true;
+			this.olvColumn3.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.olvColumn3.Text = "Коментар";
+			this.olvColumn3.Width = 460;
+			this.olvColumn3.WordWrap = true;
+			// 
+			// olvColumn5
+			// 
+			this.olvColumn5.AspectName = "Account";
+			this.olvColumn5.CellEditUseWholeCell = true;
+			this.olvColumn5.CellPadding = new System.Drawing.Rectangle(10, 0, 0, 0);
+			this.olvColumn5.DisplayIndex = 4;
+			this.olvColumn5.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.olvColumn5.Text = "Рахунок";
+			this.olvColumn5.Width = 180;
+			// 
+			// olvColumn4
+			// 
+			this.olvColumn4.AspectName = "Balance";
+			this.olvColumn4.CellEditUseWholeCell = true;
+			this.olvColumn4.DisplayIndex = 3;
+			this.olvColumn4.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.olvColumn4.IsEditable = false;
+			this.olvColumn4.Text = "Залишок";
+			this.olvColumn4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.olvColumn4.Width = 150;
+			// 
+			// olvColumn6
+			// 
+			this.olvColumn6.AspectName = "Time";
+			this.olvColumn6.CellEditUseWholeCell = true;
+			this.olvColumn6.IsEditable = false;
+			this.olvColumn6.Text = "Час";
 			// 
 			// groupBox1
 			// 
@@ -290,13 +383,19 @@
 			this.додатиТрансакціюToolStripMenuItem.Text = "Додати трату";
 			this.додатиТрансакціюToolStripMenuItem.Click += new System.EventHandler(this.додатиТрансакціюToolStripMenuItem_Click);
 			// 
+			// додатиПрибутокToolStripMenuItem
+			// 
+			this.додатиПрибутокToolStripMenuItem.Name = "додатиПрибутокToolStripMenuItem";
+			this.додатиПрибутокToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+			this.додатиПрибутокToolStripMenuItem.Text = "Додати прибуток";
+			// 
 			// contextMenuStrip2
 			// 
 			this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.виToolStripMenuItem,
             this.додатиЛініюІнвойсаToolStripMenuItem});
 			this.contextMenuStrip2.Name = "contextMenuStrip2";
-			this.contextMenuStrip2.Size = new System.Drawing.Size(193, 70);
+			this.contextMenuStrip2.Size = new System.Drawing.Size(193, 48);
 			// 
 			// виToolStripMenuItem
 			// 
@@ -305,110 +404,12 @@
 			this.виToolStripMenuItem.Text = "Видалити трансакцію";
 			this.виToolStripMenuItem.Click += new System.EventHandler(this.виToolStripMenuItem_Click);
 			// 
-			// додатиПрибутокToolStripMenuItem
-			// 
-			this.додатиПрибутокToolStripMenuItem.Name = "додатиПрибутокToolStripMenuItem";
-			this.додатиПрибутокToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-			this.додатиПрибутокToolStripMenuItem.Text = "Додати прибуток";
-			// 
 			// додатиЛініюІнвойсаToolStripMenuItem
 			// 
 			this.додатиЛініюІнвойсаToolStripMenuItem.Name = "додатиЛініюІнвойсаToolStripMenuItem";
 			this.додатиЛініюІнвойсаToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
 			this.додатиЛініюІнвойсаToolStripMenuItem.Text = "Парсити чек";
 			this.додатиЛініюІнвойсаToolStripMenuItem.Click += new System.EventHandler(this.додатиЛініюІнвойсаToolStripMenuItem_Click);
-			// 
-			// treeListView
-			// 
-			this.treeListView.AllColumns.Add(this.olvColumn1);
-			this.treeListView.AllColumns.Add(this.olvColumn2);
-			this.treeListView.AllColumns.Add(this.olvColumn3);
-			this.treeListView.AllColumns.Add(this.olvColumn5);
-			this.treeListView.AllColumns.Add(this.olvColumn4);
-			this.treeListView.AllColumns.Add(this.olvColumn6);
-			this.treeListView.AllColumns.Add(this.olvColumn7);
-			this.treeListView.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.treeListView.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.F2Only;
-			this.treeListView.CellEditUseWholeCell = false;
-			this.treeListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumn1,
-            this.olvColumn2,
-            this.olvColumn3,
-            this.olvColumn5,
-            this.olvColumn4,
-            this.olvColumn6});
-			this.treeListView.Cursor = System.Windows.Forms.Cursors.Default;
-			this.treeListView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.treeListView.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.treeListView.FullRowSelect = true;
-			this.treeListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-			this.treeListView.Location = new System.Drawing.Point(0, 0);
-			this.treeListView.Name = "treeListView";
-			this.treeListView.ShowGroups = false;
-			this.treeListView.Size = new System.Drawing.Size(1153, 399);
-			this.treeListView.SmallImageList = this.imageList;
-			this.treeListView.TabIndex = 1;
-			this.treeListView.UseCompatibleStateImageBehavior = false;
-			this.treeListView.View = System.Windows.Forms.View.Details;
-			this.treeListView.VirtualMode = true;
-			this.treeListView.CellRightClick += new System.EventHandler<BrightIdeasSoftware.CellRightClickEventArgs>(this.treeListView_CellRightClick);
-			this.treeListView.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.treeListView_FormatCell);
-			this.treeListView.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.treeListView_FormatRow);
-			// 
-			// olvColumn1
-			// 
-			this.olvColumn1.AspectName = "Tree";
-			this.olvColumn1.CellEditUseWholeCell = true;
-			this.olvColumn1.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-			this.olvColumn1.Text = "Контрагент";
-			this.olvColumn1.Width = 180;
-			// 
-			// olvColumn2
-			// 
-			this.olvColumn2.AspectName = "Amount";
-			this.olvColumn2.CellEditUseWholeCell = true;
-			this.olvColumn2.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.olvColumn2.Text = "Сума";
-			this.olvColumn2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.olvColumn2.Width = 100;
-			// 
-			// olvColumn3
-			// 
-			this.olvColumn3.AspectName = "Comment";
-			this.olvColumn3.CellEditUseWholeCell = true;
-			this.olvColumn3.CellPadding = new System.Drawing.Rectangle(10, 0, 0, 0);
-			this.olvColumn3.FillsFreeSpace = true;
-			this.olvColumn3.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.olvColumn3.Text = "Коментар";
-			this.olvColumn3.Width = 460;
-			this.olvColumn3.WordWrap = true;
-			// 
-			// olvColumn5
-			// 
-			this.olvColumn5.AspectName = "Account";
-			this.olvColumn5.CellEditUseWholeCell = true;
-			this.olvColumn5.CellPadding = new System.Drawing.Rectangle(10, 0, 0, 0);
-			this.olvColumn5.DisplayIndex = 4;
-			this.olvColumn5.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.olvColumn5.Text = "Рахунок";
-			this.olvColumn5.Width = 180;
-			// 
-			// olvColumn4
-			// 
-			this.olvColumn4.AspectName = "Balance";
-			this.olvColumn4.CellEditUseWholeCell = true;
-			this.olvColumn4.DisplayIndex = 3;
-			this.olvColumn4.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.olvColumn4.IsEditable = false;
-			this.olvColumn4.Text = "Залишок";
-			this.olvColumn4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.olvColumn4.Width = 150;
-			// 
-			// olvColumn6
-			// 
-			this.olvColumn6.AspectName = "Time";
-			this.olvColumn6.CellEditUseWholeCell = true;
-			this.olvColumn6.Text = "Час";
 			// 
 			// MainForm
 			// 
@@ -427,13 +428,13 @@
 			this.splitContainer1.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
 			this.splitContainer1.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.treeListView)).EndInit();
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
 			this.contextMenuStrip1.ResumeLayout(false);
 			this.contextMenuStrip2.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.treeListView)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

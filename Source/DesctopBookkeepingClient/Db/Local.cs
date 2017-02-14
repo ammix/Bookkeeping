@@ -24,6 +24,26 @@ namespace DesktopBookkeepingClient
 		//var connectionString = "workstation id=Bookkeeping.mssql.somee.com;packet size=4096;user id=ammix_SQLLogin_1;pwd=8h1c8vsmnk;data source=Bookkeeping.mssql.somee.com;persist security info=False;initial catalog=Bookkeeping";
 		const string connectionString = "data source=localhost;initial catalog=Bookkeeping;user=sa;password=1";
 
+		public static string[] GetArticles()
+		{
+			var lables = new List<string>();
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				var cmdText = "SELECT [Label] FROM [Articles]";
+				var command = new SqlCommand(cmdText, connection);
+				using (var dr = command.ExecuteReader())
+				{
+					while (dr.Read())
+					{
+						lables.Add((string)dr["Label"]);
+					}
+				}
+			}
+			return lables.ToArray();
+		}
+
 		public static string[] GetCounterparties()
 		{
 			var counterparties = new List<string>();

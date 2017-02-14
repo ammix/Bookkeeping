@@ -161,6 +161,7 @@ namespace DesktopBookkeepingClient
 				treeListView.ExpandAll();
 
 				treeListView.CurrentItem = newRow; // transact;
+				//olvColumn5.IsEditable = true;
 				treeListView.StartCellEdit(treeListView.GetItem(1), 0);
 				//treeListView.CancelCellEdit();
 
@@ -284,6 +285,7 @@ namespace DesktopBookkeepingClient
 			//treeListView.ExpandAll();
 
 			treeListView.CurrentItem = newRow;
+			//olvColumn5.IsEditable = true;
 			treeListView.StartCellEdit(treeListView.GetItem(n + 1), 0);
 		}
 
@@ -297,7 +299,16 @@ namespace DesktopBookkeepingClient
 
 		private void додатиЛініюІнвойсаToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+			var n = treeListView.IndexOf(clickedRow);
 
+			var newRow = new TreeListViewModel("", "");
+			newRow._parent = clickedRow;
+			clickedRow.Add(newRow);
+			treeListView.RebuildAll(true);
+			treeListView.ExpandAll();
+			treeListView.CurrentItem = newRow;
+			//olvColumn5.IsEditable = false;
+			treeListView.StartCellEdit(treeListView.GetItem(n + 1), 0);
 		}
 	}
 

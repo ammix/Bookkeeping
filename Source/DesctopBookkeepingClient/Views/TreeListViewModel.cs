@@ -97,6 +97,8 @@ namespace DesktopBookkeepingClient
 		public void Add(TreeListViewModel model)
 		{
 			model._parent = this;
+			if (Nodes == null)
+				Nodes = new List<TreeListViewModel>();
 			Nodes.Add(model);
 		}
     }

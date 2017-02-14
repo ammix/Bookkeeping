@@ -9,19 +9,27 @@ namespace DesktopBookkeepingClient
 	    {
 		    var row = (TreeListViewModel) ItemBeingEdited.RowObject;
 
-		    if (string.IsNullOrEmpty(row.Amount) || string.IsNullOrEmpty(row.Account))
-		    {
-			    MessageBox.Show("Ціна і рахунок мають бути заповнені", "Помилка створення транзакції",
-				    MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-			    return;
-		    }
+			if (row.NestingLevel == NestingLevel.Transaction)
+			{
+				if (string.IsNullOrEmpty(row.Amount) || string.IsNullOrEmpty(row.Account))
+				{
+					MessageBox.Show("Ціна і рахунок мають бути заповнені", "Помилка створення транзакції",
+						MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+					return;
+				}
 
-		    base.HandleEndEdit();
+				base.HandleEndEdit();
 
-			if (row.Id == 0)
-				LocalDb.InsertTransaction(row);
-			else
-				LocalDb.UpdateTransaction(row);
+				if (row.Id == 0)
+					LocalDb.InsertTransaction(row);
+				else
+					LocalDb.UpdateTransaction(row);
+			}
+			else if (row.NestingLevel == NestingLevel.InvoiceLine)
+			{
+
+			}
+
 	    }
     }
 
@@ -111,7 +119,10 @@ namespace DesktopBookkeepingClient
 			{
 				case "Tree":
 					treeComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/ };
-					treeComboBox.Items.AddRange(LocalDb.GetCounterparties());
+					if ((e.RowObject as TreeListViewModel).NestingLevel == NestingLevel.Transaction)
+						treeComboBox.Items.AddRange(LocalDb.GetCounterparties());
+					else
+						treeComboBox.Items.AddRange(LocalDb.GetArticles());
 
 					treeComboBox.Font = Font;
 					treeComboBox.Bounds = e.CellBounds;
