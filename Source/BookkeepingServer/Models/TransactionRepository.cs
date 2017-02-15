@@ -17,8 +17,8 @@ namespace BookkeepingServer.Models
 		string article;
 		string price;
 		string note;
-        string comment;
-        string amount;
+		string comment;
+		string amount;
 		string account;
 		string balance;
 		string currency;
@@ -26,7 +26,7 @@ namespace BookkeepingServer.Models
 		IDataReader dr;
 		string connectionString = ConfigurationManager.ConnectionStrings["RemoteSqlServer"].ConnectionString;
 
-        public IEnumerable<FinDay> GetTransactions(int month)
+		public IEnumerable<FinDay> GetTransactions(int month)
 		{
 			var finDays = new List<FinDay>();
 			var culture = CultureInfo.GetCultureInfo("uk-UA");
@@ -34,7 +34,7 @@ namespace BookkeepingServer.Models
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-                var cmdText = $"SELECT * FROM MainView WHERE DATEPART(month, [DATE]) = {month} ORDER BY [Id] DESC";
+				var cmdText = $"SELECT * FROM MainView WHERE DATEPART(month, [DATE]) = {month} ORDER BY [Id] DESC";
 				var command = new SqlCommand(cmdText, connection);
 				using (dr = command.ExecuteReader())
 				{
@@ -106,9 +106,9 @@ namespace BookkeepingServer.Models
 
 		InvoiceLine CreateInvoiceLineView()
 		{
-            return new InvoiceLine
-            {
-                Article = "• " + article,
+			return new InvoiceLine
+			{
+				Article = "• " + article,
 				Price = price,
 				Note = note
 			};

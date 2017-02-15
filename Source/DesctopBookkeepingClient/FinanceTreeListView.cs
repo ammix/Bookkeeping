@@ -3,11 +3,11 @@ using System.Windows.Forms;
 
 namespace DesktopBookkeepingClient
 {
-    public class FinanceCellEditKeyEngine: CellEditKeyEngine
-    {
-	    protected override void HandleEndEdit()
-	    {
-		    var row = (TreeListViewModel) ItemBeingEdited.RowObject;
+	public class FinanceCellEditKeyEngine: CellEditKeyEngine
+	{
+		protected override void HandleEndEdit()
+		{
+			var row = (TreeListViewModel) ItemBeingEdited.RowObject;
 
 			if (row.NestingLevel == NestingLevel.Transaction)
 			{
@@ -30,19 +30,19 @@ namespace DesktopBookkeepingClient
 
 			}
 
-	    }
-    }
+		}
+	}
 
-    public class FinanceTreeListView: TreeListView
-    {
-	    public TreeListViewModel CurrentItem;
-	    ComboBox treeComboBox;
-	    TextBox amountTextBox;
+	public class FinanceTreeListView: TreeListView
+	{
+		public TreeListViewModel CurrentItem;
+		ComboBox treeComboBox;
+		TextBox amountTextBox;
 		TextBox commentTextBox;
 		ComboBox accountComboBox;
 
-	    public FinanceTreeListView()
-	    {
+		public FinanceTreeListView()
+		{
 			//treeComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/ };
 			//treeComboBox.Items.AddRange(LocalDb.GetCounterparties());
 
@@ -53,14 +53,14 @@ namespace DesktopBookkeepingClient
 			//accountComboBox.Items.AddRange(LocalDb.GetAccounts());
 
 			CellEditValidating += FinanceTreeListView_CellEditValidating;
-        }
+		}
 
-        private void FinanceTreeListView_CellEditValidating(object sender, CellEditEventArgs e)
-        {
-            string s1 = ((TreeListViewModel)e.RowObject).Amount;
-            string s2 = ((TreeListViewModel)e.RowObject).Account;
-            //e.Cancel = true;
-        }
+		private void FinanceTreeListView_CellEditValidating(object sender, CellEditEventArgs e)
+		{
+			string s1 = ((TreeListViewModel)e.RowObject).Amount;
+			string s2 = ((TreeListViewModel)e.RowObject).Account;
+			//e.Cancel = true;
+		}
 
 		//protected override OnValidating(CancelEventArgs e)
 		//{
@@ -79,8 +79,8 @@ namespace DesktopBookkeepingClient
 		}
 
 		protected override void OnCellEditFinished(CellEditEventArgs e)
-	    {
-		    base.OnCellEditFinished(e);
+		{
+			base.OnCellEditFinished(e);
 
 			//if (e.Column.AspectName == "Amount" && string.IsNullOrEmpty(((TreeListViewModel)e.RowObject).Amount))
 			//	StartCellEdit(GetItem(1), 1);	
@@ -98,7 +98,7 @@ namespace DesktopBookkeepingClient
 			RebuildAll(true);
 		}
 
-	    public override void CancelCellEdit()
+		public override void CancelCellEdit()
 		{
 			base.CancelCellEdit();
 

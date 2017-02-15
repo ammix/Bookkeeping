@@ -4,19 +4,19 @@ using System.Collections.Generic;
 namespace DesktopBookkeepingClient
 {
 	// Model for TreeListView control
-    public class TreeListViewModel
-    {
+	public class TreeListViewModel
+	{
 		public int Id;
 		//public int UserId = 1;
 		//public int TransacId;
 		//public int CounterId;
 		//public int ArticleId;
 		//public int AccountId;
-	    public string _date;
-	    public TreeListViewModel _parent;
+		public string _date;
+		public TreeListViewModel _parent;
 
-	    public string Date
-	    {
+		public string Date
+		{
 			get
 			{
 				string q = !string.IsNullOrEmpty(_date) ? _date : _parent != null ? _parent.Date : null;
@@ -30,69 +30,69 @@ namespace DesktopBookkeepingClient
 				return q;
 			}
 			set { _date = value; }
-	    }
+		}
 
-	    public string Counterparty;
+		public string Counterparty;
 		public string Article;
 
 		public NestingLevel NestingLevel = NestingLevel.InvoiceLine;
-        public List<TreeListViewModel> Nodes;
+		public List<TreeListViewModel> Nodes;
 
 		public string Tree => _date + Counterparty + Article;
-	    public string Amount;
+		public string Amount;
 		public string Comment;
-        public string Account;
-        public string Balance;
-        public string Time;
+		public string Account;
+		public string Balance;
+		public string Time;
 
-        //static int id = 0;
-        //static int NewId() => id++;
+		//static int id = 0;
+		//static int NewId() => id++;
 
-        public bool HasChildren => Nodes != null && Nodes.Count != 0;
+		public bool HasChildren => Nodes != null && Nodes.Count != 0;
 
-        public TreeListViewModel(List<TreeListViewModel> transactions, string date)
-        {
+		public TreeListViewModel(List<TreeListViewModel> transactions, string date)
+		{
 			NestingLevel = NestingLevel.FinDay;
-            Nodes = transactions;
-            Date = date;
+			Nodes = transactions;
+			Date = date;
 
 			foreach (var tr in transactions)
 				tr._parent = this;
-        }
+		}
 
-        public TreeListViewModel(List<TreeListViewModel> articles,
+		public TreeListViewModel(List<TreeListViewModel> articles,
 			int id,
-            string counterparty,
-            string amount,
-            string account,
-            string balance,
-            string comment = null,
-            string time = null)
-        {
-            NestingLevel = NestingLevel.Transaction;
-            Nodes = articles;
+			string counterparty,
+			string amount,
+			string account,
+			string balance,
+			string comment = null,
+			string time = null)
+		{
+			NestingLevel = NestingLevel.Transaction;
+			Nodes = articles;
 			Id = id;
 
-            Counterparty = counterparty;
-            Amount = amount;
-            Comment = comment;
-            Account = account;
-            Balance = balance;
-            Time = time;
+			Counterparty = counterparty;
+			Amount = amount;
+			Comment = comment;
+			Account = account;
+			Balance = balance;
+			Time = time;
 			
 			if (articles != null)
 				foreach (var ar in articles)
 					ar._parent = this;
 		}
 
-        public TreeListViewModel(string article, string price, string note = null)
-        {
-            NestingLevel = NestingLevel.InvoiceLine;
+		public TreeListViewModel(string article, string price, string note = null)
+		{
+			NestingLevel = NestingLevel.InvoiceLine;
 
-            Article = article;
-            Amount = price;
-            Comment = note;
-        }
+			Article = article;
+			Amount = price;
+			Comment = note;
+		}
 
 		public void Add(TreeListViewModel model)
 		{
@@ -101,14 +101,14 @@ namespace DesktopBookkeepingClient
 				Nodes = new List<TreeListViewModel>();
 			Nodes.Add(model);
 		}
-    }
+	}
 
-    public enum NestingLevel
-    {
-        FinDay,
-        Transaction,
-        InvoiceLine
-    }
+	public enum NestingLevel
+	{
+		FinDay,
+		Transaction,
+		InvoiceLine
+	}
 
 	public class AccountModel
 	{
