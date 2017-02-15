@@ -307,7 +307,7 @@ namespace DesktopBookkeepingClient
 			treeListView.RebuildAll(true);
 			treeListView.ExpandAll();
 			treeListView.CurrentItem = newRow;
-			//olvColumn5.IsEditable = false;
+			olvColumn1
 			treeListView.StartCellEdit(treeListView.GetItem(n + 1), 0);
 		}
 	}
