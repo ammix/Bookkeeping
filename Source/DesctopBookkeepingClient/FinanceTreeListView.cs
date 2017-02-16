@@ -7,6 +7,8 @@ namespace DesktopBookkeepingClient
 	{
 		protected override void HandleEndEdit()
 		{
+			(ListView as FinanceTreeListView).CurrentItem = null;
+
 			var row = (TreeListViewModel) ItemBeingEdited.RowObject;
 
 			if (row.NestingLevel == NestingLevel.Transaction)
@@ -29,13 +31,13 @@ namespace DesktopBookkeepingClient
 			{
 
 			}
-
 		}
 	}
 
 	public class FinanceTreeListView: TreeListView
 	{
 		public TreeListViewModel CurrentItem;
+
 		ComboBox treeComboBox;
 		TextBox amountTextBox;
 		TextBox commentTextBox;
@@ -78,25 +80,25 @@ namespace DesktopBookkeepingClient
 			e.AutoDispose = false;
 		}
 
-		protected override void OnCellEditFinished(CellEditEventArgs e)
-		{
-			base.OnCellEditFinished(e);
+		//protected override void OnCellEditFinished(CellEditEventArgs e)
+		//{
+		//	base.OnCellEditFinished(e);
 
-			//if (e.Column.AspectName == "Amount" && string.IsNullOrEmpty(((TreeListViewModel)e.RowObject).Amount))
-			//	StartCellEdit(GetItem(1), 1);	
+		//	//if (e.Column.AspectName == "Amount" && string.IsNullOrEmpty(((TreeListViewModel)e.RowObject).Amount))
+		//	//	StartCellEdit(GetItem(1), 1);	
 
-			//if (string.IsNullOrEmpty(((TreeListViewModel) e.RowObject).Amount))
-			// StartCellEdit(GetItem(1), 1);
-			//else if (string.IsNullOrEmpty(((TreeListViewModel) e.RowObject).Account))
-			// StartCellEdit(GetItem(1), 4);
-			//else
-			//{
-			// CurrentItem = null;
-			//}
+		//	//if (string.IsNullOrEmpty(((TreeListViewModel) e.RowObject).Amount))
+		//	// StartCellEdit(GetItem(1), 1);
+		//	//else if (string.IsNullOrEmpty(((TreeListViewModel) e.RowObject).Account))
+		//	// StartCellEdit(GetItem(1), 4);
+		//	//else
+		//	//{
+		//	// CurrentItem = null;
+		//	//}
 
-			CurrentItem = null;
-			RebuildAll(true);
-		}
+		//	//CurrentItem = null;
+		//	RebuildAll(true);
+		//}
 
 		public override void CancelCellEdit()
 		{
@@ -105,6 +107,14 @@ namespace DesktopBookkeepingClient
 			if (CurrentItem != null)
 			{
 				CurrentItem._parent.Nodes.Remove(CurrentItem);
+
+				if (CurrentItem._parent.NestingLevel == NestingLevel.FinDay && !CurrentItem._parent.HasChildren)
+				{
+					var roots = EnumerableToArray(Roots, true);
+					roots.Remove(CurrentItem._parent);
+					SetObjects(roots);
+				}
+
 				CurrentItem = null;
 			}
 
