@@ -7,8 +7,6 @@ namespace DesktopBookkeepingClient
 	{
 		protected override void HandleEndEdit()
 		{
-			(ListView as FinanceTreeListView).CurrentItem = null;
-
 			var row = (TreeListViewModel) ItemBeingEdited.RowObject;
 
 			if (row.NestingLevel == NestingLevel.Transaction)
@@ -20,17 +18,29 @@ namespace DesktopBookkeepingClient
 					return;
 				}
 
-				base.HandleEndEdit();
-
 				if (row.Id == 0)
 					LocalDb.InsertTransaction(row);
 				else
 					LocalDb.UpdateTransaction(row);
+
+				(ListView as FinanceTreeListView).CurrentItem = null;
 			}
 			else if (row.NestingLevel == NestingLevel.InvoiceLine)
 			{
+				if (string.IsNullOrEmpty(row.Tree) || string.IsNullOrEmpty(row.Amount))
+				{
+					MessageBox.Show("Артикул і ціна мають бути заповнені", "Помилка створення invoice line",
+						MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+					return;
+				}
 
+				//if (row.Id == 0)
+					LocalDb.InsertInvoiceLine(row);
+				//else
+					//LocalDb.UpdateTransaction(row);
 			}
+
+			base.HandleEndEdit();
 		}
 	}
 
@@ -110,9 +120,11 @@ namespace DesktopBookkeepingClient
 
 				if (CurrentItem._parent.NestingLevel == NestingLevel.FinDay && !CurrentItem._parent.HasChildren)
 				{
-					var roots = EnumerableToArray(Roots, true);
-					roots.Remove(CurrentItem._parent);
-					SetObjects(roots);
+					//var roots = EnumerableToArray(Roots, true);
+					//roots.Remove(CurrentItem._parent);
+					//SetObjects(roots);
+
+					RemoveObject(CurrentItem._parent);
 				}
 
 				CurrentItem = null;
@@ -134,7 +146,10 @@ namespace DesktopBookkeepingClient
 					if ((e.RowObject as TreeListViewModel).NestingLevel == NestingLevel.Transaction)
 						treeComboBox.Items.AddRange(LocalDb.GetCounterparties());
 					else
+					{
+						treeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 						treeComboBox.Items.AddRange(LocalDb.GetArticles());
+					}
 
 					treeComboBox.Font = Font;
 					treeComboBox.Bounds = e.CellBounds;

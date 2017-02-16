@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
@@ -21,8 +22,7 @@ namespace DesktopBookkeepingClient
 		Dictionary<string, decimal> balance = new Dictionary<string, decimal>();
 		string currency;
 
-		//var connectionString = "workstation id=Bookkeeping.mssql.somee.com;packet size=4096;user id=ammix_SQLLogin_1;pwd=8h1c8vsmnk;data source=Bookkeeping.mssql.somee.com;persist security info=False;initial catalog=Bookkeeping";
-		const string connectionString = "data source=localhost;initial catalog=Bookkeeping;user=sa;password=1";
+		readonly static string connectionString = ConfigurationManager.ConnectionStrings["BookkeepingDb"].ConnectionString;
 
 		public static string[] GetArticles()
 		{
@@ -105,6 +105,25 @@ namespace DesktopBookkeepingClient
 			}
 		}
 
+		public static void InsertInvoiceLine(TreeListViewModel viewModel)
+		{
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				var cmdText =
+					$"INSERT INTO [InvoiceLines] " +
+					$"(UserId, TransactionId, ArticleId, Price, Note) " +
+					$"SELECT 1, " +
+					$"{viewModel._parent.Id}, " +
+					$"(SELECT [Id] FROM [Articles] WHERE [Label] = N'{viewModel.Counterparty}'), " + //TODO: Counterparty ?
+					$"{viewModel.Amount.Replace(',', '.')}, " +
+					$"N'{viewModel.Comment}'";
+
+				var command = new SqlCommand(cmdText, connection);
+				command.ExecuteNonQuery();
+			}
+		}
+
 		public static void UpdateTransaction(TreeListViewModel viewModel)
 		{
 			using (var connection = new SqlConnection(connectionString))
@@ -118,7 +137,7 @@ namespace DesktopBookkeepingClient
 					$"Amount = {viewModel.Amount.Replace(',', '.')} " +
 					$"FROM [Transactions] t " +
 					$"INNER JOIN [Accounts] a ON a.Name = N'{viewModel.Account}' " +
-					$"INNER JOIN [Counterparties] c ON c.Name = N'{viewModel.Counterparty}' " +
+					$"LEFT OUTER JOIN [Counterparties] c ON c.Name = N'{viewModel.Counterparty}' " +
 					$"WHERE t.Id = {viewModel.Id}";
 
 				var command = new SqlCommand(cmdText, connection);
@@ -183,11 +202,13 @@ namespace DesktopBookkeepingClient
 						if (finDays.Exists(trs => trs.Tree == date))
 						{
 							var finDay = finDays.Find(trs => trs.Tree == date);
-							if (finDay.Nodes.Exists(x => x.Tree == counterparty && decimal.Parse(x.Amount) == amount))
+							//if (finDay.Nodes.Exists(x => x.Tree == counterparty && decimal.Parse(x.Amount) == amount))
+							if (finDay.Nodes.Exists(x => x.Id == transactionId))
 							{
 								if (article != null)
 								{
-									var invoiceLine = finDay.Nodes.Find(x => x.Tree == counterparty);
+									//var invoiceLine = finDay.Nodes.Find(x => x.Tree == counterparty);
+									var invoiceLine = finDay.Nodes.Find(x => x.Id == transactionId);
 									invoiceLine.Nodes.Add(CreateInvoiceLineView());
 								}
 							}

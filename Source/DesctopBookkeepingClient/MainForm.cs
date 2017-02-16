@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Collections;
 
 namespace DesktopBookkeepingClient
@@ -299,7 +298,7 @@ namespace DesktopBookkeepingClient
 
 		private void додатиЛініюІнвойсаToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			var n = treeListView.IndexOf(clickedRow);
+			var n = treeListView.IndexOf(clickedRow) + (clickedRow.HasChildren ? clickedRow.Nodes.Count : 0);
 
 			var newRow = new TreeListViewModel("", "");
 			newRow._parent = clickedRow;
