@@ -307,8 +307,23 @@ namespace DesktopBookkeepingClient
 			treeListView.RebuildAll(true);
 			treeListView.ExpandAll();
 			treeListView.CurrentItem = newRow;
-			olvColumn1
+
 			treeListView.StartCellEdit(treeListView.GetItem(n + 1), 0);
+		}
+
+		private void treeListView_CellEditStarting(object sender, CellEditEventArgs e)
+		{
+			var row = (TreeListViewModel)e.RowObject;
+
+			switch (row.NestingLevel)
+			{
+				case NestingLevel.Transaction:
+					olvColumn5.IsEditable = true;
+					break;
+				case NestingLevel.InvoiceLine:
+					olvColumn5.IsEditable = false;
+					break;
+			}
 		}
 	}
 

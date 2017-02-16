@@ -165,6 +165,7 @@
 			this.treeListView.UseCompatibleStateImageBehavior = false;
 			this.treeListView.View = System.Windows.Forms.View.Details;
 			this.treeListView.VirtualMode = true;
+			this.treeListView.CellEditStarting += new BrightIdeasSoftware.CellEditEventHandler(this.treeListView_CellEditStarting);
 			this.treeListView.CellRightClick += new System.EventHandler<BrightIdeasSoftware.CellRightClickEventArgs>(this.treeListView_CellRightClick);
 			this.treeListView.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.treeListView_FormatCell);
 			this.treeListView.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.treeListView_FormatRow);

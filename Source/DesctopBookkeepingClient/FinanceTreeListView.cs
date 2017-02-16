@@ -113,17 +113,7 @@ namespace DesktopBookkeepingClient
 
 		protected override void OnCellEditStarting(CellEditEventArgs e)
 		{
-			//olvColumn5.IsEditable = false;
-			var row = (TreeListViewModel) e.RowObject;
-
-			switch (row.NestingLevel)
-			{
-				case NestingLevel.Transaction:
-					this.//olvColumn5
-					break;
-				case NestingLevel.InvoiceLine:
-					break;
-			}
+			//var row = (TreeListViewModel) e.RowObject;
 
 			base.OnCellEditStarting(e);
 
