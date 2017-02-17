@@ -271,6 +271,8 @@ namespace DesktopBookkeepingClient
 				e.MenuStrip = contextMenuStrip3;
 				clickedRow = row;
 			}
+
+			//treeListView.CurrentItem = clickedRow;
 		}
 
 		private void додатиТрансакціюToolStripMenuItem_Click(object sender, EventArgs e)
@@ -309,17 +311,22 @@ namespace DesktopBookkeepingClient
 
 		private void додатиЛініюІнвойсаToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			var n = treeListView.IndexOf(clickedRow) + (clickedRow.HasChildren ? clickedRow.Nodes.Count : 0);
-
-			var newRow = new TreeListViewModel("", "");
-			newRow._parent = clickedRow;
-			clickedRow.Add(newRow);
-			treeListView.RebuildAll(true);
-			treeListView.ExpandAll();
-			treeListView.CurrentItem = newRow;
-
-			treeListView.StartCellEdit(treeListView.GetItem(n + 1), 0);
+			treeListView.AddInvoiceLine(clickedRow);
 		}
+
+		//private static void AddInvoiceLine(FinanceTreeListView list, TreeListViewModel model)
+		//{
+		//	var n = list.IndexOf(model) + (model.HasChildren ? model.Nodes.Count : 0);
+
+		//	var newRow = new TreeListViewModel("", "");
+		//	newRow._parent = model;
+		//	model.Add(newRow);
+		//	list.RebuildAll(true);
+		//	list.ExpandAll();
+		//	list.CurrentItem = newRow;
+
+		//	list.StartCellEdit(list.GetItem(n + 1), 0);
+		//}
 
 		private void treeListView_CellEditStarting(object sender, CellEditEventArgs e)
 		{
@@ -342,6 +349,8 @@ namespace DesktopBookkeepingClient
 			treeListView.RebuildAll(true);
 
 			LocalDb.RemoveInvoiceLine(clickedRow);
+
+			//treeListView.BuildList();
 		}
 	}
 

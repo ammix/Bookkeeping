@@ -216,7 +216,7 @@ namespace DesktopBookkeepingClient
 					while (dr.Read())
 					{
 						transactionId = (int?) dr["Id"];
-						lineId = ConvertFromDbVal<int?>(dr["LineId"]);
+						lineId = ConvertFromDbVal<int?> (dr["LineId"]);
 						var dateTime = (DateTime)dr["Date"];
 						date = dateTime.ToString(culture.DateTimeFormat.ShortDatePattern, culture);
 						time = dateTime.ToString(culture.DateTimeFormat.ShortTimePattern, culture);

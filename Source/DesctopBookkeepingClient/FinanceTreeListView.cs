@@ -33,7 +33,9 @@ namespace DesktopBookkeepingClient
 				}
 
 				if (row.Id == null)
+				{
 					LocalDb.InsertInvoiceLine(row);
+				}
 				else
 					LocalDb.UpdateInvoiceLine(row);
 			}
@@ -46,12 +48,22 @@ namespace DesktopBookkeepingClient
 		 	(ListView as FinanceTreeListView).ExpandAll();
 
 			base.HandleEndEdit();
+
+
+			//var list = ListView as FinanceTreeListView;
+			//list.AddInvoiceLine(/*list.CurrentItem*/);
 		}
 	}
 
 	public class FinanceTreeListView: TreeListView
 	{
-		public TreeListViewModel CurrentItem;
+		public TreeListViewModel _currentItem;
+
+		public TreeListViewModel CurrentItem
+		{
+			get { return _currentItem; }
+			set { _currentItem = value; }
+		}
 
 		ComboBox treeComboBox;
 		TextBox amountTextBox;
@@ -161,7 +173,13 @@ namespace DesktopBookkeepingClient
 
 		protected override void OnCellEditStarting(CellEditEventArgs e)
 		{
-			//var row = (TreeListViewModel) e.RowObject;
+			var row = (TreeListViewModel) e.RowObject;
+
+			//if (row.NestingLevel == NestingLevel.InvoiceLine)
+			//{
+			//	//CellEditTabChangesRows = true;
+			//	//CellEditEnterChangesRows = true;
+			//}
 
 			base.OnCellEditStarting(e);
 
@@ -220,5 +238,21 @@ namespace DesktopBookkeepingClient
 		//Known issues:
 		// 1. Коли контрол, то починається з нуля, інакше починається із відступом так як в дереві
 		// 2. Контрол працює лише після другого кліка
+
+		public void AddInvoiceLine(TreeListViewModel model)
+		{
+			//var model = CurrentItem;
+
+			var n = IndexOf(model) + (model.HasChildren ? model.Nodes.Count : 0);
+
+			var newRow = new TreeListViewModel("", "");
+			newRow._parent = model;
+			model.Add(newRow);
+			RebuildAll(true);
+			ExpandAll();
+			//CurrentItem = newRow;
+
+			StartCellEdit(GetItem(n + 1), 0);
+		}
 	}
 }
