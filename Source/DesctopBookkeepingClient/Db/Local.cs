@@ -242,7 +242,7 @@ namespace DesktopBookkeepingClient
 								{
 									//var invoiceLine = finDay.Nodes.Find(x => x.Tree == counterparty);
 									var invoiceLine = finDay.Nodes.Find(x => x.Id == transactionId);
-									invoiceLine.Nodes.Add(CreateInvoiceLineView());
+									invoiceLine.Add(CreateInvoiceLineView());
 								}
 							}
 							else
