@@ -147,7 +147,7 @@ namespace DesktopBookkeepingClient
 			if ((treeListView.GetItem(0).RowObject as TreeListViewModel).Tree == s)
 				return;
 
-			var newRow = new TreeListViewModel(null, 0, "", "", "", "");
+			var newRow = new TreeListViewModel(null, "", "", "", "");
 			var transact = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel>() );
 			transact.Add(newRow);
 
@@ -162,10 +162,10 @@ namespace DesktopBookkeepingClient
 				treeListView.CurrentItem = newRow; // transact;
 				//olvColumn5.IsEditable = true;
 				treeListView.StartCellEdit(treeListView.GetItem(1), 0);
-				//treeListView.CancelCellEdit();
+			//treeListView.CancelCellEdit();
 
-				//treeListView.PossibleFinishCellEditing
-			
+			//treeListView.PossibleFinishCellEditing
+
 			//else
 			//{
 			//	var transact = (TreeListViewModel)treeListView.GetItem(0).RowObject;
@@ -216,6 +216,11 @@ namespace DesktopBookkeepingClient
 
 		private void toolStripButton6_Click(object sender, EventArgs e)
 		{
+			TotalUpdateListVew();
+		}
+
+		void TotalUpdateListVew()
+		{
 			var localDb = new LocalDb();
 			treeListView.Roots = localDb.GetTransactions();
 			treeListView.ExpandAll();
@@ -260,13 +265,19 @@ namespace DesktopBookkeepingClient
 				e.MenuStrip = contextMenuStrip2;
 				clickedRow = row;
 			}
+
+			if (row.NestingLevel == NestingLevel.InvoiceLine)
+			{
+				e.MenuStrip = contextMenuStrip3;
+				clickedRow = row;
+			}
 		}
 
 		private void додатиТрансакціюToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			var n = treeListView.IndexOf(clickedRow);
 
-			var newRow = new TreeListViewModel(null, 0, "", "", "", "");
+			var newRow = new TreeListViewModel(null, "", "", "", "");
 			newRow._parent = clickedRow;
 			//DateTime d = DateTime.Parse(newRow.Date);
 			//newRow._date = d.AddMinutes(1).ToString();
@@ -323,6 +334,14 @@ namespace DesktopBookkeepingClient
 					olvColumn5.IsEditable = false;
 					break;
 			}
+		}
+
+		private void видалитиЛініюToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			clickedRow._parent.Nodes.Remove(clickedRow);
+			treeListView.RebuildAll(true);
+
+			LocalDb.RemoveInvoiceLine(clickedRow);
 		}
 	}
 

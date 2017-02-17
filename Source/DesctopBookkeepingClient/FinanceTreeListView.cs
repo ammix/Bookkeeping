@@ -18,12 +18,10 @@ namespace DesktopBookkeepingClient
 					return;
 				}
 
-				if (row.Id == 0)
+				if (row.Id == null)
 					LocalDb.InsertTransaction(row);
 				else
 					LocalDb.UpdateTransaction(row);
-
-				(ListView as FinanceTreeListView).CurrentItem = null;
 			}
 			else if (row.NestingLevel == NestingLevel.InvoiceLine)
 			{
@@ -34,11 +32,18 @@ namespace DesktopBookkeepingClient
 					return;
 				}
 
-				//if (row.Id == 0)
+				if (row.Id == null)
 					LocalDb.InsertInvoiceLine(row);
-				//else
-					//LocalDb.UpdateTransaction(row);
+				else
+					LocalDb.UpdateInvoiceLine(row);
 			}
+
+			(ListView as FinanceTreeListView).CurrentItem = null;
+
+			// TODO: hack: update needed because transaction id is set on SQL side and transaction on client side do not know that Id
+			var localDb = new LocalDb();
+			ListView.SetObjects(localDb.GetTransactions());
+		 	(ListView as FinanceTreeListView).ExpandAll();
 
 			base.HandleEndEdit();
 		}
@@ -76,8 +81,29 @@ namespace DesktopBookkeepingClient
 
 		//protected override OnValidating(CancelEventArgs e)
 		//{
-		//    base.OnValidating(e);
+		//	base.OnValidating(e);
 		//}
+
+		protected override void OnCellEditorValidating(CellEditEventArgs e)
+		{
+			var row = (TreeListViewModel) e.RowObject;
+
+			if (e.Column.AspectName == "Tree" && row.NestingLevel == NestingLevel.InvoiceLine)
+			{
+				base.OnCellEditorValidating(e); //TODO: is this line need indeed?
+
+				e.Cancel = true;
+
+				foreach (var article in LocalDb.GetArticles())
+				{
+					if (article == e.Control.Text)
+					{
+						e.Cancel = false;
+						break;
+					}
+				}
+			}
+		}
 
 
 		protected override void OnCellEditFinishing(CellEditEventArgs e)
@@ -147,7 +173,7 @@ namespace DesktopBookkeepingClient
 						treeComboBox.Items.AddRange(LocalDb.GetCounterparties());
 					else
 					{
-						treeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+						//treeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 						treeComboBox.Items.AddRange(LocalDb.GetArticles());
 					}
 

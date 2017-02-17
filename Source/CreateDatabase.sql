@@ -84,6 +84,7 @@ GO
 CREATE VIEW MainView
 AS SELECT
 t.Id,
+i.Id AS LineId,
 t.TransactionDate AS Date,
 c.Name AS Counterparty,
 ar.Label AS Article,

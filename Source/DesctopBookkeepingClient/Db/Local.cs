@@ -9,7 +9,8 @@ namespace DesktopBookkeepingClient
 {
 	public class LocalDb
 	{
-		int transactionId;
+		int? transactionId;
+		int? lineId;
 		string date;
 		string time;
 		string counterparty;
@@ -113,7 +114,7 @@ namespace DesktopBookkeepingClient
 				var cmdText =
 					$"INSERT INTO [InvoiceLines] " +
 					$"(UserId, TransactionId, ArticleId, Price, Note) " +
-					$"SELECT 1, " +
+					$"SELECT 1, " + // Values(...)
 					$"{viewModel._parent.Id}, " +
 					$"(SELECT [Id] FROM [Articles] WHERE [Label] = N'{viewModel.Counterparty}'), " + //TODO: Counterparty ?
 					$"{viewModel.Amount.Replace(',', '.')}, " +
@@ -145,12 +146,43 @@ namespace DesktopBookkeepingClient
 			}
 		}
 
+		public static void UpdateInvoiceLine(TreeListViewModel viewModel)
+		{
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				var cmdText =
+					$"UPDATE line SET " +
+					$"ArticleId = a.Id, " + //TODO: TransactionId not can be changed ??
+					$"Price = {viewModel.Amount.Replace(',', '.')}, " +
+					$"Note = N'{viewModel.Comment}' " +
+					$"FROM [InvoiceLines] line " +
+					$"INNER JOIN [Articles] a ON a.Label = N'{viewModel.Counterparty}' " + // TODO: Counterpary not Article must be here??
+					$"WHERE line.Id = {viewModel.Id}";
+
+				var command = new SqlCommand(cmdText, connection);
+				command.ExecuteNonQuery();
+			}
+		}
+
 		public static void RemoveTransaction(TreeListViewModel viewModel)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
 				var cmdText = $"DELETE FROM [Transactions] WHERE Id = {viewModel.Id}";
+
+				var command = new SqlCommand(cmdText, connection);
+				command.ExecuteNonQuery();
+			}
+		}
+
+		public static void RemoveInvoiceLine(TreeListViewModel viewModel)
+		{
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				var cmdText = $"DELETE FROM [InvoiceLines] WHERE Id = {viewModel.Id}";
 
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
@@ -183,7 +215,8 @@ namespace DesktopBookkeepingClient
 				{
 					while (dr.Read())
 					{
-						transactionId = (int)dr["Id"];
+						transactionId = (int?) dr["Id"];
+						lineId = ConvertFromDbVal<int?>(dr["LineId"]);
 						var dateTime = (DateTime)dr["Date"];
 						date = dateTime.ToString(culture.DateTimeFormat.ShortDatePattern, culture);
 						time = dateTime.ToString(culture.DateTimeFormat.ShortTimePattern, culture);
@@ -263,9 +296,11 @@ namespace DesktopBookkeepingClient
 		{
 			return new TreeListViewModel
 			(
+
 				article: article,
 				price: price,
-				note: note
+				note: note,
+				id: lineId
 			);
 		}
 
@@ -276,6 +311,18 @@ namespace DesktopBookkeepingClient
 				return (field is DBNull) ? null : field.ToString();
 			else
 				return (field is DBNull) ? null : ((decimal)field).ToString("N");
+		}
+
+		static T ConvertFromDbVal<T>(object obj)
+		{
+			if (obj == null || obj == DBNull.Value)
+			{
+				return default(T); // returns the default value for the type
+			}
+			else
+			{
+				return (T)obj;
+			}
 		}
 	}
 }

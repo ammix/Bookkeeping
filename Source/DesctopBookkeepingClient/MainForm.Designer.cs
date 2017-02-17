@@ -63,6 +63,8 @@
 			this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.виToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.додатиЛініюІнвойсаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.contextMenuStrip3 = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.видалитиЛініюToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -74,6 +76,7 @@
 			this.menuStrip1.SuspendLayout();
 			this.contextMenuStrip1.SuspendLayout();
 			this.contextMenuStrip2.SuspendLayout();
+			this.contextMenuStrip3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// olvColumn7
@@ -412,6 +415,20 @@
 			this.додатиЛініюІнвойсаToolStripMenuItem.Text = "Парсити чек";
 			this.додатиЛініюІнвойсаToolStripMenuItem.Click += new System.EventHandler(this.додатиЛініюІнвойсаToolStripMenuItem_Click);
 			// 
+			// contextMenuStrip3
+			// 
+			this.contextMenuStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.видалитиЛініюToolStripMenuItem});
+			this.contextMenuStrip3.Name = "contextMenuStrip3";
+			this.contextMenuStrip3.Size = new System.Drawing.Size(160, 48);
+			// 
+			// видалитиЛініюToolStripMenuItem
+			// 
+			this.видалитиЛініюToolStripMenuItem.Name = "видалитиЛініюToolStripMenuItem";
+			this.видалитиЛініюToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+			this.видалитиЛініюToolStripMenuItem.Text = "Видалити лінію";
+			this.видалитиЛініюToolStripMenuItem.Click += new System.EventHandler(this.видалитиЛініюToolStripMenuItem_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -436,6 +453,7 @@
 			this.menuStrip1.PerformLayout();
 			this.contextMenuStrip1.ResumeLayout(false);
 			this.contextMenuStrip2.ResumeLayout(false);
+			this.contextMenuStrip3.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -475,6 +493,8 @@
 		private System.Windows.Forms.ToolStripMenuItem виToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem додатиПрибутокToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem додатиЛініюІнвойсаToolStripMenuItem;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip3;
+		private System.Windows.Forms.ToolStripMenuItem видалитиЛініюToolStripMenuItem;
 	}
 }
 
