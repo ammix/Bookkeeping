@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using BrightIdeasSoftware;
 using System.Collections.Generic;
 using System.Collections;
+using System.Configuration;
 
 namespace DesktopBookkeepingClient
 {
@@ -16,6 +17,15 @@ namespace DesktopBookkeepingClient
 			InitializeComponent();
 
 			InitializeTreeListView();
+
+			var connectionString = ConfigurationManager.ConnectionStrings["BookkeepingDb"].ConnectionString;
+			var values = connectionString.Split(';');
+			foreach (var value in values)
+				if (value.Contains("data source"))
+				{
+					label1.Text = value.Replace("data source=", "");
+					break;
+				}
 		}
 
 		private void InitializeTreeListView()

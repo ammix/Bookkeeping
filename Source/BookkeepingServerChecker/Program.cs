@@ -8,10 +8,10 @@ namespace BookkeepingServerChecker
     {
         static void Main()
         {
-            var client = new RestClient("http://money.somee.com/");
-            var request = new RestRequest("api/transactions/6");
+            var client = new RestClient("http://accounts.somee.com/");
+            var request = new RestRequest(""); //api/transactions/6
 
-            IRestResponse response = client.Get(request);
+			IRestResponse response = client.Get(request);
 
             string path = @"D:\ASP.NET\Logs\" + DateTime.Now.ToString().Replace(':', '_') + ".log";
             File.WriteAllText(path, response.Content);
