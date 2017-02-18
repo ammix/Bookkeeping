@@ -90,16 +90,17 @@ namespace DesktopBookkeepingClient
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				var cmdText =
-					$"INSERT INTO [Transactions] " +
-					$"(UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note) " +
-					$"SELECT 1, " +
-					$"(SELECT [Id] FROM [Accounts] WHERE [Name] = N'{viewModel.Account}'), " +
-					$"(SELECT [Id] FROM [Counterparties] WHERE [Name] = N'{viewModel.Counterparty}'), " +
-					$"{viewModel.Amount.Replace(',', '.')}, " +
-					$"CONVERT(DATETIME, '{viewModel.Date}', 104), " +
-					$"NULL, " +
-					$"N'{viewModel.Comment}'";
+				var cmdText = $@"
+					INSERT INTO [Transactions] 
+					(UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note) 
+					SELECT 1, 
+					(SELECT [Id] FROM [Accounts] WHERE [Name] = N'{viewModel.Account}'), 
+					(SELECT [Id] FROM [Counterparties] WHERE [Name] = N'{viewModel.Counterparty}'), 
+					{viewModel.Amount.Replace(',', '.')}, 
+					CONVERT(DATETIME, '{viewModel.Date}', 104), 
+					NULL, 
+					N'{viewModel.Comment}'
+				";
 
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
@@ -201,7 +202,7 @@ namespace DesktopBookkeepingClient
 
 				// Rule: snapshots must be on 00:00 of 1-st new month (and day if exist)
 				//var getSnapshotsSql = new SqlCommand($"SELECT [Account], [Amount] FROM [SnapshotsView] WHERE DATEPART(month, [Date]) = {month}", connection);
-				var getSnapshotsSql = new SqlCommand("SELECT [Account], [Amount] FROM [SnapshotsView]", connection);
+				var getSnapshotsSql = new SqlCommand(getSnapshotSql, connection);
 				using (var dr = getSnapshotsSql.ExecuteReader())
 				{
 					while (dr.Read())
@@ -209,8 +210,7 @@ namespace DesktopBookkeepingClient
 				}
 
 				//var cmdText = $"SELECT * FROM [MainView] WHERE DATEPART(month, [DATE]) = {month} ORDER BY [Date] ASC";
-				var cmdText = "SELECT * FROM [MainView] ORDER BY [Date] ASC";
-				var command = new SqlCommand(cmdText, connection);
+				var command = new SqlCommand(mainViewSql, connection);
 				using (var dr = command.ExecuteReader())
 				{
 					while (dr.Read())
@@ -324,5 +324,38 @@ namespace DesktopBookkeepingClient
 				return (T)obj;
 			}
 		}
+
+		const string mainViewSql = @"
+			SELECT
+			t.Id,
+			i.Id AS LineId,
+			t.TransactionDate AS Date,
+			c.Name AS Counterparty,
+			ar.Label AS Article,
+			i.Price,
+			i.Note AS Note,
+			t.Note AS Comment,
+			t.Amount,
+			ac.Name AS Account,
+			ac.Currency
+
+			FROM Transactions t
+				LEFT OUTER JOIN InvoiceLines i ON i.TransactionId = t.Id
+				LEFT OUTER JOIN Articles ar ON ar.Id = i.ArticleId
+				LEFT OUTER JOIN CounterParties c ON c.Id = t.CounterpartyId
+				INNER JOIN Accounts ac ON ac.Id = t.AccountId
+
+			ORDER BY [Date] ASC
+			";
+
+		const string getSnapshotSql = @"
+			SELECT
+			a.[Name] AS [Account],
+			s.[Amount]
+
+			FROM [Snapshots] s
+				INNER JOIN [Accounts] a ON s.AccountId = a.Id
+				WHERE DATEPART(day, s.[SnapshotDate]) = 1
+			";
 	}
 }

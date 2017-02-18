@@ -65,6 +65,7 @@
 			this.додатиЛініюІнвойсаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip3 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.видалитиЛініюToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.label1 = new System.Windows.Forms.Label();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -420,7 +421,7 @@
 			this.contextMenuStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.видалитиЛініюToolStripMenuItem});
 			this.contextMenuStrip3.Name = "contextMenuStrip3";
-			this.contextMenuStrip3.Size = new System.Drawing.Size(160, 48);
+			this.contextMenuStrip3.Size = new System.Drawing.Size(160, 26);
 			// 
 			// видалитиЛініюToolStripMenuItem
 			// 
@@ -429,11 +430,21 @@
 			this.видалитиЛініюToolStripMenuItem.Text = "Видалити лінію";
 			this.видалитиЛініюToolStripMenuItem.Click += new System.EventHandler(this.видалитиЛініюToolStripMenuItem_Click);
 			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.label1.Location = new System.Drawing.Point(662, 44);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(0, 25);
+			this.label1.TabIndex = 5;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1167, 611);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.menuStrip1);
@@ -495,6 +506,7 @@
 		private System.Windows.Forms.ToolStripMenuItem додатиЛініюІнвойсаToolStripMenuItem;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip3;
 		private System.Windows.Forms.ToolStripMenuItem видалитиЛініюToolStripMenuItem;
+		private System.Windows.Forms.Label label1;
 	}
 }
 
