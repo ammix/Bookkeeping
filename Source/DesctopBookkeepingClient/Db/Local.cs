@@ -85,7 +85,7 @@ namespace DesktopBookkeepingClient
 			return accounts.ToArray();
 		}
 
-		public static void InsertTransaction(TreeListViewModel viewModel)
+		public static int InsertTransaction(TreeListViewModel viewModel)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -104,6 +104,14 @@ namespace DesktopBookkeepingClient
 
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
+
+				var lastIdSelect = "SELECT TOP(1) Id FROM [Transactions] ORDER BY [Id] DESC";
+				var getLastIdCommand = new SqlCommand(lastIdSelect, connection);
+				using (var dr = getLastIdCommand.ExecuteReader())
+				{
+					dr.Read();
+					return (int)dr["Id"];
+				}
 			}
 		}
 
@@ -122,6 +130,7 @@ namespace DesktopBookkeepingClient
 					$"N'{viewModel.Comment}'";
 
 				var command = new SqlCommand(cmdText, connection);
+
 				command.ExecuteNonQuery();
 			}
 		}

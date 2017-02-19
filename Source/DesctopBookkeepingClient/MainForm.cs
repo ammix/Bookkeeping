@@ -43,11 +43,11 @@ namespace DesktopBookkeepingClient
 			treeListView.FullRowSelect = true;
 			treeListView.UseCellFormatEvents = true;
 
-			treeListView.GetColumn(2).AspectPutter = delegate (object model, object newValue)
-			{
-				TreeListViewModel m = (TreeListViewModel)model;
-				m.Comment = (string)newValue;
-			};
+			//treeListView.GetColumn(2).AspectPutter = delegate (object model, object newValue)
+			//{
+			//	TreeListViewModel m = (TreeListViewModel)model;
+			//	m.Comment = (string)newValue;
+			//};
 
 							//this.columnHeaderSalaryRate.AspectPutter = delegate (object model, object newValue) {
 							//	Person p = (Person)model;
@@ -148,7 +148,7 @@ namespace DesktopBookkeepingClient
 				}
 			}
 
-			if(treeListView.CurrentItem !=null)
+			if (treeListView.CurrentItem != null)
 				return;
 
 			//var s = $"{date.Day} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month).ToLower().Replace('ь', 'я')} {date.Year}";
@@ -157,23 +157,18 @@ namespace DesktopBookkeepingClient
 			if ((treeListView.GetItem(0).RowObject as TreeListViewModel).Tree == s)
 				return;
 
-			var newRow = new TreeListViewModel(null, "", "", "", "");
-			var transact = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel>() );
-			transact.Add(newRow);
+			var newFinDay = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel>());
+
+			ArrayList roots = ObjectListView.EnumerableToArray(treeListView.Roots, true);
+			roots.Insert(0, newFinDay);
+			treeListView.SetObjects(roots);
 
 
-				ArrayList roots = ObjectListView.EnumerableToArray(treeListView.Roots, true);
-				roots.Insert(0, transact);
-				treeListView.SetObjects(roots);
+			treeListView.AddTransaction(newFinDay);
+			//treeListView.CurrentItem = newFinDay;
 
-				treeListView.EnsureModelVisible(transact);
-				treeListView.ExpandAll();
 
-				treeListView.CurrentItem = newRow; // transact;
-				//olvColumn5.IsEditable = true;
-				treeListView.StartCellEdit(treeListView.GetItem(1), 0);
 			//treeListView.CancelCellEdit();
-
 			//treeListView.PossibleFinishCellEditing
 
 			//else
@@ -234,6 +229,11 @@ namespace DesktopBookkeepingClient
 			var localDb = new LocalDb();
 			treeListView.Roots = localDb.GetTransactions();
 			treeListView.ExpandAll();
+
+			// TODO: hack: update needed because transaction id is set on SQL side and transaction on client side do not know that Id
+			//var localDb = new LocalDb();
+			//ListView.SetObjects(localDb.GetTransactions());
+			//	(ListView as FinanceTreeListView).ExpandAll();
 		}
 
 		private void toolStripButton7_Click(object sender, EventArgs e)
@@ -255,6 +255,7 @@ namespace DesktopBookkeepingClient
 			{
 				e.MenuStrip = contextMenuStrip1; //this.DecideRightClickMenu(e.Model, e.Column);
 				clickedRow = row;
+				//treeListView.CurrentItem = clickedRow;
 
 				//var transact = (TreeListViewModel)treeListView.GetItem(0).RowObject;
 				//transact.A
@@ -274,12 +275,14 @@ namespace DesktopBookkeepingClient
 			{
 				e.MenuStrip = contextMenuStrip2;
 				clickedRow = row;
+				//treeListView.CurrentItem = clickedRow;
 			}
 
 			if (row.NestingLevel == NestingLevel.InvoiceLine)
 			{
 				e.MenuStrip = contextMenuStrip3;
 				clickedRow = row;
+				//treeListView.CurrentItem = clickedRow;
 			}
 
 			//treeListView.CurrentItem = clickedRow;
@@ -287,36 +290,28 @@ namespace DesktopBookkeepingClient
 
 		private void додатиТрансакціюToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			var n = treeListView.IndexOf(clickedRow);
-
-			var newRow = new TreeListViewModel(null, "", "", "", "");
-			newRow._parent = clickedRow;
-			//DateTime d = DateTime.Parse(newRow.Date);
-			//newRow._date = d.AddMinutes(1).ToString();
-
-			clickedRow.Nodes.Insert(0, newRow);
-
-			//treeListView.InsertObjects(1, new[] { newRow } ); //clickedRow
-			////ArrayList newRoots = ObjectListView.EnumerableToArray(treeListView.Roots, true);
-			////var firstElem = (TreeListViewModel)newRoots[0];
-			////firstElem.Nodes.Insert(0, newRow);
-			////treeListView.SetObjects(newRoots);
-			//treeListView.EnsureModelVisible(clickedRow);
-			treeListView.RebuildAll(true);
-
-			//treeListView.ExpandAll();
-
-			treeListView.CurrentItem = newRow;
-			//olvColumn5.IsEditable = true;
-			treeListView.StartCellEdit(treeListView.GetItem(n + 1), 0);
+			treeListView.AddTransaction(clickedRow);
 		}
 
 		private void виToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			clickedRow._parent.Nodes.Remove(clickedRow);
-			treeListView.RebuildAll(true);
+			//clickedRow._parent.Nodes.Remove(clickedRow);
+			//treeListView.RebuildAll(true);
 
-			LocalDb.RemoveTransaction(clickedRow);
+			LocalDb.RemoveTransaction(clickedRow); //TODO: return result and then update UI
+
+			if (clickedRow != null)
+			{
+				clickedRow._parent.Nodes.Remove(clickedRow);
+
+				if (clickedRow._parent.NestingLevel == NestingLevel.FinDay && !clickedRow._parent.HasChildren)
+					treeListView.RemoveObject(clickedRow._parent);
+
+				//treeListView.CurrentItem = null;
+			}
+
+			treeListView.RebuildAll(true);
+			//treeListView.BuildList();
 		}
 
 		private void додатиЛініюІнвойсаToolStripMenuItem_Click(object sender, EventArgs e)

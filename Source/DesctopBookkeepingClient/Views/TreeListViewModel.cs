@@ -103,6 +103,20 @@ namespace DesktopBookkeepingClient
 				Nodes = new List<TreeListViewModel>();
 			Nodes.Add(model);
 		}
+
+		public void Insert(int index, TreeListViewModel model)
+		{
+			model._parent = this;
+			if (Nodes == null)
+				Nodes = new List<TreeListViewModel>();
+			Nodes.Insert(index, model);
+		}
+
+		public void Remove()
+		{
+			_parent.Nodes.Remove(this);
+			//CurrentItem._parent.Nodes.Remove(CurrentItem);
+		}
 	}
 
 	public enum NestingLevel

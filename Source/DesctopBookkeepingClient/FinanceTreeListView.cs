@@ -7,7 +7,10 @@ namespace DesktopBookkeepingClient
 	{
 		protected override void HandleEndEdit()
 		{
+			//base.HandleEndEdit();
+
 			var row = (TreeListViewModel) ItemBeingEdited.RowObject;
+			var list = ListView as FinanceTreeListView;
 
 			if (row.NestingLevel == NestingLevel.Transaction)
 			{
@@ -18,10 +21,19 @@ namespace DesktopBookkeepingClient
 					return;
 				}
 
+				base.HandleEndEdit();
+
 				if (row.Id == null)
-					LocalDb.InsertTransaction(row);
+				{
+					int id = LocalDb.InsertTransaction(row);
+					row.Id = id;
+				}
 				else
 					LocalDb.UpdateTransaction(row);
+
+				list.AddTransaction();
+
+				//(ListView as FinanceTreeListView).CurrentItem = null;
 			}
 			else if (row.NestingLevel == NestingLevel.InvoiceLine)
 			{
@@ -32,26 +44,20 @@ namespace DesktopBookkeepingClient
 					return;
 				}
 
+				base.HandleEndEdit();
+
 				if (row.Id == null)
 				{
 					LocalDb.InsertInvoiceLine(row);
 				}
 				else
 					LocalDb.UpdateInvoiceLine(row);
+
+				list.AddInvoiceLine();
 			}
 
-			(ListView as FinanceTreeListView).CurrentItem = null;
-
-			// TODO: hack: update needed because transaction id is set on SQL side and transaction on client side do not know that Id
-			var localDb = new LocalDb();
-			ListView.SetObjects(localDb.GetTransactions());
-		 	(ListView as FinanceTreeListView).ExpandAll();
-
-			base.HandleEndEdit();
-
-
-			//var list = ListView as FinanceTreeListView;
-			//list.AddInvoiceLine(/*list.CurrentItem*/);
+			//base.HandleEndEdit();
+			//(ListView as FinanceTreeListView).CurrentItem = null;
 		}
 	}
 
@@ -59,7 +65,7 @@ namespace DesktopBookkeepingClient
 	{
 		public TreeListViewModel _currentItem;
 
-		public TreeListViewModel CurrentItem
+		public TreeListViewModel CurrentItem  //SelectedObject
 		{
 			get { return _currentItem; }
 			set { _currentItem = value; }
@@ -155,6 +161,7 @@ namespace DesktopBookkeepingClient
 			if (CurrentItem != null)
 			{
 				CurrentItem._parent.Nodes.Remove(CurrentItem);
+				//CurrentItem.Remove();
 
 				if (CurrentItem._parent.NestingLevel == NestingLevel.FinDay && !CurrentItem._parent.HasChildren)
 				{
@@ -239,6 +246,12 @@ namespace DesktopBookkeepingClient
 		// 1. Коли контрол, то починається з нуля, інакше починається із відступом так як в дереві
 		// 2. Контрол працює лише після другого кліка
 
+		public void AddInvoiceLine()
+		{
+			CurrentItem = (TreeListViewModel)SelectedObject;
+			AddInvoiceLine(CurrentItem._parent);
+		}
+
 		public void AddInvoiceLine(TreeListViewModel model)
 		{
 			//var model = CurrentItem;
@@ -250,9 +263,35 @@ namespace DesktopBookkeepingClient
 			model.Add(newRow);
 			RebuildAll(true);
 			ExpandAll();
-			//CurrentItem = newRow;
+
+			CurrentItem = newRow; // newRow._parent;
+			SelectedObject = CurrentItem;
 
 			StartCellEdit(GetItem(n + 1), 0);
+		}
+
+		public void AddTransaction()
+		{
+			CurrentItem = (TreeListViewModel)SelectedObject;
+			AddTransaction(CurrentItem._parent);
+		}
+
+		public void AddTransaction(TreeListViewModel model)
+		{
+			var n = IndexOf(model);
+
+			var newRow = new TreeListViewModel(null, "", "", "", "");
+
+			model.Insert(0, newRow);
+
+			//list.EnsureModelVisible(model);
+			RebuildAll(true);
+			ExpandAll();
+
+			CurrentItem = newRow;
+			SelectedObject = CurrentItem;
+
+			StartCellEdit(GetItem(n + 1), 1);
 		}
 	}
 }
