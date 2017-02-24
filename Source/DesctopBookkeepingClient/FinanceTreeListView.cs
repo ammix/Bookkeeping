@@ -37,7 +37,7 @@ namespace DesktopBookkeepingClient
 			}
 			else if (row.NestingLevel == NestingLevel.InvoiceLine)
 			{
-				if (string.IsNullOrEmpty(row.Tree) || string.IsNullOrEmpty(row.Amount))
+				if (string.IsNullOrEmpty(row.Tree) || string.IsNullOrEmpty(row.Amount) || !list.ValidateArticle(row)) //TODO !!!
 				{
 					MessageBox.Show("Артикул і ціна мають бути заповнені", "Помилка створення invoice line",
 						MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
@@ -104,24 +104,65 @@ namespace DesktopBookkeepingClient
 
 		protected override void OnCellEditorValidating(CellEditEventArgs e)
 		{
-			var row = (TreeListViewModel) e.RowObject;
-
+			var row = (TreeListViewModel)e.RowObject;
 			if (e.Column.AspectName == "Tree" && row.NestingLevel == NestingLevel.InvoiceLine)
 			{
 				base.OnCellEditorValidating(e); //TODO: is this line need indeed?
 
 				e.Cancel = true;
 
-				foreach (var article in LocalDb.GetArticles())
-				{
-					if (article == e.Control.Text)
-					{
-						e.Cancel = false;
-						break;
-					}
-				}
+				//foreach (var article in LocalDb.GetArticles())
+				//{
+				//	if (article == e.Control.Text)
+				//	{
+				//		e.Cancel = false;
+				//		break;
+				//	}
+				//}
+
+				if (ValidateArticle(row))
+					e.Cancel = false;
 			}
+
+			//var row = (TreeListViewModel)e.RowObject;
+			//var result = ValidateTransaction(row);
 		}
+
+		public bool ValidateArticle(TreeListViewModel row)
+		{
+			foreach (var article in LocalDb.GetArticles())
+				if (article == row.Tree) // row.Article
+					return true;
+
+			return false;
+		}
+
+		bool ValidatePrice(TreeListViewModel row)
+		{
+			return true;
+		}
+
+		//bool ValidateTransaction(TreeListViewModel row)
+		//{
+		//	switch (row.NestingLevel)
+		//	{
+		//		case NestingLevel.Transaction:
+		//			break;
+		//		case NestingLevel.InvoiceLine:
+		//			foreach (var article in LocalDb.GetArticles())
+		//			{
+		//				if (article == row.Tree) // row.Article
+		//					break;
+		//				return false;
+		//			}
+		//			break;
+		//	}
+
+
+
+
+		//	return true;
+		//}
 
 
 		protected override void OnCellEditFinishing(CellEditEventArgs e)
