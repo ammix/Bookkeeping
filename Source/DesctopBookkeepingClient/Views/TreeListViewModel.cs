@@ -13,6 +13,7 @@ namespace DesktopBookkeepingClient
 		//public int ArticleId;
 		//public int AccountId;
 		public string _date;
+		public DateTime? dateTime;
 		public TreeListViewModel _parent;
 
 		public string Date
@@ -49,6 +50,14 @@ namespace DesktopBookkeepingClient
 		//static int NewId() => id++;
 
 		public bool HasChildren => Nodes != null && Nodes.Count != 0;
+
+		public TreeListViewModel(DateTime dateTime)
+		{
+			this.dateTime = dateTime;
+			Nodes = new List<TreeListViewModel>();
+
+			Date = dateTime.ToShortDateString(); // <------- ??
+		}
 
 		public TreeListViewModel(List<TreeListViewModel> transactions, string date)
 		{

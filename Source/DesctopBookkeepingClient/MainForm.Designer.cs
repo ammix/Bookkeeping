@@ -155,6 +155,7 @@
             this.olvColumn5,
             this.olvColumn4,
             this.olvColumn6});
+			this.treeListView.CurrentItem = null;
 			this.treeListView.Cursor = System.Windows.Forms.Cursors.Default;
 			this.treeListView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.treeListView.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -173,6 +174,7 @@
 			this.treeListView.CellRightClick += new System.EventHandler<BrightIdeasSoftware.CellRightClickEventArgs>(this.treeListView_CellRightClick);
 			this.treeListView.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.treeListView_FormatCell);
 			this.treeListView.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.treeListView_FormatRow);
+			this.treeListView.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.treeListView_KeyPress);
 			// 
 			// olvColumn1
 			// 
@@ -180,7 +182,7 @@
 			this.olvColumn1.CellEditUseWholeCell = true;
 			this.olvColumn1.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Left;
 			this.olvColumn1.Text = "Контрагент";
-			this.olvColumn1.Width = 180;
+			this.olvColumn1.Width = 200;
 			// 
 			// olvColumn2
 			// 

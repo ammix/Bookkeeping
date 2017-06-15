@@ -199,6 +199,29 @@ namespace DesktopBookkeepingClient
 			}
 		}
 
+		public static void MoveTransaction(TreeListViewModel viewModel1, TreeListViewModel viewModel2)
+		{
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				var cmdText = "DECLARE @date1 DATETIME " +
+				              "DECLARE @date2 DATETIME " +
+				              $"SET @date1 = (SELECT TransactionDate FROM [Transactions] WHERE Id = {viewModel1.Id}) " +
+				              $"SET @date2 = (SELECT TransactionDate FROM [Transactions] WHERE Id = {viewModel2.Id}) " +
+
+				              "UPDATE [Transactions] " +
+				              "SET TransactionDate = @date2 " +
+				              $"WHERE Id = {viewModel1.Id} " +
+
+				              "UPDATE [Transactions] " +
+				              "SET TransactionDate = @date1 " +
+				              $"WHERE Id = {viewModel2.Id}";
+
+				var command = new SqlCommand(cmdText, connection);
+				command.ExecuteNonQuery();
+			}
+		}
+
 		// Months have to be in order (without gaps)
 		public List<TreeListViewModel> GetTransactions(/*int month*/)
 		{
@@ -227,7 +250,7 @@ namespace DesktopBookkeepingClient
 						transactionId = (int?) dr["Id"];
 						lineId = ConvertFromDbVal<int?> (dr["LineId"]);
 						var dateTime = (DateTime)dr["Date"];
-						date = dateTime.ToString(culture.DateTimeFormat.ShortDatePattern, culture);
+						date = dateTime.ToString("d MMMM yyyy (dddd)", culture);
 						time = dateTime.ToString(culture.DateTimeFormat.ShortTimePattern, culture);
 						counterparty = dr["Counterparty"].ToString();
 						article = GetValue(dr, "Article");

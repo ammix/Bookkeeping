@@ -5,6 +5,19 @@ namespace DesktopBookkeepingClient
 {
 	public class FinanceCellEditKeyEngine: CellEditKeyEngine
 	{
+		//protected override void InitializeCellEditKeyMaps()
+		//{
+		//	base.InitializeCellEditKeyMaps();
+		//	CellEditKeyMap[Keys.F1] = CellEditCharacterBehaviour.ChangeRowUp;
+		//}
+
+		//protected override bool HandleCustomVerb(Keys keyData, CellEditCharacterBehaviour behaviour)
+		//{
+		//	MessageBox.Show("123", "456",
+		//				MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+		//	return false;
+		//}
+
 		protected override void HandleEndEdit()
 		{
 			//base.HandleEndEdit();

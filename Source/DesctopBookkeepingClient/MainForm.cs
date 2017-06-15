@@ -158,6 +158,7 @@ namespace DesktopBookkeepingClient
 				return;
 
 			var newFinDay = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel>());
+			//var newFinDay = new TreeListViewModel(date);
 
 			ArrayList roots = ObjectListView.EnumerableToArray(treeListView.Roots, true);
 			roots.Insert(0, newFinDay);
@@ -356,6 +357,36 @@ namespace DesktopBookkeepingClient
 			LocalDb.RemoveInvoiceLine(clickedRow);
 
 			//treeListView.BuildList();
+		}
+
+		private void treeListView_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			var row = (TreeListViewModel) treeListView.SelectedObject;
+
+			var index = row._parent.Nodes.IndexOf(row);
+
+			//var index = clickedRow._parent.Nodes.IndexOf(clickedRow);
+			//var upper = clickedRow._parent.Nodes[index - 1];
+			//var downer = clickedRow._parent.Nodes[index + 1];
+			switch (e.KeyChar)
+			{
+				case '-':
+					row._parent.Nodes.RemoveAt(index);
+					row._parent.Nodes.Insert(index + 1, row);
+					treeListView.RebuildAll(true);
+
+					var next = row._parent.Nodes[index];
+					LocalDb.MoveTransaction(row, next);
+					break;
+				case '+':
+					row._parent.Nodes.RemoveAt(index);
+					row._parent.Nodes.Insert(index - 1, row);
+					treeListView.RebuildAll(true);
+
+					var prev = row._parent.Nodes[index - 1];
+					LocalDb.MoveTransaction(row, prev);
+					break;
+			}
 		}
 	}
 

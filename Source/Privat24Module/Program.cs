@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using RestSharp;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Web;
 
 namespace Privat24Module
@@ -41,8 +42,9 @@ namespace Privat24Module
 			XDocument xml = XDocument.Parse(Resources.rest_fiz);
 			var format = SaveOptions.DisableFormatting;
 
-			xml.Descendants("prop").First(x => x.Attribute("name").Value == "sd").SetAttributeValue("value", startDate.ToShortDateString());
-			xml.Descendants("prop").First(x => x.Attribute("name").Value == "ed").SetAttributeValue("value", endDate.ToShortDateString());
+			var culture = CultureInfo.GetCultureInfo("uk-UA");
+			xml.Descendants("prop").First(x => x.Attribute("name").Value == "sd").SetAttributeValue("value", startDate.ToString("d", culture));
+			xml.Descendants("prop").First(x => x.Attribute("name").Value == "ed").SetAttributeValue("value", endDate.ToString("d", culture));
 			xml.Descendants("prop").First(x => x.Attribute("name").Value == "card").SetAttributeValue("value", cardNumber);
 
 			string data = xml.Descendants("data").Elements().Select(x => x.ToString(format)).Aggregate(string.Concat);
