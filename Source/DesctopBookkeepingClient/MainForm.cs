@@ -151,13 +151,12 @@ namespace DesktopBookkeepingClient
 			if (treeListView.CurrentItem != null)
 				return;
 
-			//var s = $"{date.Day} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month).ToLower().Replace('ь', 'я')} {date.Year}";
 			var s = date.ToShortDateString();
 
 			if ((treeListView.GetItem(0).RowObject as TreeListViewModel).Tree == s)
 				return;
 
-			var newFinDay = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel>());
+			var newFinDay = new TreeListViewModel(date: date, transactions: new List<TreeListViewModel>());
 			//var newFinDay = new TreeListViewModel(date);
 
 			ArrayList roots = ObjectListView.EnumerableToArray(treeListView.Roots, true);
@@ -383,7 +382,7 @@ namespace DesktopBookkeepingClient
 					row._parent.Nodes.Insert(index - 1, row);
 					treeListView.RebuildAll(true);
 
-					var prev = row._parent.Nodes[index - 1];
+					var prev = row._parent.Nodes[index]; // - 1];
 					LocalDb.MoveTransaction(row, prev);
 					break;
 			}

@@ -11,7 +11,7 @@ namespace DesktopBookkeepingClient
 	{
 		int? transactionId;
 		int? lineId;
-		string date;
+		DateTime date;
 		string time;
 		string counterparty;
 		string article;
@@ -89,6 +89,9 @@ namespace DesktopBookkeepingClient
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
+				var time = DateTime.Now.TimeOfDay;
+				var dateTime = viewModel.GetDate().Add(time);
+
 				connection.Open();
 				var cmdText = $@"
 					INSERT INTO [Transactions] 
@@ -97,7 +100,7 @@ namespace DesktopBookkeepingClient
 					(SELECT [Id] FROM [Accounts] WHERE [Name] = N'{viewModel.Account}'), 
 					(SELECT [Id] FROM [Counterparties] WHERE [Name] = N'{viewModel.Counterparty}'), 
 					{viewModel.Amount.Replace(',', '.')}, 
-					CONVERT(DATETIME, '{viewModel.Date}', 104), 
+					'{dateTime}', 
 					NULL, 
 					N'{viewModel.Comment}'
 				";
@@ -204,10 +207,8 @@ namespace DesktopBookkeepingClient
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				var cmdText = "DECLARE @date1 DATETIME " +
-				              "DECLARE @date2 DATETIME " +
-				              $"SET @date1 = (SELECT TransactionDate FROM [Transactions] WHERE Id = {viewModel1.Id}) " +
-				              $"SET @date2 = (SELECT TransactionDate FROM [Transactions] WHERE Id = {viewModel2.Id}) " +
+				var cmdText = $"DECLARE @date1 DATETIME = (SELECT TransactionDate FROM [Transactions] WHERE Id = {viewModel1.Id}) " +
+							  $"DECLARE @date2 DATETIME = (SELECT TransactionDate FROM [Transactions] WHERE Id = {viewModel2.Id}) " +
 
 				              "UPDATE [Transactions] " +
 				              "SET TransactionDate = @date2 " +
@@ -250,7 +251,8 @@ namespace DesktopBookkeepingClient
 						transactionId = (int?) dr["Id"];
 						lineId = ConvertFromDbVal<int?> (dr["LineId"]);
 						var dateTime = (DateTime)dr["Date"];
-						date = dateTime.ToString("d MMMM yyyy (dddd)", culture);
+						//date = dateTime.ToString("d MMMM yyyy (dddd)", culture);
+						date = dateTime.Date;
 						time = dateTime.ToString(culture.DateTimeFormat.ShortTimePattern, culture);
 						counterparty = dr["Counterparty"].ToString();
 						article = GetValue(dr, "Article");
@@ -264,9 +266,10 @@ namespace DesktopBookkeepingClient
 						//balance = Balance.GetValue(account, transactionId).ToString("N");
 						currency = GetValue(dr, "Currency");
 
-						if (finDays.Exists(trs => trs.Tree == date))
+						//if (finDays.Exists(trs => trs.Tree == date))
+						if (finDays.Exists(trs => trs.GetDate().Date == date.Date))
 						{
-							var finDay = finDays.Find(trs => trs.Tree == date);
+							var finDay = finDays.Find(trs => trs.GetDate().Date == date.Date);
 							//if (finDay.Nodes.Exists(x => x.Tree == counterparty && decimal.Parse(x.Amount) == amount))
 							if (finDay.Nodes.Exists(x => x.Id == transactionId))
 							{
@@ -284,7 +287,7 @@ namespace DesktopBookkeepingClient
 						}
 						else
 						{
-							finDays.Add(CreateFinDayView());
+							finDays.Add(CreateFinDayView()); //CreateNewFinDay
 						}
 					}
 				}

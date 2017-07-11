@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace DesktopBookkeepingClient
 {
@@ -13,24 +14,36 @@ namespace DesktopBookkeepingClient
 		//public int ArticleId;
 		//public int AccountId;
 		public string _date;
-		public DateTime? dateTime;
+		public DateTime dateTime;
 		public TreeListViewModel _parent;
 
-		public string Date
+		//public string Date
+		//{
+		//	get
+		//	{
+		//		string q = !string.IsNullOrEmpty(_date) ? _date : _parent != null ? _parent.Date : null;
+		//		if (q == null)
+		//			return q;
+		//		if (Nodes != null)
+		//		{
+		//			DateTime d = DateTime.Parse(q);
+		//			return d.AddHours(Nodes.Count).ToString();
+		//		}
+		//		return q;
+		//	}
+		//	//set { _date = value; }
+		//}
+
+		public DateTime GetDate()
 		{
-			get
-			{
-				string q = !string.IsNullOrEmpty(_date) ? _date : _parent != null ? _parent.Date : null;
-				if (q == null)
-					return q;
-				if (Nodes != null)
-				{
-					DateTime d = DateTime.Parse(q);
-					return d.AddHours(Nodes.Count).ToString();
-				}
-				return q;
-			}
-			set { _date = value; }
+			return dateTime != DateTime.MinValue? dateTime: _parent.GetDate();
+		}
+
+		public void SetDate(DateTime date)
+		{
+			dateTime = date;
+			var culture = CultureInfo.GetCultureInfo("uk-UA");
+			_date = dateTime.ToString("d MMMM yyyy (dddd)", culture);
 		}
 
 		public string Counterparty;
@@ -51,22 +64,26 @@ namespace DesktopBookkeepingClient
 
 		public bool HasChildren => Nodes != null && Nodes.Count != 0;
 
-		public TreeListViewModel(DateTime dateTime)
-		{
-			this.dateTime = dateTime;
-			Nodes = new List<TreeListViewModel>();
+		//public TreeListViewModel(DateTime dateTime)
+		//{
+		//	NestingLevel = NestingLevel.FinDay;
 
-			Date = dateTime.ToShortDateString(); // <------- ??
-		}
+		//	this.dateTime = dateTime;
+		//	Nodes = new List<TreeListViewModel>();
+		//}
 
-		public TreeListViewModel(List<TreeListViewModel> transactions, string date)
+		public TreeListViewModel(List<TreeListViewModel> transactions, DateTime date)
 		{
 			NestingLevel = NestingLevel.FinDay;
 			Nodes = transactions;
-			Date = date;
+
+			//this.dateTime = date;
+			SetDate(date);
 
 			foreach (var tr in transactions)
+			{
 				tr._parent = this;
+			}
 		}
 
 		public TreeListViewModel(List<TreeListViewModel> articles,

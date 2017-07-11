@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DesktopBookkeepingClient
 {
@@ -11,7 +12,7 @@ namespace DesktopBookkeepingClient
 				new TreeListViewModel
 				(
 					//id: 2,
-					date: "2 липня 2016",
+					date: DateTime.Parse("2 липня 2016"),
 					transactions: new List<TreeListViewModel>
 					{
 						new TreeListViewModel
@@ -71,7 +72,7 @@ namespace DesktopBookkeepingClient
 				new TreeListViewModel
 				(
 					//id: 1,
-					date: "1 липня 2016",
+					date: DateTime.Parse("1 липня 2016"),
 					transactions: new List<TreeListViewModel>
 					{
 						new TreeListViewModel

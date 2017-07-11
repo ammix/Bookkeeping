@@ -1,4 +1,5 @@
-﻿using BrightIdeasSoftware;
+﻿using System;
+using BrightIdeasSoftware;
 using System.Windows.Forms;
 
 namespace DesktopBookkeepingClient
@@ -335,6 +336,7 @@ namespace DesktopBookkeepingClient
 			var n = IndexOf(model);
 
 			var newRow = new TreeListViewModel(null, "", "", "", "");
+			//newRow.SetDate(model.GetDate());
 
 			model.Insert(0, newRow);
 
