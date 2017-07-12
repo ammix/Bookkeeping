@@ -118,7 +118,7 @@ namespace DesktopBookkeepingClient
 			}
 		}
 
-		public static void InsertInvoiceLine(TreeListViewModel viewModel)
+		public static void InsertInvoiceLine(TreeListViewModel line)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -127,10 +127,10 @@ namespace DesktopBookkeepingClient
 					$"INSERT INTO [InvoiceLines] " +
 					$"(UserId, TransactionId, ArticleId, Price, Note) " +
 					$"SELECT 1, " + // Values(...)
-					$"{viewModel._parent.Id}, " +
-					$"(SELECT [Id] FROM [Articles] WHERE [Label] = N'{viewModel.Counterparty}'), " + //TODO: Counterparty ?
-					$"{viewModel.Amount.Replace(',', '.')}, " +
-					$"N'{viewModel.Comment}'";
+					$"{line._parent.Id}, " +
+					$"(SELECT [Id] FROM [Articles] WHERE [Label] = N'{line.Counterparty}'), " + //TODO: Counterparty ?
+					$"{line.Amount.Replace(',', '.')}, " +
+					$"N'{line.Comment}'";
 
 				var command = new SqlCommand(cmdText, connection);
 

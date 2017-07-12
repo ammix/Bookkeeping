@@ -4,10 +4,30 @@ using System.Globalization;
 
 namespace DesktopBookkeepingClient
 {
-	// Model for TreeListView control
-	public class TreeListViewModel
+	//public class TreeListViewModel
+	//{
+	//	public string Tree;
+	//	public string Amount;
+	//	public string Comment;
+	//	public string Account;
+	//	public string Balance;
+	//	public string Time;
+	//}
+
+	public class Line
 	{
-		public int? Id;
+		public string Tree;
+		public string Amount;
+		public string Comment;
+		public string Account;
+		public string Balance;
+		public string Time;
+	}
+
+	// Model for TreeListView control
+	public class TreeListViewModel //2: TreeListViewModel
+	{
+		//public int? Id;
 		//public int UserId = 1;
 		//public int TransacId;
 		//public int CounterId;
@@ -16,23 +36,6 @@ namespace DesktopBookkeepingClient
 		public string _date;
 		public DateTime dateTime;
 		public TreeListViewModel _parent;
-
-		//public string Date
-		//{
-		//	get
-		//	{
-		//		string q = !string.IsNullOrEmpty(_date) ? _date : _parent != null ? _parent.Date : null;
-		//		if (q == null)
-		//			return q;
-		//		if (Nodes != null)
-		//		{
-		//			DateTime d = DateTime.Parse(q);
-		//			return d.AddHours(Nodes.Count).ToString();
-		//		}
-		//		return q;
-		//	}
-		//	//set { _date = value; }
-		//}
 
 		public DateTime GetDate()
 		{
@@ -150,11 +153,5 @@ namespace DesktopBookkeepingClient
 		FinDay,
 		Transaction,
 		InvoiceLine
-	}
-
-	public class AccountModel
-	{
-		public int Id;
-		public string Account;
 	}
 }
