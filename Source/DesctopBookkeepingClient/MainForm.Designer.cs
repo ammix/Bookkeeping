@@ -30,7 +30,6 @@
         {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			this.olvColumn7 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.imageList = new System.Windows.Forms.ImageList(this.components);
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -79,14 +78,6 @@
 			this.contextMenuStrip2.SuspendLayout();
 			this.contextMenuStrip3.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// olvColumn7
-			// 
-			this.olvColumn7.AspectName = "Id";
-			this.olvColumn7.DisplayIndex = 6;
-			this.olvColumn7.IsEditable = false;
-			this.olvColumn7.IsVisible = false;
-			this.olvColumn7.Text = "Id";
 			// 
 			// imageList
 			// 
@@ -144,7 +135,6 @@
 			this.treeListView.AllColumns.Add(this.olvColumn5);
 			this.treeListView.AllColumns.Add(this.olvColumn4);
 			this.treeListView.AllColumns.Add(this.olvColumn6);
-			this.treeListView.AllColumns.Add(this.olvColumn7);
 			this.treeListView.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.treeListView.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.F2Only;
 			this.treeListView.CellEditUseWholeCell = false;
@@ -494,7 +484,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ToolStripButton toolStripButton3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private BrightIdeasSoftware.OLVColumn olvColumn7;
         private System.Windows.Forms.ToolStripButton toolStripButton4;
         private System.Windows.Forms.ToolStripButton toolStripButton5;
         private FinanceTreeListView treeListView;
