@@ -4,44 +4,9 @@ using System.Globalization;
 
 namespace DesktopBookkeepingClient
 {
-	//public class TreeListViewModel
-	//{
-	//	public string Tree;
-	//	public string Amount;
-	//	public string Comment;
-	//	public string Account;
-	//	public string Balance;
-	//	public string Time;
-	//}
-
-	public class Line
-	{
-		public string Tree;
-		public string Amount;
-		public string Comment;
-		public string Account;
-		public string Balance;
-		public string Time;
-	}
-
 	// Model for TreeListView control
-	public class TreeListViewModel //2: TreeListViewModel
+	public class TreeListViewModelConcrete: ITreeListViewModel
 	{
-		//public int? Id;
-		//public int UserId = 1;
-		//public int TransacId;
-		//public int CounterId;
-		//public int ArticleId;
-		//public int AccountId;
-		public string _date;
-		public DateTime dateTime;
-		public TreeListViewModel _parent;
-
-		public DateTime GetDate()
-		{
-			return dateTime != DateTime.MinValue? dateTime: _parent.GetDate();
-		}
-
 		public void SetDate(DateTime date)
 		{
 			dateTime = date;
@@ -52,44 +17,36 @@ namespace DesktopBookkeepingClient
 		public string Counterparty;
 		public string Article;
 
-		public NestingLevel NestingLevel = NestingLevel.InvoiceLine;
-		public List<TreeListViewModel> Nodes;
 
-		public string Tree => _date + Counterparty + Article;
-		public string Amount;
-		public string Comment;
-		public string Account;
-		public string Balance;
-		public string Time;
+		public override string Tree => _date + Counterparty + Article;
 
 		//static int id = 0;
 		//static int NewId() => id++;
 
-		public bool HasChildren => Nodes != null && Nodes.Count != 0;
 
-		//public TreeListViewModel(DateTime dateTime)
+		//public ITreeListViewModel(DateTime dateTime)
 		//{
 		//	NestingLevel = NestingLevel.FinDay;
 
 		//	this.dateTime = dateTime;
-		//	Nodes = new List<TreeListViewModel>();
+		//	Children = new List<ITreeListViewModel>();
 		//}
 
-		public TreeListViewModel(List<TreeListViewModel> transactions, DateTime date)
+		public TreeListViewModelConcrete(List<ITreeListViewModel> transactions, DateTime date)
 		{
 			NestingLevel = NestingLevel.FinDay;
-			Nodes = transactions;
+			Children = transactions;
 
 			//this.dateTime = date;
 			SetDate(date);
 
 			foreach (var tr in transactions)
 			{
-				tr._parent = this;
+				tr.Parent = this;
 			}
 		}
 
-		public TreeListViewModel(List<TreeListViewModel> articles,
+		public TreeListViewModelConcrete(List<ITreeListViewModel> articles,
 			string counterparty,
 			string amount,
 			string account,
@@ -99,7 +56,7 @@ namespace DesktopBookkeepingClient
 			int? id = null)
 		{
 			NestingLevel = NestingLevel.Transaction;
-			Nodes = articles;
+			Children = articles;
 			Id = id;
 
 			Counterparty = counterparty;
@@ -111,41 +68,31 @@ namespace DesktopBookkeepingClient
 			
 			if (articles != null)
 				foreach (var ar in articles)
-					ar._parent = this;
+					ar.Parent = this;
 		}
 
-		public TreeListViewModel(string article, string price, string note = null, int? id = null)
+		public void Add(ITreeListViewModel model)
 		{
-			NestingLevel = NestingLevel.InvoiceLine;
-
-			Article = article;
-			Amount = price;
-			Comment = note;
-
-			Id = id;
+			model.Parent = this;
+			if (Children == null)
+				Children = new List<ITreeListViewModel>();
+			Children.Add(model);
 		}
 
-		public void Add(TreeListViewModel model)
+		public void Insert(int index, ITreeListViewModel model)
 		{
-			model._parent = this;
-			if (Nodes == null)
-				Nodes = new List<TreeListViewModel>();
-			Nodes.Add(model);
-		}
-
-		public void Insert(int index, TreeListViewModel model)
-		{
-			model._parent = this;
-			if (Nodes == null)
-				Nodes = new List<TreeListViewModel>();
-			Nodes.Insert(index, model);
+			model.Parent = this;
+			if (Children == null)
+				Children = new List<ITreeListViewModel>();
+			Children.Insert(index, model);
 		}
 
 		public void Remove()
 		{
-			_parent.Nodes.Remove(this);
-			//CurrentItem._parent.Nodes.Remove(CurrentItem);
+			Parent.Children.Remove(this);
+			//CurrentItem.Parent.Children.Remove(CurrentItem);
 		}
+
 	}
 
 	public enum NestingLevel

@@ -85,7 +85,7 @@ namespace DesktopBookkeepingClient
 			return accounts.ToArray();
 		}
 
-		public static int InsertTransaction(TreeListViewModel viewModel)
+		public static int InsertTransaction(TreeListViewModelConcrete viewModel) // ITreeListViewModel -> Transaction
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -118,27 +118,7 @@ namespace DesktopBookkeepingClient
 			}
 		}
 
-		public static void InsertInvoiceLine(TreeListViewModel line)
-		{
-			using (var connection = new SqlConnection(connectionString))
-			{
-				connection.Open();
-				var cmdText =
-					$"INSERT INTO [InvoiceLines] " +
-					$"(UserId, TransactionId, ArticleId, Price, Note) " +
-					$"SELECT 1, " + // Values(...)
-					$"{line._parent.Id}, " +
-					$"(SELECT [Id] FROM [Articles] WHERE [Label] = N'{line.Counterparty}'), " + //TODO: Counterparty ?
-					$"{line.Amount.Replace(',', '.')}, " +
-					$"N'{line.Comment}'";
-
-				var command = new SqlCommand(cmdText, connection);
-
-				command.ExecuteNonQuery();
-			}
-		}
-
-		public static void UpdateTransaction(TreeListViewModel viewModel)
+		public static void UpdateTransaction(TreeListViewModelConcrete viewModel)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -159,7 +139,27 @@ namespace DesktopBookkeepingClient
 			}
 		}
 
-		public static void UpdateInvoiceLine(TreeListViewModel viewModel)
+		public static void InsertInvoiceLine(InvoiceLineModel invoiceLineModel)
+		{
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				var cmdText =
+					$"INSERT INTO [InvoiceLines] " +
+					$"(UserId, TransactionId, ArticleId, Price, Note) " +
+					$"SELECT 1, " + // Values(...)
+					$"{invoiceLineModel.ParentTransactionId}, " +
+					$"(SELECT [Id] FROM [Articles] WHERE [Label] = N'{invoiceLineModel.Article}'), " +
+					$"{invoiceLineModel.Price}, " +
+					$"N'{invoiceLineModel.Note}'";
+
+				var command = new SqlCommand(cmdText, connection);
+
+				command.ExecuteNonQuery();
+			}
+		}
+
+		public static void UpdateInvoiceLine(InvoiceLineModel invoiceLineModel)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -167,18 +167,18 @@ namespace DesktopBookkeepingClient
 				var cmdText =
 					$"UPDATE line SET " +
 					$"ArticleId = a.Id, " + //TODO: TransactionId not can be changed ??
-					$"Price = {viewModel.Amount.Replace(',', '.')}, " +
-					$"Note = N'{viewModel.Comment}' " +
+					$"Price = {invoiceLineModel.Price}, " +
+					$"Note = N'{invoiceLineModel.Note}' " +
 					$"FROM [InvoiceLines] line " +
-					$"INNER JOIN [Articles] a ON a.Label = N'{viewModel.Counterparty}' " + // TODO: Counterpary not Article must be here??
-					$"WHERE line.Id = {viewModel.Id}";
+					$"INNER JOIN [Articles] a ON a.Label = N'{invoiceLineModel.Article}' " +
+					$"WHERE line.Id = {invoiceLineModel.Id}";
 
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
 			}
 		}
 
-		public static void RemoveTransaction(TreeListViewModel viewModel)
+		public static void RemoveTransaction(ITreeListViewModel viewModel)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -190,7 +190,7 @@ namespace DesktopBookkeepingClient
 			}
 		}
 
-		public static void RemoveInvoiceLine(TreeListViewModel viewModel)
+		public static void RemoveInvoiceLine(ITreeListViewModel viewModel)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -202,7 +202,7 @@ namespace DesktopBookkeepingClient
 			}
 		}
 
-		public static void MoveTransaction(TreeListViewModel viewModel1, TreeListViewModel viewModel2)
+		public static void MoveTransaction(ITreeListViewModel viewModel1, ITreeListViewModel viewModel2)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -224,9 +224,9 @@ namespace DesktopBookkeepingClient
 		}
 
 		// Months have to be in order (without gaps)
-		public List<TreeListViewModel> GetTransactions(/*int month*/)
+		public List<ITreeListViewModel> GetTransactions(/*int month*/)
 		{
-			var finDays = new List<TreeListViewModel>();
+			var finDays = new List<ITreeListViewModel>();
 			var culture = CultureInfo.GetCultureInfo("uk-UA");
 
 			using (var connection = new SqlConnection(connectionString))
@@ -270,19 +270,19 @@ namespace DesktopBookkeepingClient
 						if (finDays.Exists(trs => trs.GetDate().Date == date.Date))
 						{
 							var finDay = finDays.Find(trs => trs.GetDate().Date == date.Date);
-							//if (finDay.Nodes.Exists(x => x.Tree == counterparty && decimal.Parse(x.Amount) == amount))
-							if (finDay.Nodes.Exists(x => x.Id == transactionId))
+							//if (finDay.Children.Exists(x => x.Tree == counterparty && decimal.Parse(x.Amount) == amount))
+							if (finDay.Children.Exists(x => x.Id == transactionId))
 							{
 								if (article != null)
 								{
-									//var invoiceLine = finDay.Nodes.Find(x => x.Tree == counterparty);
-									var invoiceLine = finDay.Nodes.Find(x => x.Id == transactionId);
-									invoiceLine.Add(CreateInvoiceLineView());
+									//var invoiceLine = finDay.Children.Find(x => x.Tree == counterparty);
+									var invoiceLine = finDay.Children.Find(x => x.Id == transactionId);
+									(invoiceLine as TreeListViewModelConcrete).Add(CreateInvoiceLineView());
 								}
 							}
 							else
 							{
-								finDay.Add(CreateFinTransactionView());
+								(finDay as TreeListViewModelConcrete).Add(CreateFinTransactionView());
 							}
 						}
 						else
@@ -295,26 +295,26 @@ namespace DesktopBookkeepingClient
 
 			finDays.Reverse();
 			foreach (var day in finDays)
-				day.Nodes.Reverse();
+				day.Children.Reverse();
 
 			return finDays;
 		}
 
-		TreeListViewModel CreateFinDayView()
+		ITreeListViewModel CreateFinDayView()
 		{
-			return new TreeListViewModel
+			return new TreeListViewModelConcrete
 			(
 				date: date,
-				transactions: new List<TreeListViewModel> { CreateFinTransactionView() }
+				transactions: new List<ITreeListViewModel> { CreateFinTransactionView() }
 			);
 		}
 
-		TreeListViewModel CreateFinTransactionView()
+		ITreeListViewModel CreateFinTransactionView()
 		{
 			if (balance.ContainsKey(account))
 				balance[account] += amount;
 
-			return new TreeListViewModel
+			return new TreeListViewModelConcrete
 			(
 				id: transactionId,
 				counterparty: counterparty,
@@ -323,13 +323,13 @@ namespace DesktopBookkeepingClient
 				account: account,
 				balance: balance.ContainsKey(account)? balance[account].ToString("N"): "",
 				time: time,
-				articles: (article != null) ? new List<TreeListViewModel> { CreateInvoiceLineView() } : null
+				articles: (article != null) ? new List<ITreeListViewModel> { CreateInvoiceLineView() } : null
 			);
 		}
 
-		TreeListViewModel CreateInvoiceLineView()
+		ITreeListViewModel CreateInvoiceLineView()
 		{
-			return new TreeListViewModel
+			return new InvoiceLineModel
 			(
 
 				article: article,

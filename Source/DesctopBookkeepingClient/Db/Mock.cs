@@ -5,17 +5,17 @@ namespace DesktopBookkeepingClient
 {
 	class MockDb
 	{
-		public static List<TreeListViewModel> GetTransactions()
+		public static List<ITreeListViewModel> GetTransactions()
 		{
-			var trs = new List<TreeListViewModel>
+			var trs = new List<ITreeListViewModel>
 			{
-				new TreeListViewModel
+				new TreeListViewModelConcrete
 				(
 					//id: 2,
 					date: DateTime.Parse("2 липня 2016"),
-					transactions: new List<TreeListViewModel>
+					transactions: new List<ITreeListViewModel>
 					{
-						new TreeListViewModel
+						new TreeListViewModelConcrete
 						(
 							id: 1,
 							counterparty: "Сільпо",
@@ -23,14 +23,14 @@ namespace DesktopBookkeepingClient
 							account: "Готівка",
 							balance: "3 568.95",
 							time: "12:00",
-							articles: new List<TreeListViewModel>
+							articles: new List<ITreeListViewModel>
 							{
-								new TreeListViewModel (article: "молоко", price: "10.50"),
-								new TreeListViewModel (article: "хліб", price: "15.20"),
-								new TreeListViewModel (article: "черешні", price: "50.50", note: "60 грн/кг")
+								new InvoiceLineModel (article: "молоко", price: "10.50"),
+								new InvoiceLineModel (article: "хліб", price: "15.20"),
+								new InvoiceLineModel (article: "черешні", price: "50.50", note: "60 грн/кг")
 							}
 						),
-						new TreeListViewModel
+						new TreeListViewModelConcrete
 						(
 							id: 2,
 							counterparty: "Алейка",
@@ -38,14 +38,14 @@ namespace DesktopBookkeepingClient
 							account: "Готівка",
 							balance: "3 668.95",
 							time: "13:01",
-							articles: new List<TreeListViewModel>
+							articles: new List<ITreeListViewModel>
 							{
-								new TreeListViewModel (article: "помідори", price: "30.49", note: "25 грн/кг"),
-								new TreeListViewModel (article: "яблука", price: "25.25", note: "15 грн/кг")
+								new InvoiceLineModel (article: "помідори", price: "30.49", note: "25 грн/кг"),
+								new InvoiceLineModel (article: "яблука", price: "25.25", note: "15 грн/кг")
 							}
 
 						),
-						new TreeListViewModel
+						new TreeListViewModelConcrete
 						(
 							id: 3,
 							articles: null,
@@ -56,7 +56,7 @@ namespace DesktopBookkeepingClient
 							balance: "2 150.00",
 							time: "14:30"
 						),
-						new TreeListViewModel
+						new TreeListViewModelConcrete
 						(
 							id: 4,
 							articles: null,
@@ -69,13 +69,13 @@ namespace DesktopBookkeepingClient
 					}
 				),
 
-				new TreeListViewModel
+				new TreeListViewModelConcrete
 				(
 					//id: 1,
 					date: DateTime.Parse("1 липня 2016"),
-					transactions: new List<TreeListViewModel>
+					transactions: new List<ITreeListViewModel>
 					{
-						new TreeListViewModel
+						new TreeListViewModelConcrete
 						(
 							id: 6,
 							articles: null,
@@ -84,7 +84,7 @@ namespace DesktopBookkeepingClient
 							account: "2600 Агріколь",
 							balance: "75 000.00"
 						),
-						new TreeListViewModel
+						new TreeListViewModelConcrete
 						(
 							id: 7,
 							articles: null,
@@ -94,21 +94,21 @@ namespace DesktopBookkeepingClient
 							balance: "14 569.00",
 							comment: "Аванс за послуги Інтернет, червень 2016, згідно договору №2525"
 						),
-						new TreeListViewModel
+						new TreeListViewModelConcrete
 						(
 							id: 8,
 							counterparty: "Метро",
 							amount: "-52.30",
 							account: "Картка",
 							balance: "5 890.85",
-							articles: new List<TreeListViewModel>
+							articles: new List<ITreeListViewModel>
 							{
-								new TreeListViewModel (article: "ікра", price: "100.50"),
-								new TreeListViewModel (article: "торт", price: "150.75"),
-								new TreeListViewModel (article: "серветки", price: "30.00")
+								new InvoiceLineModel (article: "ікра", price: "100.50"),
+								new InvoiceLineModel (article: "торт", price: "150.75"),
+								new InvoiceLineModel (article: "серветки", price: "30.00")
 							}
 						),
-						new TreeListViewModel
+						new TreeListViewModelConcrete
 						(
 							id: 9,
 							articles: null,

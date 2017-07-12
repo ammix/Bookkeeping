@@ -23,10 +23,10 @@ namespace DesktopBookkeepingClient
 		{
 			//base.HandleEndEdit();
 
-			var row = (TreeListViewModel) ItemBeingEdited.RowObject;
+			var row = ItemBeingEdited.RowObject as TreeListViewModelConcrete;
 			var list = ListView as FinanceTreeListView;
 
-			if (row.NestingLevel == NestingLevel.Transaction)
+			if (row != null && row.NestingLevel == NestingLevel.Transaction)
 			{
 				if (string.IsNullOrEmpty(row.Amount) || string.IsNullOrEmpty(row.Account))
 				{
@@ -49,9 +49,12 @@ namespace DesktopBookkeepingClient
 
 				//(ListView as FinanceTreeListView).CurrentItem = null;
 			}
-			else if (row.NestingLevel == NestingLevel.InvoiceLine)
+
+			var rowLine = ItemBeingEdited.RowObject as InvoiceLineModel;
+			//else if (row.NestingLevel == NestingLevel.InvoiceLine)
+			if (rowLine != null)
 			{
-				if (string.IsNullOrEmpty(row.Tree) || string.IsNullOrEmpty(row.Amount) || !list.ValidateArticle(row)) //TODO !!!
+				if (string.IsNullOrEmpty(rowLine.Tree) || string.IsNullOrEmpty(rowLine.Amount) || !list.ValidateArticle(rowLine)) //TODO !!!
 				{
 					MessageBox.Show("Артикул і ціна мають бути заповнені", "Помилка створення invoice line",
 						MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
@@ -60,12 +63,12 @@ namespace DesktopBookkeepingClient
 
 				base.HandleEndEdit();
 
-				if (row.Id == null)
+				if (rowLine.Id == null)
 				{
-					LocalDb.InsertInvoiceLine(row);
+					LocalDb.InsertInvoiceLine(rowLine);
 				}
 				else
-					LocalDb.UpdateInvoiceLine(row);
+					LocalDb.UpdateInvoiceLine(rowLine);
 
 				list.AddInvoiceLine();
 			}
@@ -77,9 +80,9 @@ namespace DesktopBookkeepingClient
 
 	public class FinanceTreeListView: TreeListView
 	{
-		public TreeListViewModel _currentItem;
+		public ITreeListViewModel _currentItem;
 
-		public TreeListViewModel CurrentItem  //SelectedObject
+		public ITreeListViewModel CurrentItem  //SelectedObject
 		{
 			get { return _currentItem; }
 			set { _currentItem = value; }
@@ -106,8 +109,8 @@ namespace DesktopBookkeepingClient
 
 		private void FinanceTreeListView_CellEditValidating(object sender, CellEditEventArgs e)
 		{
-			string s1 = ((TreeListViewModel)e.RowObject).Amount;
-			string s2 = ((TreeListViewModel)e.RowObject).Account;
+			string s1 = ((ITreeListViewModel)e.RowObject).Amount;
+			string s2 = ((ITreeListViewModel)e.RowObject).Account;
 			//e.Cancel = true;
 		}
 
@@ -118,7 +121,7 @@ namespace DesktopBookkeepingClient
 
 		protected override void OnCellEditorValidating(CellEditEventArgs e)
 		{
-			var row = (TreeListViewModel)e.RowObject;
+			var row = (ITreeListViewModel)e.RowObject;
 			if (e.Column.AspectName == "Tree" && row.NestingLevel == NestingLevel.InvoiceLine)
 			{
 				base.OnCellEditorValidating(e); //TODO: is this line need indeed?
@@ -138,11 +141,11 @@ namespace DesktopBookkeepingClient
 					e.Cancel = false;
 			}
 
-			//var row = (TreeListViewModel)e.RowObject;
+			//var row = (ITreeListViewModel)e.RowObject;
 			//var result = ValidateTransaction(row);
 		}
 
-		public bool ValidateArticle(TreeListViewModel row)
+		public bool ValidateArticle(ITreeListViewModel row)
 		{
 			foreach (var article in LocalDb.GetArticles())
 				if (article == row.Tree) // row.Article
@@ -151,12 +154,12 @@ namespace DesktopBookkeepingClient
 			return false;
 		}
 
-		bool ValidatePrice(TreeListViewModel row)
+		bool ValidatePrice(ITreeListViewModel row)
 		{
 			return true;
 		}
 
-		//bool ValidateTransaction(TreeListViewModel row)
+		//bool ValidateTransaction(ITreeListViewModel row)
 		//{
 		//	switch (row.NestingLevel)
 		//	{
@@ -193,12 +196,12 @@ namespace DesktopBookkeepingClient
 		//{
 		//	base.OnCellEditFinished(e);
 
-		//	//if (e.Column.AspectName == "Amount" && string.IsNullOrEmpty(((TreeListViewModel)e.RowObject).Amount))
+		//	//if (e.Column.AspectName == "Amount" && string.IsNullOrEmpty(((ITreeListViewModel)e.RowObject).Amount))
 		//	//	StartCellEdit(GetItem(1), 1);	
 
-		//	//if (string.IsNullOrEmpty(((TreeListViewModel) e.RowObject).Amount))
+		//	//if (string.IsNullOrEmpty(((ITreeListViewModel) e.RowObject).Amount))
 		//	// StartCellEdit(GetItem(1), 1);
-		//	//else if (string.IsNullOrEmpty(((TreeListViewModel) e.RowObject).Account))
+		//	//else if (string.IsNullOrEmpty(((ITreeListViewModel) e.RowObject).Account))
 		//	// StartCellEdit(GetItem(1), 4);
 		//	//else
 		//	//{
@@ -215,16 +218,16 @@ namespace DesktopBookkeepingClient
 
 			if (CurrentItem != null)
 			{
-				CurrentItem._parent.Nodes.Remove(CurrentItem);
+				CurrentItem.Parent.Children.Remove(CurrentItem);
 				//CurrentItem.Remove();
 
-				if (CurrentItem._parent.NestingLevel == NestingLevel.FinDay && !CurrentItem._parent.HasChildren)
+				if (CurrentItem.Parent.NestingLevel == NestingLevel.FinDay && !CurrentItem.Parent.CanExpand)
 				{
 					//var roots = EnumerableToArray(Roots, true);
-					//roots.Remove(CurrentItem._parent);
+					//roots.Remove(CurrentItem.Parent);
 					//SetObjects(roots);
 
-					RemoveObject(CurrentItem._parent);
+					RemoveObject(CurrentItem.Parent);
 				}
 
 				CurrentItem = null;
@@ -235,7 +238,7 @@ namespace DesktopBookkeepingClient
 
 		protected override void OnCellEditStarting(CellEditEventArgs e)
 		{
-			var row = (TreeListViewModel) e.RowObject;
+			var row = (ITreeListViewModel) e.RowObject;
 
 			//if (row.NestingLevel == NestingLevel.InvoiceLine)
 			//{
@@ -249,7 +252,7 @@ namespace DesktopBookkeepingClient
 			{
 				case "Tree":
 					treeComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/ };
-					if ((e.RowObject as TreeListViewModel).NestingLevel == NestingLevel.Transaction)
+					if ((e.RowObject as ITreeListViewModel).NestingLevel == NestingLevel.Transaction)
 						treeComboBox.Items.AddRange(LocalDb.GetCounterparties());
 					else
 					{
@@ -260,7 +263,7 @@ namespace DesktopBookkeepingClient
 					treeComboBox.Font = Font;
 					treeComboBox.Bounds = e.CellBounds;
 					treeComboBox.Text = (string)e.Value;
-					treeComboBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Counterparty = treeComboBox.Text; //Tree
+					treeComboBox.TextChanged += (o, args) => ((ITreeListViewModel)e.RowObject).Tree = treeComboBox.Text;
 					e.Control = treeComboBox;
 					break;
 
@@ -270,7 +273,7 @@ namespace DesktopBookkeepingClient
 					amountTextBox.Font = Font;
 					amountTextBox.Bounds = e.CellBounds;
 					amountTextBox.Text = (string)e.Value;
-					amountTextBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Amount = amountTextBox.Text;
+					amountTextBox.TextChanged += (o, args) => ((ITreeListViewModel)e.RowObject).Amount = amountTextBox.Text.Replace(',', '.');
 					e.Control = amountTextBox;
 					break;
 
@@ -280,7 +283,7 @@ namespace DesktopBookkeepingClient
 					commentTextBox.Font = Font;
 					commentTextBox.Bounds = e.CellBounds;
 					commentTextBox.Text = (string)e.Value;
-					commentTextBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Comment = commentTextBox.Text;
+					commentTextBox.TextChanged += (o, args) => ((ITreeListViewModel)e.RowObject).Comment = commentTextBox.Text;
 					e.Control = commentTextBox;
 					break;
 
@@ -291,7 +294,7 @@ namespace DesktopBookkeepingClient
 					accountComboBox.Font = Font;
 					accountComboBox.Bounds = e.CellBounds;
 					accountComboBox.Text = (string)e.Value;
-					accountComboBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Account = accountComboBox.Text;
+					accountComboBox.TextChanged += (o, args) => ((ITreeListViewModel)e.RowObject).Account = accountComboBox.Text;
 					e.Control = accountComboBox;
 					break;
 			}
@@ -303,23 +306,22 @@ namespace DesktopBookkeepingClient
 
 		public void AddInvoiceLine()
 		{
-			CurrentItem = (TreeListViewModel)SelectedObject;
-			AddInvoiceLine(CurrentItem._parent);
+			CurrentItem = (ITreeListViewModel)SelectedObject;
+			AddInvoiceLine(CurrentItem.Parent as TreeListViewModelConcrete);
 		}
 
-		public void AddInvoiceLine(TreeListViewModel model)
+		public void AddInvoiceLine(TreeListViewModelConcrete model)
 		{
 			//var model = CurrentItem;
 
-			var n = IndexOf(model) + (model.HasChildren ? model.Nodes.Count : 0);
+			var n = IndexOf(model) + (model.CanExpand ? model.Children.Count : 0);
 
-			var newRow = new TreeListViewModel("", "");
-			newRow._parent = model;
+			var newRow = new InvoiceLineModel(model);
 			model.Add(newRow);
 			RebuildAll(true);
 			ExpandAll();
 
-			CurrentItem = newRow; // newRow._parent;
+			CurrentItem = newRow; // newRow.Parent;
 			SelectedObject = CurrentItem;
 
 			StartCellEdit(GetItem(n + 1), 0);
@@ -327,15 +329,15 @@ namespace DesktopBookkeepingClient
 
 		public void AddTransaction()
 		{
-			CurrentItem = (TreeListViewModel)SelectedObject;
-			AddTransaction(CurrentItem._parent);
+			CurrentItem = (ITreeListViewModel)SelectedObject;
+			AddTransaction(CurrentItem.Parent as TreeListViewModelConcrete);
 		}
 
-		public void AddTransaction(TreeListViewModel model)
+		public void AddTransaction(TreeListViewModelConcrete model)
 		{
 			var n = IndexOf(model);
 
-			var newRow = new TreeListViewModel(null, "", "", "", "");
+			var newRow = new TreeListViewModelConcrete(null, "", "", "", "");
 			//newRow.SetDate(model.GetDate());
 
 			model.Insert(0, newRow);

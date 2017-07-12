@@ -32,8 +32,8 @@ namespace DesktopBookkeepingClient
 		{
 			treeListView.AddDecoration(new EditingCellBorderDecoration { UseLightbox = true });
 
-			treeListView.CanExpandGetter = model => ((TreeListViewModel)model).HasChildren;
-			treeListView.ChildrenGetter = model => ((TreeListViewModel)model).Nodes;
+			treeListView.CanExpandGetter = model => ((ITreeListViewModel)model).CanExpand;
+			treeListView.ChildrenGetter = model => ((ITreeListViewModel)model).Children;
 
 			var localDb = new LocalDb();
 			treeListView.Roots = localDb.GetTransactions();
@@ -45,7 +45,7 @@ namespace DesktopBookkeepingClient
 
 			//treeListView.GetColumn(2).AspectPutter = delegate (object model, object newValue)
 			//{
-			//	TreeListViewModel m = (TreeListViewModel)model;
+			//	ITreeListViewModel m = (ITreeListViewModel)model;
 			//	m.Comment = (string)newValue;
 			//};
 
@@ -64,7 +64,7 @@ namespace DesktopBookkeepingClient
 
 		private void treeListView_FormatCell(object sender, FormatCellEventArgs e)
 		{
-			var cell = (TreeListViewModel)e.Model;
+			var cell = (ITreeListViewModel)e.Model;
 			var item = e.SubItem; // use SubItem in cell, Item in cell is like first cell in row
 
 			var font = e.Item.Font;
@@ -112,7 +112,7 @@ namespace DesktopBookkeepingClient
 
 		private void treeListView_FormatRow(object sender, FormatRowEventArgs e)
 		{
-			var cell = (TreeListViewModel)e.Model;
+			var cell = (ITreeListViewModel)e.Model;
 			var item = e.Item;
 
 			switch (cell.NestingLevel)
@@ -153,11 +153,11 @@ namespace DesktopBookkeepingClient
 
 			var s = date.ToShortDateString();
 
-			if ((treeListView.GetItem(0).RowObject as TreeListViewModel).Tree == s)
+			if ((treeListView.GetItem(0).RowObject as ITreeListViewModel).Tree == s)
 				return;
 
-			var newFinDay = new TreeListViewModel(date: date, transactions: new List<TreeListViewModel>());
-			//var newFinDay = new TreeListViewModel(date);
+			var newFinDay = new TreeListViewModelConcrete(date: date, transactions: new List<ITreeListViewModel>());
+			//var newFinDay = new ITreeListViewModel(date);
 
 			ArrayList roots = ObjectListView.EnumerableToArray(treeListView.Roots, true);
 			roots.Insert(0, newFinDay);
@@ -173,10 +173,10 @@ namespace DesktopBookkeepingClient
 
 			//else
 			//{
-			//	var transact = (TreeListViewModel)treeListView.GetItem(0).RowObject;
+			//	var transact = (ITreeListViewModel)treeListView.GetItem(0).RowObject;
 			//	transact.A
 
-			//	//var transact = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel(null, "", "", "", "") });
+			//	//var transact = new ITreeListViewModel(date: s, transactions: new List<ITreeListViewModel> { new ITreeListViewModel(null, "", "", "", "") });
 
 			//	treeListView.InsertObjects(0, new[] { transact });
 			//	treeListView.EnsureModelVisible(transact);
@@ -199,8 +199,8 @@ namespace DesktopBookkeepingClient
 
 		private void toolStripButton5_Click(object sender, EventArgs e)
 		{
-			//var model = treeListView.GetItem(0).RowObject as TreeListViewModel;
-			var model = (TreeListViewModel)treeListView.SelectedObject;
+			//var model = treeListView.GetItem(0).RowObject as ITreeListViewModel;
+			var model = (ITreeListViewModel)treeListView.SelectedObject;
 			treeListView.RemoveObject(model);
 
 			//var enumerator = treeListView.Roots.GetEnumerator();
@@ -240,16 +240,16 @@ namespace DesktopBookkeepingClient
 		{
 			//var roots = treeListView.Roots;
 
-			//var model = (TreeListViewModel)treeListView.SelectedObject;
+			//var model = (ITreeListViewModel)treeListView.SelectedObject;
 			//var index = treeListView.SelectedIndex;
 			//treeListView.MoveObjects(index--, new[] { model });
 		}
 
-		TreeListViewModel clickedRow;
+		ITreeListViewModel clickedRow;
 
 		private void treeListView_CellRightClick(object sender, CellRightClickEventArgs e)
 		{
-			var row = (TreeListViewModel)e.Model;
+			var row = (ITreeListViewModel)e.Model;
 
 			if (row.NestingLevel == NestingLevel.FinDay)
 			{
@@ -257,10 +257,10 @@ namespace DesktopBookkeepingClient
 				clickedRow = row;
 				//treeListView.CurrentItem = clickedRow;
 
-				//var transact = (TreeListViewModel)treeListView.GetItem(0).RowObject;
+				//var transact = (ITreeListViewModel)treeListView.GetItem(0).RowObject;
 				//transact.A
 
-				//	//var transact = new TreeListViewModel(date: s, transactions: new List<TreeListViewModel> { new TreeListViewModel(null, "", "", "", "") });
+				//	//var transact = new ITreeListViewModel(date: s, transactions: new List<ITreeListViewModel> { new ITreeListViewModel(null, "", "", "", "") });
 
 				//treeListView.InsertObjects(0, new[] { transact });
 				//treeListView.EnsureModelVisible(transact);
@@ -290,22 +290,22 @@ namespace DesktopBookkeepingClient
 
 		private void додатиТрансакціюToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			treeListView.AddTransaction(clickedRow);
+			treeListView.AddTransaction(clickedRow as TreeListViewModelConcrete);
 		}
 
 		private void виToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			//clickedRow._parent.Nodes.Remove(clickedRow);
+			//clickedRow.Parent.Children.Remove(clickedRow);
 			//treeListView.RebuildAll(true);
 
 			LocalDb.RemoveTransaction(clickedRow); //TODO: return result and then update UI
 
 			if (clickedRow != null)
 			{
-				clickedRow._parent.Nodes.Remove(clickedRow);
+				clickedRow.Parent.Children.Remove(clickedRow);
 
-				if (clickedRow._parent.NestingLevel == NestingLevel.FinDay && !clickedRow._parent.HasChildren)
-					treeListView.RemoveObject(clickedRow._parent);
+				if (clickedRow.Parent.NestingLevel == NestingLevel.FinDay && !clickedRow.Parent.CanExpand)
+					treeListView.RemoveObject(clickedRow.Parent);
 
 				//treeListView.CurrentItem = null;
 			}
@@ -316,15 +316,15 @@ namespace DesktopBookkeepingClient
 
 		private void додатиЛініюІнвойсаToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			treeListView.AddInvoiceLine(clickedRow);
+			treeListView.AddInvoiceLine(clickedRow as TreeListViewModelConcrete);
 		}
 
-		//private static void AddInvoiceLine(FinanceTreeListView list, TreeListViewModel model)
+		//private static void AddInvoiceLine(FinanceTreeListView list, ITreeListViewModel model)
 		//{
-		//	var n = list.IndexOf(model) + (model.HasChildren ? model.Nodes.Count : 0);
+		//	var n = list.IndexOf(model) + (model.CanExpand ? model.Children.Count : 0);
 
-		//	var newRow = new TreeListViewModel("", "");
-		//	newRow._parent = model;
+		//	var newRow = new ITreeListViewModel("", "");
+		//	newRow.Parent = model;
 		//	model.Add(newRow);
 		//	list.RebuildAll(true);
 		//	list.ExpandAll();
@@ -335,7 +335,7 @@ namespace DesktopBookkeepingClient
 
 		private void treeListView_CellEditStarting(object sender, CellEditEventArgs e)
 		{
-			var row = (TreeListViewModel)e.RowObject;
+			var row = (ITreeListViewModel)e.RowObject;
 
 			switch (row.NestingLevel)
 			{
@@ -350,7 +350,7 @@ namespace DesktopBookkeepingClient
 
 		private void видалитиЛініюToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			clickedRow._parent.Nodes.Remove(clickedRow);
+			clickedRow.Parent.Children.Remove(clickedRow);
 			treeListView.RebuildAll(true);
 
 			LocalDb.RemoveInvoiceLine(clickedRow);
@@ -360,29 +360,29 @@ namespace DesktopBookkeepingClient
 
 		private void treeListView_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			var row = (TreeListViewModel) treeListView.SelectedObject;
+			var row = (ITreeListViewModel) treeListView.SelectedObject;
 
-			var index = row._parent.Nodes.IndexOf(row);
+			var index = row.Parent.Children.IndexOf(row);
 
-			//var index = clickedRow._parent.Nodes.IndexOf(clickedRow);
-			//var upper = clickedRow._parent.Nodes[index - 1];
-			//var downer = clickedRow._parent.Nodes[index + 1];
+			//var index = clickedRow.Parent.Children.IndexOf(clickedRow);
+			//var upper = clickedRow.Parent.Children[index - 1];
+			//var downer = clickedRow.Parent.Children[index + 1];
 			switch (e.KeyChar)
 			{
 				case '-':
-					row._parent.Nodes.RemoveAt(index);
-					row._parent.Nodes.Insert(index + 1, row);
+					row.Parent.Children.RemoveAt(index);
+					row.Parent.Children.Insert(index + 1, row);
 					treeListView.RebuildAll(true);
 
-					var next = row._parent.Nodes[index];
+					var next = row.Parent.Children[index];
 					LocalDb.MoveTransaction(row, next);
 					break;
 				case '+':
-					row._parent.Nodes.RemoveAt(index);
-					row._parent.Nodes.Insert(index - 1, row);
+					row.Parent.Children.RemoveAt(index);
+					row.Parent.Children.Insert(index - 1, row);
 					treeListView.RebuildAll(true);
 
-					var prev = row._parent.Nodes[index]; // - 1];
+					var prev = row.Parent.Children[index]; // - 1];
 					LocalDb.MoveTransaction(row, prev);
 					break;
 			}

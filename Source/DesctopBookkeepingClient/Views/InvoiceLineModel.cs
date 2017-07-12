@@ -1,0 +1,52 @@
+﻿namespace DesktopBookkeepingClient
+{
+	public class InvoiceLineModel : ITreeListViewModel
+	{
+		public InvoiceLineModel(ITreeListViewModel parent)
+		{
+			Parent = parent;
+		}
+
+		public InvoiceLineModel(string article, string price, string note = null, int? id = null)
+		{
+			this.Id = id;
+			this.Article = article;
+			this.Price = price;
+			this.Note = note;
+		}
+
+		public string Article { get; private set; }
+
+		public string Price { get; private set; }
+
+		public string Note { get; private set; }
+
+		#region Implementation ITreeListViewModel
+		public override string Tree
+		{
+			get { return Article; }
+			set { Article = value; }
+		}
+
+		public override string Amount
+		{
+			get { return Price; }
+			set { Price = value; }
+		}
+
+		public override string Comment
+		{
+			get { return Note; }
+			set { Note = value; }
+		}
+
+		public override string Account => null;
+
+		public override string Balance => null;
+
+		public override string Time => null;
+		#endregion
+
+		public int ParentTransactionId => Parent.Id.Value;
+	}
+}

@@ -1,6 +1,6 @@
 ﻿namespace DesktopBookkeepingClient
 {
-	public class InvoiceLine  //: TreeListViewModel // Line
+	public class InvoiceLine  //: ITreeListViewModel // InvoiceLineModel
 	{
 		public string Article;
 		public string Price;
