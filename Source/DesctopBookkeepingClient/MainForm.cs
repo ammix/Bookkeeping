@@ -64,14 +64,14 @@ namespace DesktopBookkeepingClient
 
 		private void treeListView_FormatCell(object sender, FormatCellEventArgs e)
 		{
-			var cell = (ITreeListViewModel)e.Model;
+			var cell = (ITreeListViewModel) e.Model;
 			var item = e.SubItem; // use SubItem in cell, Item in cell is like first cell in row
 
 			var font = e.Item.Font;
 			switch (e.Column.AspectName)
 			{
 				case "Tree":
-					if (cell.NestingLevel == NestingLevel.FinDay)
+					if (cell is FinDayModel)
 					{
 						item.Font = new Font(font.Name, font.Size, FontStyle.Underline);
 						item.ForeColor = Color.Blue;
@@ -83,14 +83,14 @@ namespace DesktopBookkeepingClient
 					break;
 
 				case "Amount":
-					if (cell.NestingLevel == NestingLevel.Transaction)
+					if (cell is InvoiceLineModel)
+					{
+						item.Font = new Font(font.Name, font.Size - 0, FontStyle.Regular);
+					}
+					else if (cell is TransactionModel)
 					{
 						item.ForeColor = cell.Amount.Contains("-") ? Color.Black : Color.Green; //DeepPink
 						item.Font = new Font(font.Name, font.Size + 0, FontStyle.Bold);
-					}
-					else if (cell is InvoiceLineModel)
-					{
-						item.Font = new Font(font.Name, font.Size - 0, FontStyle.Regular);
 					}
 					break;
 
@@ -113,7 +113,7 @@ namespace DesktopBookkeepingClient
 			var cell = (ITreeListViewModel) e.Model;
 			var item = e.Item;
 
-			if (cell.NestingLevel == NestingLevel.FinDay)
+			if (cell is FinDayModel)
 			{
 				item.BackColor = Color.LightGray; // WhiteSmoke;
 			}
@@ -153,7 +153,7 @@ namespace DesktopBookkeepingClient
 			if ((treeListView.GetItem(0).RowObject as ITreeListViewModel).Tree == s)
 				return;
 
-			var newFinDay = new TreeListViewModelConcrete(date: date, transactions: new List<ITreeListViewModel>());
+			var newFinDay = new FinDayModel(date: date, transactions: new List<ITreeListViewModel>());
 			//var newFinDay = new ITreeListViewModel(date);
 
 			ArrayList roots = ObjectListView.EnumerableToArray(treeListView.Roots, true);
@@ -248,7 +248,7 @@ namespace DesktopBookkeepingClient
 		{
 			var row = (ITreeListViewModel)e.Model;
 
-			if (row.NestingLevel == NestingLevel.FinDay)
+			if (row is FinDayModel)
 			{
 				e.MenuStrip = contextMenuStrip1; //this.DecideRightClickMenu(e.Model, e.Column);
 				clickedRow = row;
@@ -268,7 +268,7 @@ namespace DesktopBookkeepingClient
 				//treeListView.StartCellEdit(treeListView.GetItem(1), 0);
 			}
 
-			if (row.NestingLevel == NestingLevel.Transaction)
+			if (row is TransactionModel)
 			{
 				e.MenuStrip = contextMenuStrip2;
 				clickedRow = row;
@@ -287,7 +287,7 @@ namespace DesktopBookkeepingClient
 
 		private void додатиТрансакціюToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			treeListView.AddTransaction(clickedRow as TreeListViewModelConcrete);
+			treeListView.AddTransaction(clickedRow as FinDayModel);
 		}
 
 		private void виToolStripMenuItem_Click(object sender, EventArgs e)
@@ -301,7 +301,7 @@ namespace DesktopBookkeepingClient
 			{
 				clickedRow.Parent.Children.Remove(clickedRow);
 
-				if (clickedRow.Parent.NestingLevel == NestingLevel.FinDay && !clickedRow.Parent.CanExpand)
+				if (clickedRow.Parent is FinDayModel && !clickedRow.Parent.CanExpand)
 					treeListView.RemoveObject(clickedRow.Parent);
 
 				//treeListView.CurrentItem = null;
@@ -313,7 +313,7 @@ namespace DesktopBookkeepingClient
 
 		private void додатиЛініюІнвойсаToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			treeListView.AddInvoiceLine(clickedRow as TreeListViewModelConcrete);
+			treeListView.AddInvoiceLine(clickedRow as TransactionModel);
 		}
 
 		//private static void AddInvoiceLine(FinanceTreeListView list, ITreeListViewModel model)
@@ -334,7 +334,7 @@ namespace DesktopBookkeepingClient
 		{
 			var row = (ITreeListViewModel)e.RowObject;
 
-			if (row.NestingLevel == NestingLevel.Transaction)
+			if (row is TransactionModel)
 			{
 				olvColumn5.IsEditable = true;
 			}

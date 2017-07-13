@@ -9,13 +9,13 @@ namespace DesktopBookkeepingClient
 		{
 			var trs = new List<ITreeListViewModel>
 			{
-				new TreeListViewModelConcrete
+				new FinDayModel
 				(
 					//id: 2,
 					date: DateTime.Parse("2 липня 2016"),
 					transactions: new List<ITreeListViewModel>
 					{
-						new TreeListViewModelConcrete
+						new TransactionModel
 						(
 							id: 1,
 							counterparty: "Сільпо",
@@ -30,7 +30,7 @@ namespace DesktopBookkeepingClient
 								new InvoiceLineModel (article: "черешні", price: "50.50", note: "60 грн/кг")
 							}
 						),
-						new TreeListViewModelConcrete
+						new TransactionModel
 						(
 							id: 2,
 							counterparty: "Алейка",
@@ -45,7 +45,7 @@ namespace DesktopBookkeepingClient
 							}
 
 						),
-						new TreeListViewModelConcrete
+						new TransactionModel
 						(
 							id: 3,
 							articles: null,
@@ -56,7 +56,7 @@ namespace DesktopBookkeepingClient
 							balance: "2 150.00",
 							time: "14:30"
 						),
-						new TreeListViewModelConcrete
+						new TransactionModel
 						(
 							id: 4,
 							articles: null,
@@ -69,13 +69,13 @@ namespace DesktopBookkeepingClient
 					}
 				),
 
-				new TreeListViewModelConcrete
+				new FinDayModel
 				(
 					//id: 1,
 					date: DateTime.Parse("1 липня 2016"),
 					transactions: new List<ITreeListViewModel>
 					{
-						new TreeListViewModelConcrete
+						new TransactionModel
 						(
 							id: 6,
 							articles: null,
@@ -84,7 +84,7 @@ namespace DesktopBookkeepingClient
 							account: "2600 Агріколь",
 							balance: "75 000.00"
 						),
-						new TreeListViewModelConcrete
+						new TransactionModel
 						(
 							id: 7,
 							articles: null,
@@ -94,7 +94,7 @@ namespace DesktopBookkeepingClient
 							balance: "14 569.00",
 							comment: "Аванс за послуги Інтернет, червень 2016, згідно договору №2525"
 						),
-						new TreeListViewModelConcrete
+						new TransactionModel
 						(
 							id: 8,
 							counterparty: "Метро",
@@ -108,7 +108,7 @@ namespace DesktopBookkeepingClient
 								new InvoiceLineModel (article: "серветки", price: "30.00")
 							}
 						),
-						new TreeListViewModelConcrete
+						new TransactionModel
 						(
 							id: 9,
 							articles: null,

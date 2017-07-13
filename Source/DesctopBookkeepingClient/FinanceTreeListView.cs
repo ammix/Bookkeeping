@@ -23,10 +23,10 @@ namespace DesktopBookkeepingClient
 		{
 			//base.HandleEndEdit();
 
-			var row = ItemBeingEdited.RowObject as TreeListViewModelConcrete;
+			var row = ItemBeingEdited.RowObject as TransactionModel;
 			var list = ListView as FinanceTreeListView;
 
-			if (row != null && row.NestingLevel == NestingLevel.Transaction)
+			if (row != null)
 			{
 				if (string.IsNullOrEmpty(row.Amount) || string.IsNullOrEmpty(row.Account))
 				{
@@ -221,7 +221,7 @@ namespace DesktopBookkeepingClient
 				CurrentItem.Parent.Children.Remove(CurrentItem);
 				//CurrentItem.Remove();
 
-				if (CurrentItem.Parent.NestingLevel == NestingLevel.FinDay && !CurrentItem.Parent.CanExpand)
+				if (CurrentItem.Parent is FinDayModel && !CurrentItem.Parent.CanExpand)
 				{
 					//var roots = EnumerableToArray(Roots, true);
 					//roots.Remove(CurrentItem.Parent);
@@ -252,7 +252,7 @@ namespace DesktopBookkeepingClient
 			{
 				case "Tree":
 					treeComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/ };
-					if ((e.RowObject as ITreeListViewModel).NestingLevel == NestingLevel.Transaction)
+					if (e.RowObject is TransactionModel)
 						treeComboBox.Items.AddRange(LocalDb.GetCounterparties());
 					else
 					{
@@ -307,10 +307,10 @@ namespace DesktopBookkeepingClient
 		public void AddInvoiceLine()
 		{
 			CurrentItem = (ITreeListViewModel)SelectedObject;
-			AddInvoiceLine(CurrentItem.Parent as TreeListViewModelConcrete);
+			AddInvoiceLine(CurrentItem.Parent as TransactionModel);
 		}
 
-		public void AddInvoiceLine(TreeListViewModelConcrete model)
+		public void AddInvoiceLine(TransactionModel model)
 		{
 			//var model = CurrentItem;
 
@@ -330,14 +330,14 @@ namespace DesktopBookkeepingClient
 		public void AddTransaction()
 		{
 			CurrentItem = (ITreeListViewModel)SelectedObject;
-			AddTransaction(CurrentItem.Parent as TreeListViewModelConcrete);
+			AddTransaction(CurrentItem.Parent as FinDayModel);
 		}
 
-		public void AddTransaction(TreeListViewModelConcrete model)
+		public void AddTransaction(FinDayModel model)
 		{
 			var n = IndexOf(model);
 
-			var newRow = new TreeListViewModelConcrete(null, "", "", "", "");
+			var newRow = new TransactionModel(null, "", "", "", "");
 			//newRow.SetDate(model.GetDate());
 
 			model.Insert(0, newRow);

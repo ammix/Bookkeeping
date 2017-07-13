@@ -85,7 +85,7 @@ namespace DesktopBookkeepingClient
 			return accounts.ToArray();
 		}
 
-		public static int InsertTransaction(TreeListViewModelConcrete viewModel) // ITreeListViewModel -> Transaction
+		public static int InsertTransaction(TransactionModel viewModel) // ITreeListViewModel -> Transaction
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -118,7 +118,7 @@ namespace DesktopBookkeepingClient
 			}
 		}
 
-		public static void UpdateTransaction(TreeListViewModelConcrete viewModel)
+		public static void UpdateTransaction(TransactionModel viewModel)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -277,12 +277,12 @@ namespace DesktopBookkeepingClient
 								{
 									//var invoiceLine = finDay.Children.Find(x => x.Tree == counterparty);
 									var invoiceLine = finDay.Children.Find(x => x.Id == transactionId);
-									(invoiceLine as TreeListViewModelConcrete).Add(CreateInvoiceLineView());
+									(invoiceLine as TransactionModel).Add(CreateInvoiceLineView());
 								}
 							}
 							else
 							{
-								(finDay as TreeListViewModelConcrete).Add(CreateFinTransactionView());
+								finDay.Add(CreateFinTransactionView());
 							}
 						}
 						else
@@ -302,7 +302,7 @@ namespace DesktopBookkeepingClient
 
 		ITreeListViewModel CreateFinDayView()
 		{
-			return new TreeListViewModelConcrete
+			return new FinDayModel
 			(
 				date: date,
 				transactions: new List<ITreeListViewModel> { CreateFinTransactionView() }
@@ -314,7 +314,7 @@ namespace DesktopBookkeepingClient
 			if (balance.ContainsKey(account))
 				balance[account] += amount;
 
-			return new TreeListViewModelConcrete
+			return new TransactionModel
 			(
 				id: transactionId,
 				counterparty: counterparty,

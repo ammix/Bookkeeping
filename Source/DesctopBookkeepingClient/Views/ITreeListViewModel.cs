@@ -1,6 +1,23 @@
-﻿using System;
+﻿//using System.Collections.Generic;
+
+//namespace DesktopBookkeepingClient
+//{
+//	public interface ITreeListViewModel
+//	{
+//		string Tree { get; set; }
+//		string Amount { get; set; } // Value, Sum
+//		string Comment { get; set; } // Remark, Note
+//		string Account { get; set; }
+//		string Balance { get; set; }
+//		string Time { get; set; }
+
+//		List<ITreeListViewModel> Children { get; }
+//		bool CanExpand { get; }
+//	}
+//}
+
+using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace DesktopBookkeepingClient
 {
@@ -13,31 +30,36 @@ namespace DesktopBookkeepingClient
 		public virtual string Balance { get; set; }
 		public virtual string Time { get; set; }
 
-		public List<ITreeListViewModel> Children;
+		public List<ITreeListViewModel> Children; // { get; set; }
 		public bool CanExpand => Children != null && Children.Count != 0;
 
 		#region TODO: move this in abstract class and this class do an interface
 		public virtual int? Id { get; set; }
-		public ITreeListViewModel Parent { get; set; }
-		#endregion
-
-		#region This have to be deleted after refactoring
-		public string _date;
-		public DateTime dateTime;
-
-		public DateTime GetDate()
+		public ITreeListViewModel Parent;
+		public virtual DateTime GetDate()
 		{
-			return dateTime != DateTime.MinValue ? dateTime : Parent.GetDate();
+			return Parent.GetDate();
+		}
+		public virtual void Add(ITreeListViewModel model)
+		{
+			model.Parent = this;
+			if (Children == null)
+				Children = new List<ITreeListViewModel>();
+			Children.Add(model);
 		}
 
-		public void SetDate(DateTime date)
+		public virtual void Insert(int index, ITreeListViewModel model)
 		{
-			dateTime = date;
-			var culture = CultureInfo.GetCultureInfo("uk-UA");
-			_date = dateTime.ToString("d MMMM yyyy (dddd)", culture);
+			model.Parent = this;
+			if (Children == null)
+				Children = new List<ITreeListViewModel>();
+			Children.Insert(index, model);
 		}
-
-		public NestingLevel NestingLevel = NestingLevel.Transaction;
+		public virtual void Remove()
+		{
+			Parent.Children.Remove(this);
+			//CurrentItem.Parent.Children.Remove(CurrentItem);
+		}
 		#endregion
 	}
 }
