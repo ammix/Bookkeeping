@@ -1,24 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace DesktopBookkeepingClient
 {
 	// Model for TreeListView control
 	public class TreeListViewModelConcrete: ITreeListViewModel
 	{
-		public void SetDate(DateTime date)
-		{
-			dateTime = date;
-			var culture = CultureInfo.GetCultureInfo("uk-UA");
-			_date = dateTime.ToString("d MMMM yyyy (dddd)", culture);
-		}
-
 		public string Counterparty;
-		public string Article;
 
-
-		public override string Tree => _date + Counterparty + Article;
+		public override string Tree => _date + Counterparty;
 
 		//static int id = 0;
 		//static int NewId() => id++;
@@ -98,7 +88,6 @@ namespace DesktopBookkeepingClient
 	public enum NestingLevel
 	{
 		FinDay,
-		Transaction,
-		InvoiceLine
+		Transaction
 	}
 }

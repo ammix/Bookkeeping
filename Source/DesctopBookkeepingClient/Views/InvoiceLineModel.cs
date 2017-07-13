@@ -39,12 +39,6 @@
 			get { return Note; }
 			set { Note = value; }
 		}
-
-		public override string Account => null;
-
-		public override string Balance => null;
-
-		public override string Time => null;
 		#endregion
 
 		public int ParentTransactionId => Parent.Id.Value;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace DesktopBookkeepingClient
 {
@@ -28,7 +29,15 @@ namespace DesktopBookkeepingClient
 		{
 			return dateTime != DateTime.MinValue ? dateTime : Parent.GetDate();
 		}
-		public NestingLevel NestingLevel = NestingLevel.InvoiceLine;
+
+		public void SetDate(DateTime date)
+		{
+			dateTime = date;
+			var culture = CultureInfo.GetCultureInfo("uk-UA");
+			_date = dateTime.ToString("d MMMM yyyy (dddd)", culture);
+		}
+
+		public NestingLevel NestingLevel = NestingLevel.Transaction;
 		#endregion
 	}
 }

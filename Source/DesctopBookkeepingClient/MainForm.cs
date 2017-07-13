@@ -71,28 +71,26 @@ namespace DesktopBookkeepingClient
 			switch (e.Column.AspectName)
 			{
 				case "Tree":
-					switch(cell.NestingLevel)
+					if (cell.NestingLevel == NestingLevel.FinDay)
 					{
-						case NestingLevel.FinDay:
-							item.Font = new Font(font.Name, font.Size, FontStyle.Underline);
-							item.ForeColor = Color.Blue;
-							break;
-						case NestingLevel.InvoiceLine:
-							item.Text = "• " + item.Text;
-							break;
+						item.Font = new Font(font.Name, font.Size, FontStyle.Underline);
+						item.ForeColor = Color.Blue;
+					}
+					else if (cell is InvoiceLineModel)
+					{
+						item.Text = "• " + item.Text;
 					}
 					break;
 
 				case "Amount":
-					switch(cell.NestingLevel)
+					if (cell.NestingLevel == NestingLevel.Transaction)
 					{
-						case NestingLevel.Transaction:
-							item.ForeColor = cell.Amount.Contains("-") ? Color.Black : Color.Green; //DeepPink
-							item.Font = new Font(font.Name, font.Size + 0, FontStyle.Bold);
-							break;
-						case NestingLevel.InvoiceLine:
-							item.Font = new Font(font.Name, font.Size - 0, FontStyle.Regular);
-							break;
+						item.ForeColor = cell.Amount.Contains("-") ? Color.Black : Color.Green; //DeepPink
+						item.Font = new Font(font.Name, font.Size + 0, FontStyle.Bold);
+					}
+					else if (cell is InvoiceLineModel)
+					{
+						item.Font = new Font(font.Name, font.Size - 0, FontStyle.Regular);
 					}
 					break;
 
@@ -112,17 +110,16 @@ namespace DesktopBookkeepingClient
 
 		private void treeListView_FormatRow(object sender, FormatRowEventArgs e)
 		{
-			var cell = (ITreeListViewModel)e.Model;
+			var cell = (ITreeListViewModel) e.Model;
 			var item = e.Item;
 
-			switch (cell.NestingLevel)
+			if (cell.NestingLevel == NestingLevel.FinDay)
 			{
-				case NestingLevel.FinDay:
-					item.BackColor = Color.LightGray; // WhiteSmoke;
-					break;
-				case NestingLevel.InvoiceLine:
-					item.ForeColor = Color.Gray;
-					break;
+				item.BackColor = Color.LightGray; // WhiteSmoke;
+			}
+			else if (cell is InvoiceLineModel)
+			{
+				item.ForeColor = Color.Gray;
 			}
 		}
 
@@ -278,7 +275,7 @@ namespace DesktopBookkeepingClient
 				//treeListView.CurrentItem = clickedRow;
 			}
 
-			if (row.NestingLevel == NestingLevel.InvoiceLine)
+			if (row is InvoiceLineModel)
 			{
 				e.MenuStrip = contextMenuStrip3;
 				clickedRow = row;
@@ -337,14 +334,13 @@ namespace DesktopBookkeepingClient
 		{
 			var row = (ITreeListViewModel)e.RowObject;
 
-			switch (row.NestingLevel)
+			if (row.NestingLevel == NestingLevel.Transaction)
 			{
-				case NestingLevel.Transaction:
-					olvColumn5.IsEditable = true;
-					break;
-				case NestingLevel.InvoiceLine:
-					olvColumn5.IsEditable = false;
-					break;
+				olvColumn5.IsEditable = true;
+			}
+			else if (row is InvoiceLineModel)
+			{
+				olvColumn5.IsEditable = false;
 			}
 		}
 

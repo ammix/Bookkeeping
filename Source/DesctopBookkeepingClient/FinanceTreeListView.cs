@@ -122,7 +122,7 @@ namespace DesktopBookkeepingClient
 		protected override void OnCellEditorValidating(CellEditEventArgs e)
 		{
 			var row = (ITreeListViewModel)e.RowObject;
-			if (e.Column.AspectName == "Tree" && row.NestingLevel == NestingLevel.InvoiceLine)
+			if (e.Column.AspectName == "Tree" && row is InvoiceLineModel)
 			{
 				base.OnCellEditorValidating(e); //TODO: is this line need indeed?
 
