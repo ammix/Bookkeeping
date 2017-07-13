@@ -3,7 +3,7 @@
 namespace DesktopBookkeepingClient
 {
 	// Model for TreeListView control
-	public class TransactionModel : ITreeListViewModel
+	public class TransactionModel : TreeListViewModel
 	{
 		public string Counterparty;
 
@@ -56,7 +56,7 @@ namespace DesktopBookkeepingClient
 
 			if (articles != null)
 				foreach (var ar in articles)
-					ar.Parent = this;
+					(ar as TreeListViewModel).Parent = this;
 		}
 	}
 }

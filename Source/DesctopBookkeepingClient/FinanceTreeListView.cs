@@ -263,7 +263,7 @@ namespace DesktopBookkeepingClient
 					treeComboBox.Font = Font;
 					treeComboBox.Bounds = e.CellBounds;
 					treeComboBox.Text = (string)e.Value;
-					treeComboBox.TextChanged += (o, args) => ((ITreeListViewModel)e.RowObject).Tree = treeComboBox.Text;
+					treeComboBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Tree = treeComboBox.Text;
 					e.Control = treeComboBox;
 					break;
 
@@ -273,7 +273,7 @@ namespace DesktopBookkeepingClient
 					amountTextBox.Font = Font;
 					amountTextBox.Bounds = e.CellBounds;
 					amountTextBox.Text = (string)e.Value;
-					amountTextBox.TextChanged += (o, args) => ((ITreeListViewModel)e.RowObject).Amount = amountTextBox.Text.Replace(',', '.');
+					amountTextBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Amount = amountTextBox.Text.Replace(',', '.');
 					e.Control = amountTextBox;
 					break;
 
@@ -283,7 +283,7 @@ namespace DesktopBookkeepingClient
 					commentTextBox.Font = Font;
 					commentTextBox.Bounds = e.CellBounds;
 					commentTextBox.Text = (string)e.Value;
-					commentTextBox.TextChanged += (o, args) => ((ITreeListViewModel)e.RowObject).Comment = commentTextBox.Text;
+					commentTextBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Comment = commentTextBox.Text;
 					e.Control = commentTextBox;
 					break;
 
@@ -294,7 +294,7 @@ namespace DesktopBookkeepingClient
 					accountComboBox.Font = Font;
 					accountComboBox.Bounds = e.CellBounds;
 					accountComboBox.Text = (string)e.Value;
-					accountComboBox.TextChanged += (o, args) => ((ITreeListViewModel)e.RowObject).Account = accountComboBox.Text;
+					accountComboBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Account = accountComboBox.Text;
 					e.Control = accountComboBox;
 					break;
 			}

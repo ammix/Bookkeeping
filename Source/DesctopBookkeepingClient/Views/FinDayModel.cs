@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace DesktopBookkeepingClient
 {
-	public class FinDayModel : ITreeListViewModel
+	public class FinDayModel : TreeListViewModel
 	{
 		string date;
 		DateTime dateTime;
@@ -22,7 +22,7 @@ namespace DesktopBookkeepingClient
 			foreach (var tr in transactions)
 			{
 				//Add(tr);
-				tr.Parent = this;
+				(tr as TreeListViewModel).Parent = this;
 			}
 		}
 

@@ -85,24 +85,24 @@ namespace DesktopBookkeepingClient
 			return accounts.ToArray();
 		}
 
-		public static int InsertTransaction(TransactionModel viewModel) // ITreeListViewModel -> Transaction
+		public static int InsertTransaction(TransactionModel transaction)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
 				var time = DateTime.Now.TimeOfDay;
-				var dateTime = viewModel.GetDate().Add(time);
+				var dateTime = transaction.GetDate().Add(time);
 
 				connection.Open();
 				var cmdText = $@"
 					INSERT INTO [Transactions] 
 					(UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note) 
 					SELECT 1, 
-					(SELECT [Id] FROM [Accounts] WHERE [Name] = N'{viewModel.Account}'), 
-					(SELECT [Id] FROM [Counterparties] WHERE [Name] = N'{viewModel.Counterparty}'), 
-					{viewModel.Amount.Replace(',', '.')}, 
+					(SELECT [Id] FROM [Accounts] WHERE [Name] = N'{transaction.Account}'), 
+					(SELECT [Id] FROM [Counterparties] WHERE [Name] = N'{transaction.Counterparty}'), 
+					{transaction.Amount.Replace(',', '.')}, 
 					'{dateTime}', 
 					NULL, 
-					N'{viewModel.Comment}'
+					N'{transaction.Comment}'
 				";
 
 				var command = new SqlCommand(cmdText, connection);
@@ -118,7 +118,7 @@ namespace DesktopBookkeepingClient
 			}
 		}
 
-		public static void UpdateTransaction(TransactionModel viewModel)
+		public static void UpdateTransaction(TransactionModel transaction)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -127,19 +127,19 @@ namespace DesktopBookkeepingClient
 					$"UPDATE t SET " +
 					$"AccountId = a.Id, " +
 					$"CounterpartyId = c.Id, " +
-					$"Note = N'{viewModel.Comment}', " +
-					$"Amount = {viewModel.Amount.Replace(',', '.')} " +
+					$"Note = N'{transaction.Comment}', " +
+					$"Amount = {transaction.Amount} " +
 					$"FROM [Transactions] t " +
-					$"INNER JOIN [Accounts] a ON a.Name = N'{viewModel.Account}' " +
-					$"LEFT OUTER JOIN [Counterparties] c ON c.Name = N'{viewModel.Counterparty}' " +
-					$"WHERE t.Id = {viewModel.Id}";
+					$"INNER JOIN [Accounts] a ON a.Name = N'{transaction.Account}' " +
+					$"LEFT OUTER JOIN [Counterparties] c ON c.Name = N'{transaction.Counterparty}' " +
+					$"WHERE t.Id = {transaction.Id}";
 
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
 			}
 		}
 
-		public static void InsertInvoiceLine(InvoiceLineModel invoiceLineModel)
+		public static void InsertInvoiceLine(InvoiceLineModel invoiceLine)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -148,10 +148,10 @@ namespace DesktopBookkeepingClient
 					$"INSERT INTO [InvoiceLines] " +
 					$"(UserId, TransactionId, ArticleId, Price, Note) " +
 					$"SELECT 1, " + // Values(...)
-					$"{invoiceLineModel.ParentTransactionId}, " +
-					$"(SELECT [Id] FROM [Articles] WHERE [Label] = N'{invoiceLineModel.Article}'), " +
-					$"{invoiceLineModel.Price}, " +
-					$"N'{invoiceLineModel.Note}'";
+					$"{invoiceLine.ParentTransactionId}, " +
+					$"(SELECT [Id] FROM [Articles] WHERE [Label] = N'{invoiceLine.Article}'), " +
+					$"{invoiceLine.Price}, " +
+					$"N'{invoiceLine.Note}'";
 
 				var command = new SqlCommand(cmdText, connection);
 
@@ -159,7 +159,7 @@ namespace DesktopBookkeepingClient
 			}
 		}
 
-		public static void UpdateInvoiceLine(InvoiceLineModel invoiceLineModel)
+		public static void UpdateInvoiceLine(InvoiceLineModel invoiceLine)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -167,56 +167,56 @@ namespace DesktopBookkeepingClient
 				var cmdText =
 					$"UPDATE line SET " +
 					$"ArticleId = a.Id, " + //TODO: TransactionId not can be changed ??
-					$"Price = {invoiceLineModel.Price}, " +
-					$"Note = N'{invoiceLineModel.Note}' " +
+					$"Price = {invoiceLine.Price}, " +
+					$"Note = N'{invoiceLine.Note}' " +
 					$"FROM [InvoiceLines] line " +
-					$"INNER JOIN [Articles] a ON a.Label = N'{invoiceLineModel.Article}' " +
-					$"WHERE line.Id = {invoiceLineModel.Id}";
+					$"INNER JOIN [Articles] a ON a.Label = N'{invoiceLine.Article}' " +
+					$"WHERE line.Id = {invoiceLine.Id}";
 
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
 			}
 		}
 
-		public static void RemoveTransaction(ITreeListViewModel viewModel)
+		public static void RemoveTransaction(TransactionModel transaction)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				var cmdText = $"DELETE FROM [Transactions] WHERE Id = {viewModel.Id}";
+				var cmdText = $"DELETE FROM [Transactions] WHERE Id = {transaction.Id}";
 
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
 			}
 		}
 
-		public static void RemoveInvoiceLine(ITreeListViewModel viewModel)
+		public static void RemoveInvoiceLine(InvoiceLineModel invoiceLine)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				var cmdText = $"DELETE FROM [InvoiceLines] WHERE Id = {viewModel.Id}";
+				var cmdText = $"DELETE FROM [InvoiceLines] WHERE Id = {invoiceLine.Id}";
 
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
 			}
 		}
 
-		public static void MoveTransaction(ITreeListViewModel viewModel1, ITreeListViewModel viewModel2)
+		public static void MoveTransaction(TransactionModel transaction1, TransactionModel transaction2)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				var cmdText = $"DECLARE @date1 DATETIME = (SELECT TransactionDate FROM [Transactions] WHERE Id = {viewModel1.Id}) " +
-							  $"DECLARE @date2 DATETIME = (SELECT TransactionDate FROM [Transactions] WHERE Id = {viewModel2.Id}) " +
+				var cmdText = $"DECLARE @date1 DATETIME = (SELECT TransactionDate FROM [Transactions] WHERE Id = {transaction1.Id}) " +
+							  $"DECLARE @date2 DATETIME = (SELECT TransactionDate FROM [Transactions] WHERE Id = {transaction2.Id}) " +
 
 				              "UPDATE [Transactions] " +
 				              "SET TransactionDate = @date2 " +
-				              $"WHERE Id = {viewModel1.Id} " +
+				              $"WHERE Id = {transaction1.Id} " +
 
 				              "UPDATE [Transactions] " +
 				              "SET TransactionDate = @date1 " +
-				              $"WHERE Id = {viewModel2.Id}";
+				              $"WHERE Id = {transaction2.Id}";
 
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
@@ -224,9 +224,9 @@ namespace DesktopBookkeepingClient
 		}
 
 		// Months have to be in order (without gaps)
-		public List<ITreeListViewModel> GetTransactions(/*int month*/)
+		public List<TreeListViewModel> GetTransactions(/*int month*/)
 		{
-			var finDays = new List<ITreeListViewModel>();
+			var finDays = new List<TreeListViewModel>();
 			var culture = CultureInfo.GetCultureInfo("uk-UA");
 
 			using (var connection = new SqlConnection(connectionString))
@@ -277,7 +277,7 @@ namespace DesktopBookkeepingClient
 								{
 									//var invoiceLine = finDay.Children.Find(x => x.Tree == counterparty);
 									var invoiceLine = finDay.Children.Find(x => x.Id == transactionId);
-									(invoiceLine as TransactionModel).Add(CreateInvoiceLineView());
+									invoiceLine.Add(CreateInvoiceLineView());
 								}
 							}
 							else
@@ -300,7 +300,7 @@ namespace DesktopBookkeepingClient
 			return finDays;
 		}
 
-		ITreeListViewModel CreateFinDayView()
+		FinDayModel CreateFinDayView()
 		{
 			return new FinDayModel
 			(

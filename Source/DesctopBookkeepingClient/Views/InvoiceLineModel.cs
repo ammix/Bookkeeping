@@ -1,6 +1,6 @@
 ﻿namespace DesktopBookkeepingClient
 {
-	public class InvoiceLineModel : ITreeListViewModel
+	public class InvoiceLineModel : TreeListViewModel
 	{
 		public InvoiceLineModel(ITreeListViewModel parent)
 		{

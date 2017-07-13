@@ -295,7 +295,7 @@ namespace DesktopBookkeepingClient
 			//clickedRow.Parent.Children.Remove(clickedRow);
 			//treeListView.RebuildAll(true);
 
-			LocalDb.RemoveTransaction(clickedRow); //TODO: return result and then update UI
+			LocalDb.RemoveTransaction((TransactionModel)clickedRow); //TODO: return result and then update UI
 
 			if (clickedRow != null)
 			{
@@ -349,14 +349,15 @@ namespace DesktopBookkeepingClient
 			clickedRow.Parent.Children.Remove(clickedRow);
 			treeListView.RebuildAll(true);
 
-			LocalDb.RemoveInvoiceLine(clickedRow);
+			LocalDb.RemoveInvoiceLine((InvoiceLineModel)clickedRow);
 
 			//treeListView.BuildList();
 		}
 
 		private void treeListView_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			var row = (ITreeListViewModel) treeListView.SelectedObject;
+			var row = treeListView.SelectedObject as TransactionModel;
+			if (row == null) return;
 
 			var index = row.Parent.Children.IndexOf(row);
 
@@ -370,7 +371,7 @@ namespace DesktopBookkeepingClient
 					row.Parent.Children.Insert(index + 1, row);
 					treeListView.RebuildAll(true);
 
-					var next = row.Parent.Children[index];
+					var next = (TransactionModel) row.Parent.Children[index];
 					LocalDb.MoveTransaction(row, next);
 					break;
 				case '+':
@@ -378,7 +379,7 @@ namespace DesktopBookkeepingClient
 					row.Parent.Children.Insert(index - 1, row);
 					treeListView.RebuildAll(true);
 
-					var prev = row.Parent.Children[index]; // - 1];
+					var prev = (TransactionModel) row.Parent.Children[index]; // - 1];
 					LocalDb.MoveTransaction(row, prev);
 					break;
 			}
