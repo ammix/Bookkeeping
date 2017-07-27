@@ -2,40 +2,16 @@
 
 namespace DesktopBookkeepingClient
 {
-	// Model for TreeListView control
 	public class TransactionModel : TreeListViewModel
 	{
-		public string Counterparty;
+		public string Counterparty { get; private set; }
 
-		public override string Tree => Counterparty;
+		public TransactionModel()
+		{
+			Amount = ""; // "0"
+		}
 
-		//static int id = 0;
-		//static int NewId() => id++;
-
-
-		//public ITreeListViewModel(DateTime dateTime)
-		//{
-		//	NestingLevel = NestingLevel.FinDay;
-
-		//	this.dateTime = dateTime;
-		//	Children = new List<ITreeListViewModel>();
-		//}
-
-		//public TransactionModel(List<ITreeListViewModel> transactions, DateTime date)
-		//{
-		//	NestingLevel = NestingLevel.FinDay;
-		//	Children = transactions;
-
-		//	//this.dateTime = date;
-		//	SetDate(date);
-
-		//	foreach (var tr in transactions)
-		//	{
-		//		tr.Parent = this;
-		//	}
-		//}
-
-		public TransactionModel(List<ITreeListViewModel> articles,
+		public TransactionModel(
 			string counterparty,
 			string amount,
 			string account,
@@ -44,7 +20,6 @@ namespace DesktopBookkeepingClient
 			string time = null,
 			int? id = null)
 		{
-			Children = articles;
 			Id = id;
 
 			Counterparty = counterparty;
@@ -53,10 +28,32 @@ namespace DesktopBookkeepingClient
 			Account = account;
 			Balance = balance;
 			Time = time;
-
-			if (articles != null)
-				foreach (var ar in articles)
-					(ar as TreeListViewModel).Parent = this;
 		}
+
+		public TransactionModel(List<ITreeListViewModel> articles,
+			string counterparty,
+			string amount,
+			string account,
+			string balance,
+			string comment = null,
+			string time = null,
+			int? id = null): base(articles)
+		{
+			Id = id;
+
+			Counterparty = counterparty;
+			Amount = amount;
+			Comment = comment;
+			Account = account;
+			Balance = balance;
+			Time = time;
+		}
+
+		#region Implementation ITreeListViewModel
+		public override string Tree
+		{
+			get { return Counterparty; }
+		}
+		#endregion
 	}
 }

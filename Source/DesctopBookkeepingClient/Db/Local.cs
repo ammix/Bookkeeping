@@ -1,4 +1,4 @@
-﻿using System;
+﻿qqqqqqqqusing System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -89,8 +89,9 @@ namespace DesktopBookkeepingClient
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
-				var time = DateTime.Now.TimeOfDay;
-				var dateTime = transaction.GetDate().Add(time);
+				//var time = DateTime.Now.TimeOfDay;
+				//var dateTime = transaction.Date.Add(time);
+				var dateTime = transaction.Date;
 
 				connection.Open();
 				var cmdText = $@"
@@ -99,7 +100,7 @@ namespace DesktopBookkeepingClient
 					SELECT 1, 
 					(SELECT [Id] FROM [Accounts] WHERE [Name] = N'{transaction.Account}'), 
 					(SELECT [Id] FROM [Counterparties] WHERE [Name] = N'{transaction.Counterparty}'), 
-					{transaction.Amount.Replace(',', '.')}, 
+					{transaction.Amount}, 
 					'{dateTime}', 
 					NULL, 
 					N'{transaction.Comment}'
@@ -267,9 +268,9 @@ namespace DesktopBookkeepingClient
 						currency = GetValue(dr, "Currency");
 
 						//if (finDays.Exists(trs => trs.Tree == date))
-						if (finDays.Exists(trs => trs.GetDate().Date == date.Date))
+						if (finDays.Exists(trs => trs.Date.Date == date.Date))
 						{
-							var finDay = finDays.Find(trs => trs.GetDate().Date == date.Date);
+							var finDay = finDays.Find(trs => trs.Date.Date == date.Date);
 							//if (finDay.Children.Exists(x => x.Tree == counterparty && decimal.Parse(x.Amount) == amount))
 							if (finDay.Children.Exists(x => x.Id == transactionId))
 							{
@@ -277,12 +278,12 @@ namespace DesktopBookkeepingClient
 								{
 									//var invoiceLine = finDay.Children.Find(x => x.Tree == counterparty);
 									var invoiceLine = finDay.Children.Find(x => x.Id == transactionId);
-									invoiceLine.Add(CreateInvoiceLineView());
+									invoiceLine.AddChild(CreateInvoiceLineView());
 								}
 							}
 							else
 							{
-								finDay.Add(CreateFinTransactionView());
+								finDay.AddChild(CreateFinTransactionView());
 							}
 						}
 						else
@@ -314,7 +315,7 @@ namespace DesktopBookkeepingClient
 			if (balance.ContainsKey(account))
 				balance[account] += amount;
 
-			return new TransactionModel
+			var transactionModel = new TransactionModel
 			(
 				id: transactionId,
 				counterparty: counterparty,
@@ -322,9 +323,10 @@ namespace DesktopBookkeepingClient
 				comment: comment,
 				account: account,
 				balance: balance.ContainsKey(account)? balance[account].ToString("N"): "",
-				time: time,
-				articles: (article != null) ? new List<ITreeListViewModel> { CreateInvoiceLineView() } : null
+				time: time
 			);
+			transactionModel.AddChildren((article != null) ? new List<ITreeListViewModel> { CreateInvoiceLineView() } : null);
+			return transactionModel;
 		}
 
 		ITreeListViewModel CreateInvoiceLineView()

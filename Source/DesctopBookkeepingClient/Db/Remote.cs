@@ -27,14 +27,16 @@ namespace DesktopBookkeepingClient
 			var transaction = new List<ITreeListViewModel>();
 			foreach (var t in trs)
 			{
-				transaction.Add(new TransactionModel(
+				var transactionModel = new TransactionModel(
 					id: t.Id,
 					counterparty: t.Counterparty,
 					amount: t.Amount,
 					comment: t.Note,
 					account: t.Account,
-					balance: t.Balance, /*Currency = t.Currency,*/
-					articles: ToView(t.InvoiceLines)));
+					balance: t.Balance /*Currency = t.Currency,*/
+					);
+				transactionModel.AddChildren(ToView(t.InvoiceLines));
+				transaction.Add(transactionModel);
 			}
 			return transaction;
 		}

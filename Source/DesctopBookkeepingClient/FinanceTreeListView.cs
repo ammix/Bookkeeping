@@ -317,7 +317,7 @@ namespace DesktopBookkeepingClient
 			var n = IndexOf(model) + (model.CanExpand ? model.Children.Count : 0);
 
 			var newRow = new InvoiceLineModel(model);
-			model.Add(newRow);
+			model.AddChild(newRow);
 			RebuildAll(true);
 			ExpandAll();
 
@@ -337,10 +337,10 @@ namespace DesktopBookkeepingClient
 		{
 			var n = IndexOf(model);
 
-			var newRow = new TransactionModel(null, "", "", "", "");
+			var newRow = new TransactionModel();
 			//newRow.SetDate(model.GetDate());
 
-			model.Insert(0, newRow);
+			model.InsertChild(0, newRow);
 
 			//list.EnsureModelVisible(model);
 			RebuildAll(true);

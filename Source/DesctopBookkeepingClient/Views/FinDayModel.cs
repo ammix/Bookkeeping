@@ -8,16 +8,12 @@ namespace DesktopBookkeepingClient
 	{
 		string date;
 		DateTime dateTime;
-		//public DateTime Date;
-		//public List<FinTransaction> FinTransactions;
 
 		public FinDayModel(List<ITreeListViewModel> transactions, DateTime date)
 		{
-			//NestingLevel = NestingLevel.FinDay;
 			Children = transactions;
 
-			//this.dateTime = date;
-			SetDate(date);
+			Date = date;
 
 			foreach (var tr in transactions)
 			{
@@ -31,19 +27,19 @@ namespace DesktopBookkeepingClient
 		{
 			get { return date; }
 		}
+
+		public override DateTime Date
+		{
+			get
+			{
+				return dateTime;
+			}
+			protected set
+			{
+				dateTime = value;
+				date = dateTime.ToString("d MMMM yyyy (dddd)", CultureInfo.GetCultureInfo("uk-UA"));
+			}
+		}
 		#endregion
-
-		public override DateTime GetDate()
-		{
-			//return dateTime != DateTime.MinValue ? dateTime : Parent.GetDate();
-			return dateTime;
-		}
-
-		public void SetDate(DateTime date)
-		{
-			dateTime = date;
-			var culture = CultureInfo.GetCultureInfo("uk-UA");
-			this.date = dateTime.ToString("d MMMM yyyy (dddd)", culture);
-		}
 	}
 }
