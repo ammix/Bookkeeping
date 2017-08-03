@@ -285,33 +285,22 @@ namespace DesktopBookkeepingClient
 			//treeListView.CurrentItem = clickedRow;
 		}
 
-		private void додатиТрансакціюToolStripMenuItem_Click(object sender, EventArgs e)
+		private void addTransactionToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			treeListView.AddTransaction(clickedRow as FinDayModel);
 		}
 
-		private void виToolStripMenuItem_Click(object sender, EventArgs e)
+		private void removeTransactionToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			//clickedRow.Parent.Children.Remove(clickedRow);
-			//treeListView.RebuildAll(true);
-
-			LocalDb.RemoveTransaction((TransactionModel)clickedRow); //TODO: return result and then update UI
-
-			if (clickedRow != null)
-			{
-				clickedRow.Parent.Children.Remove(clickedRow);
-
-				if (clickedRow.Parent is FinDayModel && !clickedRow.Parent.CanExpand)
-					treeListView.RemoveObject(clickedRow.Parent);
-
-				//treeListView.CurrentItem = null;
-			}
-
-			treeListView.RebuildAll(true);
-			//treeListView.BuildList();
+			treeListView.RemoveTransaction(clickedRow as TransactionModel);
 		}
 
-		private void додатиЛініюІнвойсаToolStripMenuItem_Click(object sender, EventArgs e)
+		private void removeInvoiceLineToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			treeListView.RemoveInvoiceLine(clickedRow as InvoiceLineModel);
+		}
+
+		private void addInvoiceLineToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			treeListView.AddInvoiceLine(clickedRow as TransactionModel);
 		}
@@ -342,16 +331,6 @@ namespace DesktopBookkeepingClient
 			{
 				olvColumn5.IsEditable = false;
 			}
-		}
-
-		private void видалитиЛініюToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			clickedRow.Parent.Children.Remove(clickedRow);
-			treeListView.RebuildAll(true);
-
-			LocalDb.RemoveInvoiceLine((InvoiceLineModel)clickedRow);
-
-			//treeListView.BuildList();
 		}
 
 		private void treeListView_KeyPress(object sender, KeyPressEventArgs e)

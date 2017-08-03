@@ -351,5 +351,53 @@ namespace DesktopBookkeepingClient
 
 			StartCellEdit(GetItem(n + 1), 1);
 		}
+
+		public void RemoveTransaction(TransactionModel model)
+		{
+			LocalDb.RemoveTransaction(model); //TODO: return result and then update UI
+
+			// update UI
+			if (model != null)
+			{
+				model.RemoveChild();
+
+				if (!model.Parent.CanExpand)
+					RemoveObject(model.Parent);
+			}
+
+			RebuildAll(true);
+			// end update UI
+
+			/*
+			//clickedRow.Parent.Children.Remove(clickedRow);
+			//treeListView.RebuildAll(true);
+
+			LocalDb.RemoveTransaction((TransactionModel)clickedRow); //TODO: return result and then update UI
+
+			if (clickedRow != null)
+			{
+				clickedRow.Parent.Children.Remove(clickedRow);
+
+				if (clickedRow.Parent is FinDayModel && !clickedRow.Parent.CanExpand)
+					treeListView.RemoveObject(clickedRow.Parent);
+
+				//treeListView.CurrentItem = null;
+			}
+
+			treeListView.RebuildAll(true);
+			//treeListView.BuildList();
+			*/
+		}
+
+		public void RemoveInvoiceLine(InvoiceLineModel model)
+		{
+			LocalDb.RemoveInvoiceLine(model); //TODO: return result and then update UI
+
+			//model.Parent.Children.Remove(model);
+			model.RemoveChild();
+			RebuildAll(true);
+
+			//treeListView.BuildList();
+		}
 	}
 }

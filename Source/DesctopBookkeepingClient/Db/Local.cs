@@ -1,4 +1,4 @@
-﻿qqqqqqqqusing System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -89,24 +89,28 @@ namespace DesktopBookkeepingClient
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
-				//var time = DateTime.Now.TimeOfDay;
-				//var dateTime = transaction.Date.Add(time);
-				var dateTime = transaction.Date;
-
 				connection.Open();
 				var cmdText = $@"
-					INSERT INTO [Transactions] 
-					(UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note) 
-					SELECT 1, 
+					INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note) 
+						SELECT 1, 
 					(SELECT [Id] FROM [Accounts] WHERE [Name] = N'{transaction.Account}'), 
 					(SELECT [Id] FROM [Counterparties] WHERE [Name] = N'{transaction.Counterparty}'), 
-					{transaction.Amount}, 
-					'{dateTime}', 
-					NULL, 
-					N'{transaction.Comment}'
-				";
+						{transaction.Amount}, @DateTime, NULL, N'{transaction.Comment}'";
+
+				//var cmdText = @"
+				//	INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note) 
+				//		SELECT 1, 
+				//	(SELECT [Id] FROM [Accounts] WHERE [Name] = @Account), 
+				//	(SELECT [Id] FROM [Counterparties] WHERE [Name] = @Counterparty), 
+				//		@Amount, @DateTime, NULL, @Comment";
+
+				SqlParameter param = new SqlParameter();
+				param.ParameterName = "@DateTime";
+				param.Value = transaction.Date;
+				param.SqlDbType = SqlDbType.DateTime;
 
 				var command = new SqlCommand(cmdText, connection);
+				command.Parameters.Add(param);
 				command.ExecuteNonQuery();
 
 				var lastIdSelect = "SELECT TOP(1) Id FROM [Transactions] ORDER BY [Id] DESC";

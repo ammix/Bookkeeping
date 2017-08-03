@@ -68,7 +68,7 @@ namespace DesktopBookkeepingClient
 		public void RemoveChild()
 		{
 			Parent.Children.Remove(this);
-			//CurrentItem.Parent.Children.Remove(CurrentItem);
+			//Parent = null;
 		}
 
 		protected TreeListViewModel(List<ITreeListViewModel> children)

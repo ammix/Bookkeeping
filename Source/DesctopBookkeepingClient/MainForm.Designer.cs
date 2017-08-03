@@ -57,13 +57,13 @@
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.валютиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.додатиТрансакціюToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.додатиПрибутокToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.addTransactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.addProfitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.виToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.додатиЛініюІнвойсаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.addInvoiceLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip3 = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.видалитиЛініюToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.removeInvoiceLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.label1 = new System.Windows.Forms.Label();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
@@ -368,29 +368,29 @@
 			// contextMenuStrip1
 			// 
 			this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.додатиТрансакціюToolStripMenuItem,
-            this.додатиПрибутокToolStripMenuItem});
+            this.addTransactionToolStripMenuItem,
+            this.addProfitToolStripMenuItem});
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			this.contextMenuStrip1.Size = new System.Drawing.Size(169, 48);
 			// 
-			// додатиТрансакціюToolStripMenuItem
+			// addTransactionToolStripMenuItem
 			// 
-			this.додатиТрансакціюToolStripMenuItem.Name = "додатиТрансакціюToolStripMenuItem";
-			this.додатиТрансакціюToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-			this.додатиТрансакціюToolStripMenuItem.Text = "Додати трату";
-			this.додатиТрансакціюToolStripMenuItem.Click += new System.EventHandler(this.додатиТрансакціюToolStripMenuItem_Click);
+			this.addTransactionToolStripMenuItem.Name = "addTransactionToolStripMenuItem";
+			this.addTransactionToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+			this.addTransactionToolStripMenuItem.Text = "Додати трату";
+			this.addTransactionToolStripMenuItem.Click += new System.EventHandler(this.addTransactionToolStripMenuItem_Click);
 			// 
-			// додатиПрибутокToolStripMenuItem
+			// addProfitToolStripMenuItem
 			// 
-			this.додатиПрибутокToolStripMenuItem.Name = "додатиПрибутокToolStripMenuItem";
-			this.додатиПрибутокToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-			this.додатиПрибутокToolStripMenuItem.Text = "Додати прибуток";
+			this.addProfitToolStripMenuItem.Name = "addProfitToolStripMenuItem";
+			this.addProfitToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+			this.addProfitToolStripMenuItem.Text = "Додати прибуток";
 			// 
 			// contextMenuStrip2
 			// 
 			this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.виToolStripMenuItem,
-            this.додатиЛініюІнвойсаToolStripMenuItem});
+            this.addInvoiceLineToolStripMenuItem});
 			this.contextMenuStrip2.Name = "contextMenuStrip2";
 			this.contextMenuStrip2.Size = new System.Drawing.Size(193, 48);
 			// 
@@ -399,28 +399,28 @@
 			this.виToolStripMenuItem.Name = "виToolStripMenuItem";
 			this.виToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
 			this.виToolStripMenuItem.Text = "Видалити трансакцію";
-			this.виToolStripMenuItem.Click += new System.EventHandler(this.виToolStripMenuItem_Click);
+			this.виToolStripMenuItem.Click += new System.EventHandler(this.removeTransactionToolStripMenuItem_Click);
 			// 
-			// додатиЛініюІнвойсаToolStripMenuItem
+			// addInvoiceLineToolStripMenuItem
 			// 
-			this.додатиЛініюІнвойсаToolStripMenuItem.Name = "додатиЛініюІнвойсаToolStripMenuItem";
-			this.додатиЛініюІнвойсаToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-			this.додатиЛініюІнвойсаToolStripMenuItem.Text = "Парсити чек";
-			this.додатиЛініюІнвойсаToolStripMenuItem.Click += new System.EventHandler(this.додатиЛініюІнвойсаToolStripMenuItem_Click);
+			this.addInvoiceLineToolStripMenuItem.Name = "addInvoiceLineToolStripMenuItem";
+			this.addInvoiceLineToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.addInvoiceLineToolStripMenuItem.Text = "Парсити чек";
+			this.addInvoiceLineToolStripMenuItem.Click += new System.EventHandler(this.addInvoiceLineToolStripMenuItem_Click);
 			// 
 			// contextMenuStrip3
 			// 
 			this.contextMenuStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.видалитиЛініюToolStripMenuItem});
+            this.removeInvoiceLineToolStripMenuItem});
 			this.contextMenuStrip3.Name = "contextMenuStrip3";
 			this.contextMenuStrip3.Size = new System.Drawing.Size(160, 26);
 			// 
-			// видалитиЛініюToolStripMenuItem
+			// removeInvoiceLineToolStripMenuItem
 			// 
-			this.видалитиЛініюToolStripMenuItem.Name = "видалитиЛініюToolStripMenuItem";
-			this.видалитиЛініюToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-			this.видалитиЛініюToolStripMenuItem.Text = "Видалити лінію";
-			this.видалитиЛініюToolStripMenuItem.Click += new System.EventHandler(this.видалитиЛініюToolStripMenuItem_Click);
+			this.removeInvoiceLineToolStripMenuItem.Name = "removeInvoiceLineToolStripMenuItem";
+			this.removeInvoiceLineToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+			this.removeInvoiceLineToolStripMenuItem.Text = "Видалити лінію";
+			this.removeInvoiceLineToolStripMenuItem.Click += new System.EventHandler(this.removeInvoiceLineToolStripMenuItem_Click);
 			// 
 			// label1
 			// 
@@ -490,13 +490,13 @@
 		private System.Windows.Forms.ToolStripButton toolStripButton6;
 		private System.Windows.Forms.ToolStripButton toolStripButton7;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-		private System.Windows.Forms.ToolStripMenuItem додатиТрансакціюToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem addTransactionToolStripMenuItem;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
 		private System.Windows.Forms.ToolStripMenuItem виToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem додатиПрибутокToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem додатиЛініюІнвойсаToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem addProfitToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem addInvoiceLineToolStripMenuItem;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip3;
-		private System.Windows.Forms.ToolStripMenuItem видалитиЛініюToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem removeInvoiceLineToolStripMenuItem;
 		private System.Windows.Forms.Label label1;
 	}
 }
