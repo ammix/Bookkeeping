@@ -6,6 +6,15 @@ namespace DesktopBookkeepingClient
 	// Model for TreeListView control
 	public abstract class TreeListViewModel : ITreeListViewModel
 	{
+		#region Constructors
+		protected TreeListViewModel() { }
+
+		protected TreeListViewModel(List<ITreeListViewModel> children)
+		{
+			AddChildren(children);
+		}
+		#endregion
+
 		public virtual int? Id { get; set; }
 		public virtual DateTime Date
 		{
@@ -13,9 +22,9 @@ namespace DesktopBookkeepingClient
 			protected set { }
 		}
 
-		public virtual string Tree { get; set; }
-		public virtual string Amount { get; set; } // Value, Sum
-		public virtual string Comment { get; set; } // Remark, Note
+		public virtual string Column1 { get; set; }
+		public virtual string Amount { get; set; }
+		public virtual string Comment { get; set; }
 		public virtual string Account { get; set; }
 		public virtual string Balance { get; set; }
 		public virtual string Time { get; set; }
@@ -45,24 +54,12 @@ namespace DesktopBookkeepingClient
 
 		public void AddChildren(List<ITreeListViewModel> children) // IList
 		{
-			//Children = children;
-			if (children == null) return;
+			if (children == null) return; //TODO
 
 			foreach (var child in children)
 			{
 				AddChild(child);
 			}
-			//Children = transactions;
-			//foreach (var tr in transactions)
-			//{
-			//	//Add(tr);
-			//	(tr as TreeListViewModel).Parent = this;
-			//}
-
-			//Children = articles;
-			//if (articles != null)
-			//	foreach (var ar in articles)
-			//		(ar as TreeListViewModel).Parent = this;
 		}
 
 		public void RemoveChild()
@@ -70,12 +67,5 @@ namespace DesktopBookkeepingClient
 			Parent.Children.Remove(this);
 			//Parent = null;
 		}
-
-		protected TreeListViewModel(List<ITreeListViewModel> children)
-		{
-			AddChildren(children);
-		}
-
-		protected TreeListViewModel() { }
 	}
 }

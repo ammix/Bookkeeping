@@ -2,9 +2,8 @@
 {
 	public class InvoiceLineModel : TreeListViewModel
 	{
-		public InvoiceLineModel(ITreeListViewModel parent)
+		public InvoiceLineModel()
 		{
-			Parent = parent;
 		}
 
 		public InvoiceLineModel(string article, string price, string note = null, int? id = null)
@@ -16,13 +15,11 @@
 		}
 
 		public string Article { get; private set; }
-
 		public string Price { get; private set; }
-
 		public string Note { get; private set; }
 
 		#region Implementation ITreeListViewModel
-		public override string Tree
+		public override string Column1
 		{
 			get { return Article; }
 			set { Article = value; }

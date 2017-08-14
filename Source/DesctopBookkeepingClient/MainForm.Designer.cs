@@ -168,7 +168,7 @@
 			// 
 			// olvColumn1
 			// 
-			this.olvColumn1.AspectName = "Tree";
+			this.olvColumn1.AspectName = "Column1";
 			this.olvColumn1.CellEditUseWholeCell = true;
 			this.olvColumn1.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Left;
 			this.olvColumn1.Text = "Контрагент";

@@ -97,17 +97,12 @@ namespace DesktopBookkeepingClient
 					(SELECT [Id] FROM [Counterparties] WHERE [Name] = N'{transaction.Counterparty}'), 
 						{transaction.Amount}, @DateTime, NULL, N'{transaction.Comment}'";
 
-				//var cmdText = @"
-				//	INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note) 
-				//		SELECT 1, 
-				//	(SELECT [Id] FROM [Accounts] WHERE [Name] = @Account), 
-				//	(SELECT [Id] FROM [Counterparties] WHERE [Name] = @Counterparty), 
-				//		@Amount, @DateTime, NULL, @Comment";
-
-				SqlParameter param = new SqlParameter();
-				param.ParameterName = "@DateTime";
-				param.Value = transaction.Date;
-				param.SqlDbType = SqlDbType.DateTime;
+				var param = new SqlParameter
+				{
+					ParameterName = "@DateTime",
+					Value = transaction.Date,
+					SqlDbType = SqlDbType.DateTime
+				};
 
 				var command = new SqlCommand(cmdText, connection);
 				command.Parameters.Add(param);
@@ -271,16 +266,16 @@ namespace DesktopBookkeepingClient
 						//balance = Balance.GetValue(account, transactionId).ToString("N");
 						currency = GetValue(dr, "Currency");
 
-						//if (finDays.Exists(trs => trs.Tree == date))
+						//if (finDays.Exists(trs => trs.Column1 == date))
 						if (finDays.Exists(trs => trs.Date.Date == date.Date))
 						{
 							var finDay = finDays.Find(trs => trs.Date.Date == date.Date);
-							//if (finDay.Children.Exists(x => x.Tree == counterparty && decimal.Parse(x.Amount) == amount))
+							//if (finDay.Children.Exists(x => x.Column1 == counterparty && decimal.Parse(x.Amount) == amount))
 							if (finDay.Children.Exists(x => x.Id == transactionId))
 							{
 								if (article != null)
 								{
-									//var invoiceLine = finDay.Children.Find(x => x.Tree == counterparty);
+									//var invoiceLine = finDay.Children.Find(x => x.Column1 == counterparty);
 									var invoiceLine = finDay.Children.Find(x => x.Id == transactionId);
 									invoiceLine.AddChild(CreateInvoiceLineView());
 								}

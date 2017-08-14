@@ -9,21 +9,14 @@ namespace DesktopBookkeepingClient
 		string date;
 		DateTime dateTime;
 
-		public FinDayModel(List<ITreeListViewModel> transactions, DateTime date)
+		public FinDayModel(DateTime date, List<ITreeListViewModel> transactions=null) :
+			base(transactions)
 		{
-			Children = transactions;
-
-			Date = date;
-
-			foreach (var tr in transactions)
-			{
-				//Add(tr);
-				(tr as TreeListViewModel).Parent = this;
-			}
+			SetDate(date);
 		}
 
 		#region Implementation ITreeListViewModel
-		public override string Tree
+		public override string Column1
 		{
 			get { return date; }
 		}
@@ -36,10 +29,15 @@ namespace DesktopBookkeepingClient
 			}
 			protected set
 			{
-				dateTime = value;
-				date = dateTime.ToString("d MMMM yyyy (dddd)", CultureInfo.GetCultureInfo("uk-UA"));
+				SetDate(value);
 			}
 		}
 		#endregion
+
+		void SetDate(DateTime value)
+		{
+			dateTime = value;
+			date = dateTime.ToString("d MMMM yyyy (dddd)", CultureInfo.GetCultureInfo("uk-UA"));
+		}
 	}
 }

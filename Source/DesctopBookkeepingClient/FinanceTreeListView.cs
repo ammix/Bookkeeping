@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using BrightIdeasSoftware;
 using System.Windows.Forms;
 
@@ -54,7 +55,7 @@ namespace DesktopBookkeepingClient
 			//else if (row.NestingLevel == NestingLevel.InvoiceLine)
 			if (rowLine != null)
 			{
-				if (string.IsNullOrEmpty(rowLine.Tree) || string.IsNullOrEmpty(rowLine.Amount) || !list.ValidateArticle(rowLine)) //TODO !!!
+				if (string.IsNullOrEmpty(rowLine.Article) || string.IsNullOrEmpty(rowLine.Amount) || !list.ValidateArticle(rowLine)) //TODO !!!
 				{
 					MessageBox.Show("Артикул і ціна мають бути заповнені", "Помилка створення invoice line",
 						MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
@@ -80,7 +81,7 @@ namespace DesktopBookkeepingClient
 
 	public class FinanceTreeListView: TreeListView
 	{
-		public ITreeListViewModel _currentItem;
+		ITreeListViewModel _currentItem;
 
 		public ITreeListViewModel CurrentItem  //SelectedObject
 		{
@@ -122,7 +123,7 @@ namespace DesktopBookkeepingClient
 		protected override void OnCellEditorValidating(CellEditEventArgs e)
 		{
 			var row = (ITreeListViewModel)e.RowObject;
-			if (e.Column.AspectName == "Tree" && row is InvoiceLineModel)
+			if (e.Column.AspectName == "Column1" && row is InvoiceLineModel)
 			{
 				base.OnCellEditorValidating(e); //TODO: is this line need indeed?
 
@@ -137,7 +138,7 @@ namespace DesktopBookkeepingClient
 				//	}
 				//}
 
-				if (ValidateArticle(row))
+				if (ValidateArticle((InvoiceLineModel)row))
 					e.Cancel = false;
 			}
 
@@ -145,10 +146,10 @@ namespace DesktopBookkeepingClient
 			//var result = ValidateTransaction(row);
 		}
 
-		public bool ValidateArticle(ITreeListViewModel row)
+		public bool ValidateArticle(InvoiceLineModel row)
 		{
 			foreach (var article in LocalDb.GetArticles())
-				if (article == row.Tree) // row.Article
+				if (article == row.Article) // row.Article
 					return true;
 
 			return false;
@@ -168,7 +169,7 @@ namespace DesktopBookkeepingClient
 		//		case NestingLevel.InvoiceLine:
 		//			foreach (var article in LocalDb.GetArticles())
 		//			{
-		//				if (article == row.Tree) // row.Article
+		//				if (article == row.Column1) // row.Article
 		//					break;
 		//				return false;
 		//			}
@@ -250,7 +251,7 @@ namespace DesktopBookkeepingClient
 
 			switch (e.Column.AspectName)
 			{
-				case "Tree":
+				case "Column1":
 					treeComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/ };
 					if (e.RowObject is TransactionModel)
 						treeComboBox.Items.AddRange(LocalDb.GetCounterparties());
@@ -263,7 +264,7 @@ namespace DesktopBookkeepingClient
 					treeComboBox.Font = Font;
 					treeComboBox.Bounds = e.CellBounds;
 					treeComboBox.Text = (string)e.Value;
-					treeComboBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Tree = treeComboBox.Text;
+					treeComboBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Column1 = treeComboBox.Text;
 					e.Control = treeComboBox;
 					break;
 
@@ -316,7 +317,7 @@ namespace DesktopBookkeepingClient
 
 			var n = IndexOf(model) + (model.CanExpand ? model.Children.Count : 0);
 
-			var newRow = new InvoiceLineModel(model);
+			var newRow = new InvoiceLineModel();
 			model.AddChild(newRow);
 			RebuildAll(true);
 			ExpandAll();
@@ -332,6 +333,33 @@ namespace DesktopBookkeepingClient
 			CurrentItem = (ITreeListViewModel)SelectedObject;
 			AddTransaction(CurrentItem.Parent as FinDayModel);
 		}
+
+	    public void AddTransaction(DateTime date)
+	    {
+	        if (CurrentItem != null)
+	            return;
+
+	        var roots = ObjectListView.EnumerableToArray(Roots, true);
+
+	        FinDayModel finDay = null;
+	        foreach (var element in roots)
+	        {
+	            if (((FinDayModel) element).Date.Date == date.Date)
+	            {
+	                finDay = element as FinDayModel;
+	                break;
+	            }
+	        }
+
+	        if (finDay == null)
+	        {
+	            finDay = new FinDayModel(date);
+                roots.Insert(0, finDay);
+	            SetObjects(roots);
+	        }
+
+	        AddTransaction(finDay);
+	    }
 
 		public void AddTransaction(FinDayModel model)
 		{

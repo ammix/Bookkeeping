@@ -2,8 +2,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
-using System.Collections.Generic;
-using System.Collections;
 using System.Configuration;
 
 namespace DesktopBookkeepingClient
@@ -70,7 +68,7 @@ namespace DesktopBookkeepingClient
 			var font = e.Item.Font;
 			switch (e.Column.AspectName)
 			{
-				case "Tree":
+				case "Column1":
 					if (cell is FinDayModel)
 					{
 						item.Font = new Font(font.Name, font.Size, FontStyle.Underline);
@@ -89,7 +87,7 @@ namespace DesktopBookkeepingClient
 					}
 					else if (cell is TransactionModel)
 					{
-						item.ForeColor = cell.Amount.Contains("-") ? Color.Black : Color.Green; //DeepPink
+						item.ForeColor = cell.Account != null && cell.Amount.Contains("-") ? Color.Black : Color.Green; //DeepPink
 						item.Font = new Font(font.Name, font.Size + 0, FontStyle.Bold);
 					}
 					break;
@@ -145,47 +143,10 @@ namespace DesktopBookkeepingClient
 				}
 			}
 
-			if (treeListView.CurrentItem != null)
-				return;
-
-			var s = date.ToShortDateString();
-
-			if ((treeListView.GetItem(0).RowObject as ITreeListViewModel).Tree == s)
-				return;
-
-			var newFinDay = new FinDayModel(date: date, transactions: new List<ITreeListViewModel>());
-			//var newFinDay = new ITreeListViewModel(date);
-
-			ArrayList roots = ObjectListView.EnumerableToArray(treeListView.Roots, true);
-			roots.Insert(0, newFinDay);
-			treeListView.SetObjects(roots);
-
-
-			treeListView.AddTransaction(newFinDay);
-			//treeListView.CurrentItem = newFinDay;
-
-
-			//treeListView.CancelCellEdit();
-			//treeListView.PossibleFinishCellEditing
-
-			//else
-			//{
-			//	var transact = (ITreeListViewModel)treeListView.GetItem(0).RowObject;
-			//	transact.A
-
-			//	//var transact = new ITreeListViewModel(date: s, transactions: new List<ITreeListViewModel> { new ITreeListViewModel(null, "", "", "", "") });
-
-			//	treeListView.InsertObjects(0, new[] { transact });
-			//	treeListView.EnsureModelVisible(transact);
-
-			//	treeListView.ExpandAll();
-
-			//	treeListView.CurrentItem = transact;
-			//	treeListView.StartCellEdit(treeListView.GetItem(1), 0);
-			//}
+			treeListView.AddTransaction(date);
 		}
 
-		private void toolStripButton4_Click(object sender, EventArgs e)
+	    private void toolStripButton4_Click(object sender, EventArgs e)
 		{
 			flag = !flag;
 			if (flag)
@@ -206,7 +167,7 @@ namespace DesktopBookkeepingClient
 
 			//var q = treeListView.GetSubItem(0, 0);
 			//q.Text = "Hello, world!";
-			//model[0].Tree = "Hello, world!";
+			//model[0].Column1 = "Hello, world!";
 
 			//e.ListViewItem.SubItems[0].Text = "Hello, world!";
 		}
@@ -295,14 +256,14 @@ namespace DesktopBookkeepingClient
 			treeListView.RemoveTransaction(clickedRow as TransactionModel);
 		}
 
-		private void removeInvoiceLineToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			treeListView.RemoveInvoiceLine(clickedRow as InvoiceLineModel);
-		}
-
 		private void addInvoiceLineToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			treeListView.AddInvoiceLine(clickedRow as TransactionModel);
+		}
+
+		private void removeInvoiceLineToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			treeListView.RemoveInvoiceLine(clickedRow as InvoiceLineModel);
 		}
 
 		//private static void AddInvoiceLine(FinanceTreeListView list, ITreeListViewModel model)

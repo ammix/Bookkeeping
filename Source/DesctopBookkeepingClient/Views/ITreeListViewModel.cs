@@ -8,7 +8,7 @@ namespace DesktopBookkeepingClient
 		int? Id { get; }
 		DateTime Date { get; }
 
-		string Tree { get; }
+		string Column1 { get; }
 		string Amount { get; } // Value, Sum
 		string Comment { get; } // Remark, Note
 		string Account { get; }
@@ -19,7 +19,8 @@ namespace DesktopBookkeepingClient
 		ITreeListViewModel Parent { get; }
 		List<ITreeListViewModel> Children { get; } //IList
 		void AddChild(ITreeListViewModel child);
-		void AddChildren(List<ITreeListViewModel> children); //IList
-		void InsertChild(int index, ITreeListViewModel child);
+
+		//void AddChildren(List<ITreeListViewModel> children); //IList
+		//void InsertChild(int index, ITreeListViewModel child);
 	}
 }
