@@ -4,7 +4,6 @@
 	{
 		string amount;
 
-		public InvoiceLineModel(ITreeListViewModel parent)
 		public InvoiceLineModel()
 		{
 		}
