@@ -30,7 +30,7 @@ namespace DesktopBookkeepingClient
 				var transactionModel = new TransactionModel(
 					id: t.Id,
 					counterparty: t.Counterparty,
-					amount: t.Amount,
+					amount: decimal.Parse(t.Amount), //TODO
 					comment: t.Note,
 					account: t.Account,
 					balance: t.Balance /*Currency = t.Currency,*/
@@ -47,7 +47,7 @@ namespace DesktopBookkeepingClient
 			var transaction = new List<ITreeListViewModel>();
 			foreach (var i in ils)
 			{
-				transaction.Add(new InvoiceLineModel(article: i.Article, price: i.Price, note: i.Note));
+				transaction.Add(new InvoiceLineModel(article: i.Article, price: decimal.Parse(i.Price) /*TODO*/, note: i.Note));
 			}
 			return transaction;
 		}

@@ -19,29 +19,29 @@ namespace DesktopBookkeepingClient
 						(
 							id: 1,
 							counterparty: "Сільпо",
-							amount: "- 100.00",
+							amount: -100.00m, // "- 100.00"
 							account: "Готівка",
 							balance: "3 568.95",
 							time: "12:00",
 							articles: new List<ITreeListViewModel>
 							{
-								new InvoiceLineModel (article: "молоко", price: "10.50"),
-								new InvoiceLineModel (article: "хліб", price: "15.20"),
-								new InvoiceLineModel (article: "черешні", price: "50.50", note: "60 грн/кг")
+								new InvoiceLineModel (article: "молоко", price: 10.50m),
+								new InvoiceLineModel (article: "хліб", price: 15.20m),
+								new InvoiceLineModel (article: "черешні", price: 50.50m, note: "60 грн/кг")
 							}
 						),
 						new TransactionModel
 						(
 							id: 2,
 							counterparty: "Алейка",
-							amount: "- 52.30",
+							amount: -52.30m, // "- 52.30",
 							account: "Готівка",
 							balance: "3 668.95",
 							time: "13:01",
 							articles: new List<ITreeListViewModel>
 							{
-								new InvoiceLineModel (article: "помідори", price: "30.49", note: "25 грн/кг"),
-								new InvoiceLineModel (article: "яблука", price: "25.25", note: "15 грн/кг")
+								new InvoiceLineModel (article: "помідори", price: 30.49m, note: "25 грн/кг"),
+								new InvoiceLineModel (article: "яблука", price: 25.25m, note: "15 грн/кг")
 							}
 
 						),
@@ -50,7 +50,7 @@ namespace DesktopBookkeepingClient
 							id: 3,
 							articles: null,
 							counterparty: "Обмін",
-							amount: "-2 500.00",
+							amount: -2500.0m, // "- 2 500.00",
 							account: "Гаманець UAH",
 							comment: "25.00 UAH/$",
 							balance: "2 150.00",
@@ -61,7 +61,7 @@ namespace DesktopBookkeepingClient
 							id: 4,
 							articles: null,
 							counterparty: "Обмін",
-							amount: "100.00",
+							amount: 100.0m,
 							account: "Гаманець $",
 							balance: "$ 100.00"
 						)
@@ -80,7 +80,7 @@ namespace DesktopBookkeepingClient
 							id: 6,
 							articles: null,
 							counterparty: "Twinfield",
-							amount: "50 000.00",
+							amount: 50000.0m,
 							account: "2600 Агріколь",
 							balance: "75 000.00"
 						),
@@ -89,7 +89,7 @@ namespace DesktopBookkeepingClient
 							id: 7,
 							articles: null,
 							counterparty: "Ліко-Світ",
-							amount: "-7 500.00",
+							amount: -7500.0m,
 							account: "Приват",
 							balance: "14 569.00",
 							comment: "Аванс за послуги Інтернет, червень 2016, згідно договору №2525"
@@ -98,14 +98,14 @@ namespace DesktopBookkeepingClient
 						(
 							id: 8,
 							counterparty: "Метро",
-							amount: "-52.30",
+							amount: -52.3m,
 							account: "Картка",
 							balance: "5 890.85",
 							articles: new List<ITreeListViewModel>
 							{
-								new InvoiceLineModel (article: "ікра", price: "100.50"),
-								new InvoiceLineModel (article: "торт", price: "150.75"),
-								new InvoiceLineModel (article: "серветки", price: "30.00")
+								new InvoiceLineModel (article: "ікра", price: 100.50m),
+								new InvoiceLineModel (article: "торт", price: 150.75m),
+								new InvoiceLineModel (article: "серветки", price: 30.00m)
 							}
 						),
 						new TransactionModel
@@ -113,7 +113,7 @@ namespace DesktopBookkeepingClient
 							id: 9,
 							articles: null,
 							counterparty: "Алейка",
-							amount: "-152.55",
+							amount: -152.55m,
 							account: "Готівка",
 							balance: "3 700.00"
 						)

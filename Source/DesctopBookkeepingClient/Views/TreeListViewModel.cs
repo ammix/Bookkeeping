@@ -6,6 +6,8 @@ namespace DesktopBookkeepingClient
 	// Model for TreeListView control
 	public abstract class TreeListViewModel : ITreeListViewModel
 	{
+		protected decimal sum;
+
 		#region Constructors
 		protected TreeListViewModel() { }
 
@@ -21,10 +23,19 @@ namespace DesktopBookkeepingClient
 			get { return Parent.Date; }
 			protected set { }
 		}
+		public decimal Sum // Value
+		{
+			get { return sum; }
+			set
+			{
+				sum = value; //TODO invoice price do not update automatically
+				Amount = sum.ToString("N"); //TODO
+			}
+		}
 
 		public virtual string Column1 { get; set; }
-		public virtual string Amount { get; set; }
-		public virtual string Comment { get; set; }
+		public virtual string Amount { get; protected set; } // Value, Sum -> Column2
+		public virtual string Comment { get; set; } // Remark, Note
 		public virtual string Account { get; set; }
 		public virtual string Balance { get; set; }
 		public virtual string Time { get; set; }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Collections;
 using BrightIdeasSoftware;
 using System.Windows.Forms;
@@ -141,6 +142,16 @@ namespace DesktopBookkeepingClient
 				if (ValidateArticle((InvoiceLineModel)row))
 					e.Cancel = false;
 			}
+			else if (e.Column.AspectName == "Amount" && (row is TransactionModel || row is InvoiceLineModel))
+			{
+				base.OnCellEditorValidating(e);
+				e.Cancel = true;
+
+				decimal amount;
+				var ok = decimal.TryParse(e.Control.Text, out amount);
+				if (ok)
+					e.Cancel = false;
+			}
 
 			//var row = (ITreeListViewModel)e.RowObject;
 			//var result = ValidateTransaction(row);
@@ -217,6 +228,13 @@ namespace DesktopBookkeepingClient
 		{
 			base.CancelCellEdit();
 
+			amountTextBox.Text = (SelectedObject as TreeListViewModel).Amount; //TODO
+			//amountTextBox.Leave -= (o, args) =>
+			//{
+			//	((TreeListViewModel)e.RowObject).Sum = decimal.Parse(amountTextBox.Text);
+			//};
+
+
 			if (CurrentItem != null)
 			{
 				CurrentItem.Parent.Children.Remove(CurrentItem);
@@ -237,7 +255,8 @@ namespace DesktopBookkeepingClient
 			RebuildAll(true);
 		}
 
-		protected override void OnCellEditStarting(CellEditEventArgs e)
+
+	protected override void OnCellEditStarting(CellEditEventArgs e)
 		{
 			var row = (ITreeListViewModel) e.RowObject;
 
@@ -273,8 +292,13 @@ namespace DesktopBookkeepingClient
 
 					amountTextBox.Font = Font;
 					amountTextBox.Bounds = e.CellBounds;
-					amountTextBox.Text = (string)e.Value;
-					amountTextBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Amount = amountTextBox.Text.Replace(',', '.');
+					//amountTextBox.Text = decimal.Parse((string)e.Value).ToString(CultureInfo.InvariantCulture);
+					amountTextBox.Text = ((TreeListViewModel)e.RowObject).Sum.ToString("F2");
+					amountTextBox.Leave += (o, args) =>
+					{
+						//amountTextBox.Text = (decimal.Parse(amountTextBox.Text.Replace(',', '.')).ToString("N"));
+						((TreeListViewModel) e.RowObject).Sum = decimal.Parse(amountTextBox.Text);
+					};
 					e.Control = amountTextBox;
 					break;
 
