@@ -11,9 +11,11 @@ namespace DesktopBookkeepingClient
 			Amount = ""; // "0"
 		}
 
+		//public string Amount { get; private set; } // decimal
+
 		public TransactionModel(
 			string counterparty,
-			string amount,
+			decimal amount,
 			string account,
 			string balance,
 			string comment = null,
@@ -23,7 +25,8 @@ namespace DesktopBookkeepingClient
 			Id = id;
 
 			Counterparty = counterparty;
-			Amount = amount;
+			sum = amount;
+			Amount = amount.ToString("N");
 			Comment = comment;
 			Account = account;
 			Balance = balance;
@@ -32,7 +35,7 @@ namespace DesktopBookkeepingClient
 
 		public TransactionModel(List<ITreeListViewModel> articles,
 			string counterparty,
-			string amount,
+			decimal amount,
 			string account,
 			string balance,
 			string comment = null,
@@ -42,7 +45,8 @@ namespace DesktopBookkeepingClient
 			Id = id;
 
 			Counterparty = counterparty;
-			Amount = amount;
+			sum = amount;
+			Amount = amount.ToString("N");
 			Comment = comment;
 			Account = account;
 			Balance = balance;

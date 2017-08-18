@@ -2,22 +2,32 @@
 {
 	public class InvoiceLineModel : TreeListViewModel
 	{
+		string amount;
+
 		public InvoiceLineModel(ITreeListViewModel parent)
 		{
 			Parent = parent;
 		}
 
-		public InvoiceLineModel(string article, string price, string note = null, int? id = null)
+		public InvoiceLineModel(string article, decimal price, string note = null, int? id = null)
 		{
-			this.Id = id;
-			this.Article = article;
-			this.Price = price;
-			this.Note = note;
+			Id = id;
+			Article = article;
+			Price = price;
+			Note = note;
 		}
 
 		public string Article { get; private set; }
 
-		public string Price { get; private set; }
+		public decimal Price
+		{
+			get { return sum; }
+			private set
+			{
+				sum = value;
+				amount = sum.ToString("N");
+			}
+		}
 
 		public string Note { get; private set; }
 
@@ -30,8 +40,9 @@
 
 		public override string Amount
 		{
-			get { return Price; }
-			set { Price = value; }
+			//get { return amount; }
+			get { return sum.ToString("N"); }//TODO
+			//set { Price = value; }
 		}
 
 		public override string Comment

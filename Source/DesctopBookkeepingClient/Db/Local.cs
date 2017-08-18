@@ -95,7 +95,7 @@ namespace DesktopBookkeepingClient
 						SELECT 1, 
 					(SELECT [Id] FROM [Accounts] WHERE [Name] = N'{transaction.Account}'), 
 					(SELECT [Id] FROM [Counterparties] WHERE [Name] = N'{transaction.Counterparty}'), 
-						{transaction.Amount}, @DateTime, NULL, N'{transaction.Comment}'";
+						{transaction.Sum}, @DateTime, NULL, N'{transaction.Comment}'";
 
 				//var cmdText = @"
 				//	INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note) 
@@ -133,7 +133,7 @@ namespace DesktopBookkeepingClient
 					$"AccountId = a.Id, " +
 					$"CounterpartyId = c.Id, " +
 					$"Note = N'{transaction.Comment}', " +
-					$"Amount = {transaction.Amount} " +
+					$"Amount = {transaction.Sum} " +
 					$"FROM [Transactions] t " +
 					$"INNER JOIN [Accounts] a ON a.Name = N'{transaction.Account}' " +
 					$"LEFT OUTER JOIN [Counterparties] c ON c.Name = N'{transaction.Counterparty}' " +
@@ -323,7 +323,7 @@ namespace DesktopBookkeepingClient
 			(
 				id: transactionId,
 				counterparty: counterparty,
-				amount: amount.ToString("N"),
+				amount: amount, //.ToString("N"), //TODO
 				comment: comment,
 				account: account,
 				balance: balance.ContainsKey(account)? balance[account].ToString("N"): "",
@@ -339,7 +339,7 @@ namespace DesktopBookkeepingClient
 			(
 
 				article: article,
-				price: price,
+				price: decimal.Parse(price), //TODO
 				note: note,
 				id: lineId
 			);
