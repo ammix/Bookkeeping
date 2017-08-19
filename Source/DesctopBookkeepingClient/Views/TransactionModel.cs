@@ -4,9 +4,9 @@ namespace DesktopBookkeepingClient
 {
 	public class TransactionModel : TreeListViewModel
 	{
-		public TransactionModel() { }
+		private string column2;
 
-		//public string Amount { get; private set; } // decimal
+		public TransactionModel() { }
 
 		public TransactionModel(
 			string counterparty,
@@ -22,8 +22,7 @@ namespace DesktopBookkeepingClient
 			Id = id;
 
 			Counterparty = counterparty;
-			sum = amount;
-			Amount = amount.ToString("N");
+			Amount = amount;
 			Comment = comment;
 			Account = account;
 			Balance = balance;
@@ -31,12 +30,25 @@ namespace DesktopBookkeepingClient
 		}
 
 		public string Counterparty { get; }
-		//public string Amount { get; }
+		public decimal Amount
+		{
+			get { return Value; }
+			set
+			{
+				Value = value;
+				column2 = value.ToString("N");
+			}
+		}
 
 		#region Implementation ITreeListViewModel
 		public override string Column1
 		{
 			get { return Counterparty; }
+		}
+
+		public override string Column2
+		{
+			get { return column2; }
 		}
 		#endregion
 	}

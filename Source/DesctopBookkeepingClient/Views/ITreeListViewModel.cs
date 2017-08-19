@@ -9,7 +9,7 @@ namespace DesktopBookkeepingClient
 		DateTime Date { get; }
 
 		string Column1 { get; }
-		string Amount { get; } // Value, Sum
+		string Column2 { get; } // Value, Sum
 		string Comment { get; } // Remark, Note
 		string Account { get; }
 		string Balance { get; }

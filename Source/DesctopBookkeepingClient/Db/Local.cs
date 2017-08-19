@@ -91,11 +91,11 @@ namespace DesktopBookkeepingClient
 			{
 				connection.Open();
 				var cmdText = $@"
-					INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note) 
+					INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Column2, TransactionDate, Invoice, Note) 
 						SELECT 1, 
 					(SELECT [Id] FROM [Accounts] WHERE [Name] = N'{transaction.Account}'), 
 					(SELECT [Id] FROM [Counterparties] WHERE [Name] = N'{transaction.Counterparty}'), 
-						{transaction.Sum}, @DateTime, NULL, N'{transaction.Comment}'";
+						{transaction.Amount}, @DateTime, NULL, N'{transaction.Comment}'";
 
 				var param = new SqlParameter
 				{
@@ -128,7 +128,7 @@ namespace DesktopBookkeepingClient
 					$"AccountId = a.Id, " +
 					$"CounterpartyId = c.Id, " +
 					$"Note = N'{transaction.Comment}', " +
-					$"Amount = {transaction.Sum} " +
+					$"Column2 = {transaction.Amount} " +
 					$"FROM [Transactions] t " +
 					$"INNER JOIN [Accounts] a ON a.Name = N'{transaction.Account}' " +
 					$"LEFT OUTER JOIN [Counterparties] c ON c.Name = N'{transaction.Counterparty}' " +
@@ -234,7 +234,7 @@ namespace DesktopBookkeepingClient
 				connection.Open();
 
 				// Rule: snapshots must be on 00:00 of 1-st new month (and day if exist)
-				//var getSnapshotsSql = new SqlCommand($"SELECT [Account], [Amount] FROM [SnapshotsView] WHERE DATEPART(month, [Date]) = {month}", connection);
+				//var getSnapshotsSql = new SqlCommand($"SELECT [Account], [Column2] FROM [SnapshotsView] WHERE DATEPART(month, [Date]) = {month}", connection);
 				var getSnapshotsSql = new SqlCommand(getSnapshotSql, connection);
 				using (var dr = getSnapshotsSql.ExecuteReader())
 				{
@@ -259,7 +259,7 @@ namespace DesktopBookkeepingClient
 						price = GetValue(dr, "Price");
 						note = GetValue(dr, "Note");
 						comment = GetValue(dr, "Comment");
-						amount = (decimal)dr["Amount"]; //$"{dr["Amount"]:N}";
+						amount = (decimal)dr["Amount"]; //$"{dr["Column2"]:N}";
 						account = dr["Account"].ToString();
 						//balance = $"{dr["Balance"]:N}";
 						//balance = snapshotReader.GetInitialAccountValue(account, dateTime);
@@ -270,7 +270,7 @@ namespace DesktopBookkeepingClient
 						if (finDays.Exists(trs => trs.Date.Date == date.Date))
 						{
 							var finDay = finDays.Find(trs => trs.Date.Date == date.Date);
-							//if (finDay.Children.Exists(x => x.Column1 == counterparty && decimal.Parse(x.Amount) == amount))
+							//if (finDay.Children.Exists(x => x.Column1 == counterparty && decimal.Parse(x.Column2) == amount))
 							if (finDay.Children.Exists(x => x.Id == transactionId))
 							{
 								if (article != null)

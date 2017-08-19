@@ -2,7 +2,7 @@
 {
 	public class InvoiceLineModel : TreeListViewModel
 	{
-		string amount;
+		private string column2;
 
 		public InvoiceLineModel()
 		{
@@ -19,11 +19,11 @@
 		public string Article { get; private set; }
 		public decimal Price
 		{
-			get { return sum; }
+			get { return Value; }
 			private set
 			{
-				sum = value;
-				amount = sum.ToString("N");
+				Value = value;
+				column2 = Value.ToString("N");
 			}
 		}
 		public string Note { get; private set; }
@@ -35,11 +35,9 @@
 			set { Article = value; }
 		}
 
-		public override string Amount
+		public override string Column2
 		{
-			//get { return amount; }
-			get { return sum.ToString("N"); }//TODO
-			//set { Price = value; }
+			get { return column2; }
 		}
 
 		public override string Comment

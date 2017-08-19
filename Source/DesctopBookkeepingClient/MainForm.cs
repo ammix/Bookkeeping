@@ -80,14 +80,14 @@ namespace DesktopBookkeepingClient
 					}
 					break;
 
-				case "Amount":
+				case "Column2":
 					if (cell is InvoiceLineModel)
 					{
 						item.Font = new Font(font.Name, font.Size - 0, FontStyle.Regular);
 					}
 					else if (cell is TransactionModel)
 					{
-						item.ForeColor = cell.Account != null && cell.Amount.Contains("-") ? Color.Black : Color.Green; //DeepPink
+						item.ForeColor = cell.Account != null && cell.Column2.Contains("-") ? Color.Black : Color.Green; //DeepPink
 						item.Font = new Font(font.Name, font.Size + 0, FontStyle.Bold);
 					}
 					break;

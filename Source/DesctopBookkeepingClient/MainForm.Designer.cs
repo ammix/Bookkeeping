@@ -176,7 +176,7 @@
 			// 
 			// olvColumn2
 			// 
-			this.olvColumn2.AspectName = "Amount";
+			this.olvColumn2.AspectName = "Column2";
 			this.olvColumn2.CellEditUseWholeCell = true;
 			this.olvColumn2.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.olvColumn2.Text = "Сума";

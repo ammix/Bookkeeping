@@ -30,7 +30,7 @@ namespace DesktopBookkeepingClient
 
 			if (row != null)
 			{
-				if (string.IsNullOrEmpty(row.Amount) || string.IsNullOrEmpty(row.Account))
+				if (string.IsNullOrEmpty(row.Column2) || string.IsNullOrEmpty(row.Account))
 				{
 					MessageBox.Show("Ціна і рахунок мають бути заповнені", "Помилка створення транзакції",
 						MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
@@ -56,7 +56,7 @@ namespace DesktopBookkeepingClient
 			//else if (row.NestingLevel == NestingLevel.InvoiceLine)
 			if (rowLine != null)
 			{
-				if (string.IsNullOrEmpty(rowLine.Article) || string.IsNullOrEmpty(rowLine.Amount) || !list.ValidateArticle(rowLine)) //TODO !!!
+				if (string.IsNullOrEmpty(rowLine.Article) || string.IsNullOrEmpty(rowLine.Column2) || !list.ValidateArticle(rowLine)) //TODO !!!
 				{
 					MessageBox.Show("Артикул і ціна мають бути заповнені", "Помилка створення invoice line",
 						MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
@@ -111,7 +111,7 @@ namespace DesktopBookkeepingClient
 
 		private void FinanceTreeListView_CellEditValidating(object sender, CellEditEventArgs e)
 		{
-			string s1 = ((ITreeListViewModel)e.RowObject).Amount;
+			string s1 = ((ITreeListViewModel)e.RowObject).Column2;
 			string s2 = ((ITreeListViewModel)e.RowObject).Account;
 			//e.Cancel = true;
 		}
@@ -142,7 +142,7 @@ namespace DesktopBookkeepingClient
 				if (ValidateArticle((InvoiceLineModel)row))
 					e.Cancel = false;
 			}
-			else if (e.Column.AspectName == "Amount" && (row is TransactionModel || row is InvoiceLineModel))
+			else if (e.Column.AspectName == "Column2" && (row is TransactionModel || row is InvoiceLineModel))
 			{
 				base.OnCellEditorValidating(e);
 				e.Cancel = true;
@@ -208,10 +208,10 @@ namespace DesktopBookkeepingClient
 		//{
 		//	base.OnCellEditFinished(e);
 
-		//	//if (e.Column.AspectName == "Amount" && string.IsNullOrEmpty(((ITreeListViewModel)e.RowObject).Amount))
+		//	//if (e.Column.AspectName == "Column2" && string.IsNullOrEmpty(((ITreeListViewModel)e.RowObject).Column2))
 		//	//	StartCellEdit(GetItem(1), 1);	
 
-		//	//if (string.IsNullOrEmpty(((ITreeListViewModel) e.RowObject).Amount))
+		//	//if (string.IsNullOrEmpty(((ITreeListViewModel) e.RowObject).Column2))
 		//	// StartCellEdit(GetItem(1), 1);
 		//	//else if (string.IsNullOrEmpty(((ITreeListViewModel) e.RowObject).Account))
 		//	// StartCellEdit(GetItem(1), 4);
@@ -226,12 +226,10 @@ namespace DesktopBookkeepingClient
 
 		public override void CancelCellEdit()
 		{
-			base.CancelCellEdit();
-
-			amountTextBox.Text = (SelectedObject as TreeListViewModel).Amount; //TODO
+			amountTextBox.Text = (SelectedObject as TreeListViewModel).Column2; //TODO: remove subscription
 			//amountTextBox.Leave -= (o, args) =>
 			//{
-			//	((TreeListViewModel)e.RowObject).Sum = decimal.Parse(amountTextBox.Text);
+			//	((TreeListViewModel)e.RowObject).Value = decimal.Parse(amountTextBox.Text);
 			//};
 
 
@@ -253,6 +251,8 @@ namespace DesktopBookkeepingClient
 			}
 
 			RebuildAll(true);
+
+			base.CancelCellEdit();
 		}
 
 
@@ -287,17 +287,17 @@ namespace DesktopBookkeepingClient
 					e.Control = treeComboBox;
 					break;
 
-				case "Amount":
+				case "Column2":
 					amountTextBox = new TextBox();
 
 					amountTextBox.Font = Font;
 					amountTextBox.Bounds = e.CellBounds;
 					//amountTextBox.Text = decimal.Parse((string)e.Value).ToString(CultureInfo.InvariantCulture);
-					amountTextBox.Text = ((TreeListViewModel)e.RowObject).Sum.ToString("F2");
+					amountTextBox.Text = ((TreeListViewModel)e.RowObject).Value.ToString("F2");
 					amountTextBox.Leave += (o, args) =>
 					{
 						//amountTextBox.Text = (decimal.Parse(amountTextBox.Text.Replace(',', '.')).ToString("N"));
-						((TreeListViewModel) e.RowObject).Sum = decimal.Parse(amountTextBox.Text);
+						((TreeListViewModel) e.RowObject).Value = decimal.Parse(amountTextBox.Text);
 					};
 					e.Control = amountTextBox;
 					break;
