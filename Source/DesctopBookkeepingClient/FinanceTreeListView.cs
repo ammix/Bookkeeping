@@ -1,90 +1,15 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using BrightIdeasSoftware;
 using System.Windows.Forms;
 
 namespace DesktopBookkeepingClient
 {
-	public class FinanceCellEditKeyEngine: CellEditKeyEngine
-	{
-		//protected override void InitializeCellEditKeyMaps()
-		//{
-		//	base.InitializeCellEditKeyMaps();
-		//	CellEditKeyMap[Keys.F1] = CellEditCharacterBehaviour.ChangeRowUp;
-		//}
-
-		//protected override bool HandleCustomVerb(Keys keyData, CellEditCharacterBehaviour behaviour)
-		//{
-		//	MessageBox.Show("123", "456",
-		//				MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-		//	return false;
-		//}
-
-		protected override void HandleEndEdit()
-		{
-			//base.HandleEndEdit();
-
-			var row = ItemBeingEdited.RowObject as TransactionModel;
-			var list = ListView as FinanceTreeListView;
-
-			if (row != null)
-			{
-				if (string.IsNullOrEmpty(row.Column2) || string.IsNullOrEmpty(row.Account))
-				{
-					MessageBox.Show("Ціна і рахунок мають бути заповнені", "Помилка створення транзакції",
-						MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-					return;
-				}
-
-				base.HandleEndEdit();
-
-				if (row.Id == null)
-				{
-					int id = LocalDb.InsertTransaction(row);
-					row.Id = id;
-				}
-				else
-					LocalDb.UpdateTransaction(row);
-
-				list.AddTransaction();
-
-				//(ListView as FinanceTreeListView).CurrentItem = null;
-			}
-
-			var rowLine = ItemBeingEdited.RowObject as InvoiceLineModel;
-			//else if (row.NestingLevel == NestingLevel.InvoiceLine)
-			if (rowLine != null)
-			{
-				if (string.IsNullOrEmpty(rowLine.Article) || string.IsNullOrEmpty(rowLine.Column2) || !list.ValidateArticle(rowLine)) //TODO !!!
-				{
-					MessageBox.Show("Артикул і ціна мають бути заповнені", "Помилка створення invoice line",
-						MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-					return;
-				}
-
-				base.HandleEndEdit();
-
-				if (rowLine.Id == null)
-				{
-					LocalDb.InsertInvoiceLine(rowLine);
-				}
-				else
-					LocalDb.UpdateInvoiceLine(rowLine);
-
-				list.AddInvoiceLine();
-			}
-
-			//base.HandleEndEdit();
-			//(ListView as FinanceTreeListView).CurrentItem = null;
-		}
-	}
-
-	public class FinanceTreeListView: TreeListView
+	public class FinanceTreeListView : TreeListView
 	{
 		private ITreeListViewModel _currentItem;
 		private TreeListViewModel treeListViewModel;
 
-		public ITreeListViewModel CurrentItem  //SelectedObject
+		public ITreeListViewModel CurrentItem //SelectedObject
 		{
 			get { return _currentItem; }
 			set { _currentItem = value; }
@@ -111,8 +36,8 @@ namespace DesktopBookkeepingClient
 
 		private void FinanceTreeListView_CellEditValidating(object sender, CellEditEventArgs e)
 		{
-			string s1 = ((ITreeListViewModel)e.RowObject).Column2;
-			string s2 = ((ITreeListViewModel)e.RowObject).Account;
+			string s1 = ((ITreeListViewModel) e.RowObject).Column2;
+			string s2 = ((ITreeListViewModel) e.RowObject).Account;
 			//e.Cancel = true;
 		}
 
@@ -123,7 +48,7 @@ namespace DesktopBookkeepingClient
 
 		protected override void OnCellEditorValidating(CellEditEventArgs e)
 		{
-			var row = (ITreeListViewModel)e.RowObject;
+			var row = (ITreeListViewModel) e.RowObject;
 			if (e.Column.AspectName == "Column1" && row is InvoiceLineModel)
 			{
 				base.OnCellEditorValidating(e); //TODO: is this line need indeed?
@@ -139,7 +64,7 @@ namespace DesktopBookkeepingClient
 				//	}
 				//}
 
-				if (ValidateArticle((InvoiceLineModel)row))
+				if (ValidateArticle((InvoiceLineModel) row))
 					e.Cancel = false;
 			}
 			else if (e.Column.AspectName == "Column2" && (row is TransactionModel || row is InvoiceLineModel))
@@ -232,7 +157,7 @@ namespace DesktopBookkeepingClient
 			//	((TreeListViewModel)e.RowObject).Value = decimal.Parse(amountTextBox.Text);
 			//};
 
-			amountTextBox.Leave -= Function;
+			amountTextBox.Leave -= SetValue;
 
 			if (CurrentItem != null)
 			{
@@ -256,12 +181,12 @@ namespace DesktopBookkeepingClient
 			base.CancelCellEdit();
 		}
 
-		private void Function (object o, EventArgs args) 
+		private void SetValue(object o, EventArgs args)
 		{
 			treeListViewModel.Value = decimal.Parse(amountTextBox.Text);
 		}
 
-	protected override void OnCellEditStarting(CellEditEventArgs e)
+		protected override void OnCellEditStarting(CellEditEventArgs e)
 		{
 			var row = (ITreeListViewModel) e.RowObject;
 
@@ -276,7 +201,7 @@ namespace DesktopBookkeepingClient
 			switch (e.Column.AspectName)
 			{
 				case "Column1":
-					treeComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/ };
+					treeComboBox = new ComboBox {DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/};
 					if (e.RowObject is TransactionModel)
 						treeComboBox.Items.AddRange(LocalDb.GetCounterparties());
 					else
@@ -287,8 +212,8 @@ namespace DesktopBookkeepingClient
 
 					treeComboBox.Font = Font;
 					treeComboBox.Bounds = e.CellBounds;
-					treeComboBox.Text = (string)e.Value;
-					treeComboBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Column1 = treeComboBox.Text;
+					treeComboBox.Text = (string) e.Value;
+					treeComboBox.TextChanged += (o, args) => treeListViewModel.Column1 = treeComboBox.Text;
 					e.Control = treeComboBox;
 					break;
 
@@ -299,22 +224,8 @@ namespace DesktopBookkeepingClient
 
 					amountTextBox.Font = Font;
 					amountTextBox.Bounds = e.CellBounds;
-					//amountTextBox.Text = decimal.Parse((string)e.Value).ToString(CultureInfo.InvariantCulture);
-					amountTextBox.Text = ((TreeListViewModel)e.RowObject).Value.ToString("F2");
-					//amountTextBox.Leave += (o, args) =>
-					//{
-					//	//amountTextBox.Text = (decimal.Parse(amountTextBox.Text.Replace(',', '.')).ToString("N"));
-					//	((TreeListViewModel)e.RowObject).Value = decimal.Parse(amountTextBox.Text);
-					//};
-					//amountTextBox.Leave += delegate (object o, EventArgs args /*,TreeListViewModel row*/) 
-					//{
-					//	//((TreeListViewModel)((FinanceTreeListView)o).SelectedObject).Value = decimal.Parse(amountTextBox.Text);
-					//	//amountTextBox.Text = (decimal.Parse(amountTextBox.Text.Replace(',', '.')).ToString("N"));
-					//	//((TreeListViewModel)e.RowObject).Value = decimal.Parse(amountTextBox.Text);
-
-					//	treeListViewModel.Value = decimal.Parse(amountTextBox.Text);
-					//};
-					amountTextBox.Leave += Function;
+					amountTextBox.Text = treeListViewModel.Value.ToString("F2");
+					amountTextBox.Leave += SetValue;
 					e.Control = amountTextBox;
 					break;
 
@@ -323,19 +234,19 @@ namespace DesktopBookkeepingClient
 
 					commentTextBox.Font = Font;
 					commentTextBox.Bounds = e.CellBounds;
-					commentTextBox.Text = (string)e.Value;
-					commentTextBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Comment = commentTextBox.Text;
+					commentTextBox.Text = (string) e.Value;
+					commentTextBox.TextChanged += (o, args) => treeListViewModel.Comment = commentTextBox.Text;
 					e.Control = commentTextBox;
 					break;
 
 				case "Account":
-					accountComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/ };
+					accountComboBox = new ComboBox {DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/};
 					accountComboBox.Items.AddRange(LocalDb.GetAccounts());
 
 					accountComboBox.Font = Font;
 					accountComboBox.Bounds = e.CellBounds;
-					accountComboBox.Text = (string)e.Value;
-					accountComboBox.TextChanged += (o, args) => ((TreeListViewModel)e.RowObject).Account = accountComboBox.Text;
+					accountComboBox.Text = (string) e.Value;
+					accountComboBox.TextChanged += (o, args) => treeListViewModel.Account = accountComboBox.Text;
 					e.Control = accountComboBox;
 					break;
 			}
@@ -347,7 +258,7 @@ namespace DesktopBookkeepingClient
 
 		public void AddInvoiceLine()
 		{
-			CurrentItem = (ITreeListViewModel)SelectedObject;
+			CurrentItem = (ITreeListViewModel) SelectedObject;
 			AddInvoiceLine(CurrentItem.Parent as TransactionModel);
 		}
 
@@ -370,36 +281,36 @@ namespace DesktopBookkeepingClient
 
 		public void AddTransaction()
 		{
-			CurrentItem = (ITreeListViewModel)SelectedObject;
+			CurrentItem = (ITreeListViewModel) SelectedObject;
 			AddTransaction(CurrentItem.Parent as FinDayModel);
 		}
 
-	    public void AddTransaction(DateTime date)
-	    {
-	        if (CurrentItem != null)
-	            return;
+		public void AddTransaction(DateTime date)
+		{
+			if (CurrentItem != null)
+				return;
 
-	        var roots = ObjectListView.EnumerableToArray(Roots, true);
+			var roots = ObjectListView.EnumerableToArray(Roots, true);
 
-	        FinDayModel finDay = null;
-	        foreach (var element in roots)
-	        {
-	            if (((FinDayModel) element).Date.Date == date.Date)
-	            {
-	                finDay = element as FinDayModel;
-	                break;
-	            }
-	        }
+			FinDayModel finDay = null;
+			foreach (var element in roots)
+			{
+				if (((FinDayModel) element).Date.Date == date.Date)
+				{
+					finDay = element as FinDayModel;
+					break;
+				}
+			}
 
-	        if (finDay == null)
-	        {
-	            finDay = new FinDayModel(date);
-                roots.Insert(0, finDay);
-	            SetObjects(roots);
-	        }
+			if (finDay == null)
+			{
+				finDay = new FinDayModel(date);
+				roots.Insert(0, finDay);
+				SetObjects(roots);
+			}
 
-	        AddTransaction(finDay);
-	    }
+			AddTransaction(finDay);
+		}
 
 		public void AddTransaction(FinDayModel model)
 		{
