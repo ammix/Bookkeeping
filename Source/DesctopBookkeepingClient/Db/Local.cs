@@ -91,7 +91,7 @@ namespace DesktopBookkeepingClient
 			{
 				connection.Open();
 				var cmdText = $@"
-					INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Column2, TransactionDate, Invoice, Note) 
+					INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note) 
 						SELECT 1, 
 					(SELECT [Id] FROM [Accounts] WHERE [Name] = N'{transaction.Account}'), 
 					(SELECT [Id] FROM [Counterparties] WHERE [Name] = N'{transaction.Counterparty}'), 
@@ -128,7 +128,7 @@ namespace DesktopBookkeepingClient
 					$"AccountId = a.Id, " +
 					$"CounterpartyId = c.Id, " +
 					$"Note = N'{transaction.Comment}', " +
-					$"Column2 = {transaction.Amount} " +
+					$"Amount = {transaction.Amount} " +
 					$"FROM [Transactions] t " +
 					$"INNER JOIN [Accounts] a ON a.Name = N'{transaction.Account}' " +
 					$"LEFT OUTER JOIN [Counterparties] c ON c.Name = N'{transaction.Counterparty}' " +
@@ -234,7 +234,7 @@ namespace DesktopBookkeepingClient
 				connection.Open();
 
 				// Rule: snapshots must be on 00:00 of 1-st new month (and day if exist)
-				//var getSnapshotsSql = new SqlCommand($"SELECT [Account], [Column2] FROM [SnapshotsView] WHERE DATEPART(month, [Date]) = {month}", connection);
+				//var getSnapshotsSql = new SqlCommand($"SELECT [Account], [Amount] FROM [SnapshotsView] WHERE DATEPART(month, [Date]) = {month}", connection);
 				var getSnapshotsSql = new SqlCommand(getSnapshotSql, connection);
 				using (var dr = getSnapshotsSql.ExecuteReader())
 				{
@@ -259,7 +259,7 @@ namespace DesktopBookkeepingClient
 						price = GetValue(dr, "Price");
 						note = GetValue(dr, "Note");
 						comment = GetValue(dr, "Comment");
-						amount = (decimal)dr["Amount"]; //$"{dr["Column2"]:N}";
+						amount = (decimal)dr["Amount"]; //$"{dr["Amount"]:N}";
 						account = dr["Account"].ToString();
 						//balance = $"{dr["Balance"]:N}";
 						//balance = snapshotReader.GetInitialAccountValue(account, dateTime);

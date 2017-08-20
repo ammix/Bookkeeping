@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace DesktopBookkeepingClient
 {
 	// Model for TreeListView control
 	public abstract class TreeListViewModel : ITreeListViewModel
 	{
+		private DateTime? _dateTime;
 		private decimal _value;
 
 		#region Constructors
@@ -18,10 +20,17 @@ namespace DesktopBookkeepingClient
 		#endregion
 
 		public virtual int? Id { get; set; }
-		public virtual DateTime Date
+		public DateTime Date
 		{
-			get { return Parent.Date; }
-			protected set { }
+			get
+			{
+				return _dateTime ?? Parent.Date;
+			}
+			protected set
+			{
+				_dateTime = value;
+				Column1 = _dateTime.Value.ToString("d MMMM yyyy (dddd)", CultureInfo.GetCultureInfo("uk-UA"));
+			}
 		}
 		public decimal Value
 		{

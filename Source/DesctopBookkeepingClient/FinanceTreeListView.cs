@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Globalization;
-using System.Collections;
+using System.Runtime.CompilerServices;
 using BrightIdeasSoftware;
 using System.Windows.Forms;
 
@@ -82,7 +81,8 @@ namespace DesktopBookkeepingClient
 
 	public class FinanceTreeListView: TreeListView
 	{
-		ITreeListViewModel _currentItem;
+		private ITreeListViewModel _currentItem;
+		private TreeListViewModel treeListViewModel;
 
 		public ITreeListViewModel CurrentItem  //SelectedObject
 		{
@@ -226,12 +226,13 @@ namespace DesktopBookkeepingClient
 
 		public override void CancelCellEdit()
 		{
-			amountTextBox.Text = (SelectedObject as TreeListViewModel).Column2; //TODO: remove subscription
+			//amountTextBox.Text = (SelectedObject as TreeListViewModel).Column2; //TODO: remove subscription
 			//amountTextBox.Leave -= (o, args) =>
 			//{
 			//	((TreeListViewModel)e.RowObject).Value = decimal.Parse(amountTextBox.Text);
 			//};
 
+			amountTextBox.Leave -= Function;
 
 			if (CurrentItem != null)
 			{
@@ -255,6 +256,10 @@ namespace DesktopBookkeepingClient
 			base.CancelCellEdit();
 		}
 
+		private void Function (object o, EventArgs args) 
+		{
+			treeListViewModel.Value = decimal.Parse(amountTextBox.Text);
+		}
 
 	protected override void OnCellEditStarting(CellEditEventArgs e)
 		{
@@ -288,17 +293,28 @@ namespace DesktopBookkeepingClient
 					break;
 
 				case "Column2":
+					treeListViewModel = (TreeListViewModel) e.RowObject;
+
 					amountTextBox = new TextBox();
 
 					amountTextBox.Font = Font;
 					amountTextBox.Bounds = e.CellBounds;
 					//amountTextBox.Text = decimal.Parse((string)e.Value).ToString(CultureInfo.InvariantCulture);
 					amountTextBox.Text = ((TreeListViewModel)e.RowObject).Value.ToString("F2");
-					amountTextBox.Leave += (o, args) =>
-					{
-						//amountTextBox.Text = (decimal.Parse(amountTextBox.Text.Replace(',', '.')).ToString("N"));
-						((TreeListViewModel) e.RowObject).Value = decimal.Parse(amountTextBox.Text);
-					};
+					//amountTextBox.Leave += (o, args) =>
+					//{
+					//	//amountTextBox.Text = (decimal.Parse(amountTextBox.Text.Replace(',', '.')).ToString("N"));
+					//	((TreeListViewModel)e.RowObject).Value = decimal.Parse(amountTextBox.Text);
+					//};
+					//amountTextBox.Leave += delegate (object o, EventArgs args /*,TreeListViewModel row*/) 
+					//{
+					//	//((TreeListViewModel)((FinanceTreeListView)o).SelectedObject).Value = decimal.Parse(amountTextBox.Text);
+					//	//amountTextBox.Text = (decimal.Parse(amountTextBox.Text.Replace(',', '.')).ToString("N"));
+					//	//((TreeListViewModel)e.RowObject).Value = decimal.Parse(amountTextBox.Text);
+
+					//	treeListViewModel.Value = decimal.Parse(amountTextBox.Text);
+					//};
+					amountTextBox.Leave += Function;
 					e.Control = amountTextBox;
 					break;
 

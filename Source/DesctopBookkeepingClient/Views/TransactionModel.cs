@@ -4,8 +4,6 @@ namespace DesktopBookkeepingClient
 {
 	public class TransactionModel : TreeListViewModel
 	{
-		private string column2;
-
 		public TransactionModel() { }
 
 		public TransactionModel(
@@ -36,7 +34,6 @@ namespace DesktopBookkeepingClient
 			set
 			{
 				Value = value;
-				column2 = value.ToString("N");
 			}
 		}
 
@@ -44,11 +41,6 @@ namespace DesktopBookkeepingClient
 		public override string Column1
 		{
 			get { return Counterparty; }
-		}
-
-		public override string Column2
-		{
-			get { return column2; }
 		}
 		#endregion
 	}

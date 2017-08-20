@@ -2,8 +2,6 @@
 {
 	public class InvoiceLineModel : TreeListViewModel
 	{
-		private string column2;
-
 		public InvoiceLineModel()
 		{
 		}
@@ -23,7 +21,6 @@
 			private set
 			{
 				Value = value;
-				column2 = Value.ToString("N");
 			}
 		}
 		public string Note { get; private set; }
@@ -33,11 +30,6 @@
 		{
 			get { return Article; }
 			set { Article = value; }
-		}
-
-		public override string Column2
-		{
-			get { return column2; }
 		}
 
 		public override string Comment
