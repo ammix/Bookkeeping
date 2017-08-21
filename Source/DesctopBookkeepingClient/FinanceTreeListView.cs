@@ -157,7 +157,7 @@ namespace DesktopBookkeepingClient
 			//	((TreeListViewModel)e.RowObject).Value = decimal.Parse(amountTextBox.Text);
 			//};
 
-			amountTextBox.Leave -= SetValue;
+			amountTextBox.Leave -= SetColumn2;
 
 			if (CurrentItem != null)
 			{
@@ -181,9 +181,8 @@ namespace DesktopBookkeepingClient
 			base.CancelCellEdit();
 		}
 
-		private void SetValue(object o, EventArgs args)
+		private void SetColumn2(object o, EventArgs args)
 		{
-			//treeListViewModel.Value = decimal.Parse(amountTextBox.Text);
 			treeListViewModel.Column2 = amountTextBox.Text;
 		}
 
@@ -224,8 +223,11 @@ namespace DesktopBookkeepingClient
 
 					amountTextBox.Font = Font;
 					amountTextBox.Bounds = e.CellBounds;
-					amountTextBox.Text = treeListViewModel.Value.ToString("F2");
-					amountTextBox.Leave += SetValue;
+					if (treeListViewModel is TransactionModel)
+						amountTextBox.Text = ((TransactionModel) treeListViewModel).Amount.ToString("F2");
+					else if (treeListViewModel is InvoiceLineModel)
+						amountTextBox.Text = ((InvoiceLineModel)treeListViewModel).Price.ToString("F2");
+					amountTextBox.Leave += SetColumn2;
 					e.Control = amountTextBox;
 					break;
 

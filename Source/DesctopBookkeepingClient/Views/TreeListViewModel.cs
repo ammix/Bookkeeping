@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace DesktopBookkeepingClient
 {
 	// Model for TreeListView control
 	public abstract class TreeListViewModel : ITreeListViewModel
 	{
-		private DateTime? _dateTime;
-		private decimal _value;
-
 		#region Constructors
 		protected TreeListViewModel() { }
 
@@ -20,39 +16,14 @@ namespace DesktopBookkeepingClient
 		#endregion
 
 		public virtual int? Id { get; set; }
-		public DateTime Date
+		public virtual DateTime Date
 		{
-			get
-			{
-				return _dateTime ?? Parent.Date;
-			}
-			protected set
-			{
-				_dateTime = value;
-				Column1 = _dateTime.Value.ToString("d MMMM yyyy (dddd)", CultureInfo.GetCultureInfo("uk-UA"));
-			}
-		}
-		public decimal Value
-		{
-			get { return _value; }
-			set
-			{
-				_value = value;
-				Column2 = _value.ToString("N");
-			}
+			get { return Parent.Date; }
+			protected set { }
 		}
 
 		public virtual string Column1 { get; set; }
-		private string column2;
-		public virtual string Column2
-		{
-			get { return column2; }
-			set
-			{
-				_value = decimal.Parse(value);
-				column2 = _value.ToString("N");
-			}
-		} // Value, Sum -> Column2
+		public virtual string Column2 { get; set; } // Value, Sum -> Column2
 		public virtual string Column3 { get; set; } // Remark, Note
 		public virtual string Account { get; set; }
 		public virtual string Balance { get; set; }
