@@ -8,9 +8,9 @@ namespace DesktopBookkeepingClient
 		int? Id { get; }
 		DateTime Date { get; }
 
-		string Column1 { get; }
-		string Column2 { get; } // Value, Sum
-		string Comment { get; } // Remark, Note
+		string Column1 { get; } // Tree
+		string Column2 { get; } // Value: Amount, Price, Sum
+		string Column3 { get; } // Remark, Note
 		string Account { get; }
 		string Balance { get; }
 		string Time { get; }

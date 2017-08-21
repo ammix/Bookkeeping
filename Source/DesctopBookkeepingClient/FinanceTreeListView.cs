@@ -183,12 +183,14 @@ namespace DesktopBookkeepingClient
 
 		private void SetValue(object o, EventArgs args)
 		{
-			treeListViewModel.Value = decimal.Parse(amountTextBox.Text);
+			//treeListViewModel.Value = decimal.Parse(amountTextBox.Text);
+			treeListViewModel.Column2 = amountTextBox.Text;
 		}
 
 		protected override void OnCellEditStarting(CellEditEventArgs e)
 		{
 			var row = (ITreeListViewModel) e.RowObject;
+			treeListViewModel = (TreeListViewModel)e.RowObject;
 
 			//if (row.NestingLevel == NestingLevel.InvoiceLine)
 			//{
@@ -218,8 +220,6 @@ namespace DesktopBookkeepingClient
 					break;
 
 				case "Column2":
-					treeListViewModel = (TreeListViewModel) e.RowObject;
-
 					amountTextBox = new TextBox();
 
 					amountTextBox.Font = Font;
@@ -229,13 +229,13 @@ namespace DesktopBookkeepingClient
 					e.Control = amountTextBox;
 					break;
 
-				case "Comment":
+				case "Column3":
 					commentTextBox = new TextBox();
 
 					commentTextBox.Font = Font;
 					commentTextBox.Bounds = e.CellBounds;
 					commentTextBox.Text = (string) e.Value;
-					commentTextBox.TextChanged += (o, args) => treeListViewModel.Comment = commentTextBox.Text;
+					commentTextBox.TextChanged += (o, args) => treeListViewModel.Column3 = commentTextBox.Text;
 					e.Control = commentTextBox;
 					break;
 

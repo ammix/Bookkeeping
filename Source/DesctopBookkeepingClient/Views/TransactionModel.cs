@@ -36,11 +36,17 @@ namespace DesktopBookkeepingClient
 				Value = value;
 			}
 		}
+		public string Comment { get; }
 
 		#region Implementation ITreeListViewModel
 		public override string Column1
 		{
 			get { return Counterparty; }
+		}
+
+		public override string Column3
+		{
+			get { return Comment; }
 		}
 		#endregion
 	}

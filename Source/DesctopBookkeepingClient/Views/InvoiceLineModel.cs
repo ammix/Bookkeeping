@@ -32,7 +32,7 @@
 			set { Article = value; }
 		}
 
-		public override string Comment
+		public override string Column3
 		{
 			get { return Note; }
 			set { Note = value; }

@@ -185,7 +185,7 @@
 			// 
 			// olvColumn3
 			// 
-			this.olvColumn3.AspectName = "Comment";
+			this.olvColumn3.AspectName = "Column3";
 			this.olvColumn3.CellEditUseWholeCell = true;
 			this.olvColumn3.CellPadding = new System.Drawing.Rectangle(10, 0, 0, 0);
 			this.olvColumn3.FillsFreeSpace = true;

@@ -43,8 +43,17 @@ namespace DesktopBookkeepingClient
 		}
 
 		public virtual string Column1 { get; set; }
-		public virtual string Column2 { get; private set; } // Value, Sum -> Column2
-		public virtual string Comment { get; set; } // Remark, Note
+		private string column2;
+		public virtual string Column2
+		{
+			get { return column2; }
+			set
+			{
+				_value = decimal.Parse(value);
+				column2 = _value.ToString("N");
+			}
+		} // Value, Sum -> Column2
+		public virtual string Column3 { get; set; } // Remark, Note
 		public virtual string Account { get; set; }
 		public virtual string Balance { get; set; }
 		public virtual string Time { get; set; }
