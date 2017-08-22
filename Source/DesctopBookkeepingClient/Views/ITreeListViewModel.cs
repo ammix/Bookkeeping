@@ -8,12 +8,12 @@ namespace DesktopBookkeepingClient
 		int? Id { get; }
 		DateTime Date { get; }
 
-		string Column1 { get; } // Tree
-		string Column2 { get; } // Value: Amount, Price, Sum
-		string Column3 { get; } // Remark, Note
-		string Account { get; }
-		string Balance { get; }
-		string Time { get; }
+		string Column1 { get; set; } // Tree: Date, Counterparty, Article
+		string Column2 { get; set; } // Value: DaySum, Amount, Price
+		string Column3 { get; set; } // Remark: Comment, Note
+		string Column4 { get; set; } // Account
+		string Column5 { get; set; } // Balance
+		string Column6 { get; set; } // Time
 
 		bool CanExpand { get; }
 		ITreeListViewModel Parent { get; }

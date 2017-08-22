@@ -224,9 +224,9 @@ namespace DesktopBookkeepingClient
 		}
 
 		// Months have to be in order (without gaps)
-		public List<TreeListViewModel> GetTransactions(/*int month*/)
+		public List<ITreeListViewModel> GetTransactions(/*int month*/)
 		{
-			var finDays = new List<TreeListViewModel>();
+			var finDays = new List<ITreeListViewModel>();
 			var culture = CultureInfo.GetCultureInfo("uk-UA");
 
 			using (var connection = new SqlConnection(connectionString))

@@ -27,7 +27,8 @@ namespace DesktopBookkeepingClient
 
 			if (row != null)
 			{
-				if (string.IsNullOrEmpty(row.Column2) || string.IsNullOrEmpty(row.Account))
+				//if (string.IsNullOrEmpty(row.Column2) || string.IsNullOrEmpty(row.Column4))
+				if (row.Amount == 0 || string.IsNullOrEmpty(row.Account))
 				{
 					MessageBox.Show("Ціна і рахунок мають бути заповнені", "Помилка створення транзакції",
 						MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
@@ -53,8 +54,7 @@ namespace DesktopBookkeepingClient
 			//else if (row.NestingLevel == NestingLevel.InvoiceLine)
 			if (rowLine != null)
 			{
-				if (string.IsNullOrEmpty(rowLine.Article) || string.IsNullOrEmpty(rowLine.Column2) ||
-				    !list.ValidateArticle(rowLine)) //TODO !!!
+				if (string.IsNullOrEmpty(rowLine.Article) || rowLine.Price==0 || !list.ValidateArticle(rowLine)) //TODO !!!
 				{
 					MessageBox.Show("Артикул і ціна мають бути заповнені", "Помилка створення invoice line",
 						MessageBoxButtons.OK, MessageBoxIcon.Asterisk);

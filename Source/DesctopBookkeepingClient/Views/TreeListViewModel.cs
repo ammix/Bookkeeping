@@ -9,25 +9,26 @@ namespace DesktopBookkeepingClient
 		#region Constructors
 		protected TreeListViewModel() { }
 
-		protected TreeListViewModel(List<ITreeListViewModel> children)
+		protected TreeListViewModel(int? id, List<ITreeListViewModel> children)
 		{
+			Id = id;
 			AddChildren(children);
 		}
 		#endregion
 
-		public virtual int? Id { get; set; }
+		public int? Id { get; set; }
 		public virtual DateTime Date
 		{
 			get { return Parent.Date; }
 			protected set { }
 		}
 
-		public virtual string Column1 { get; set; }
-		public virtual string Column2 { get; set; } // Value, Sum -> Column2
-		public virtual string Column3 { get; set; } // Remark, Note
-		public virtual string Account { get; set; }
-		public virtual string Balance { get; set; }
-		public virtual string Time { get; set; }
+		string ITreeListViewModel.Column1 { get; set; }
+		string ITreeListViewModel.Column2 { get; set; } // Value, Sum -> Column2
+		string ITreeListViewModel.Column3 { get; set; } // Remark, Note
+		string ITreeListViewModel.Column4 { get; set; }
+		string ITreeListViewModel.Column5 { get; set; }
+		string ITreeListViewModel.Column6 { get; set; }
 
 		public bool CanExpand
 		{

@@ -196,7 +196,7 @@
 			// 
 			// olvColumn5
 			// 
-			this.olvColumn5.AspectName = "Account";
+			this.olvColumn5.AspectName = "Column4";
 			this.olvColumn5.CellEditUseWholeCell = true;
 			this.olvColumn5.CellPadding = new System.Drawing.Rectangle(10, 0, 0, 0);
 			this.olvColumn5.DisplayIndex = 4;
@@ -206,7 +206,7 @@
 			// 
 			// olvColumn4
 			// 
-			this.olvColumn4.AspectName = "Balance";
+			this.olvColumn4.AspectName = "Column5";
 			this.olvColumn4.CellEditUseWholeCell = true;
 			this.olvColumn4.DisplayIndex = 3;
 			this.olvColumn4.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -217,7 +217,7 @@
 			// 
 			// olvColumn6
 			// 
-			this.olvColumn6.AspectName = "Time";
+			this.olvColumn6.AspectName = "Column6";
 			this.olvColumn6.CellEditUseWholeCell = true;
 			this.olvColumn6.IsEditable = false;
 			this.olvColumn6.Text = "Час";

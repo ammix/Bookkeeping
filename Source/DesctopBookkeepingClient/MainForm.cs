@@ -87,7 +87,7 @@ namespace DesktopBookkeepingClient
 					}
 					else if (cell is TransactionModel)
 					{
-						item.ForeColor = cell.Account != null && cell.Column2.Contains("-") ? Color.Black : Color.Green; //DeepPink
+						item.ForeColor = cell.Column4 != null && cell.Column2.Contains("-") ? Color.Black : Color.Green; //DeepPink
 						item.Font = new Font(font.Name, font.Size + 0, FontStyle.Bold);
 					}
 					break;
@@ -96,11 +96,11 @@ namespace DesktopBookkeepingClient
 				//	item.Font = new Font(font.Name, font.Size, FontStyle.Bold);
 				//	break;
 
-				case "Account":
+				case "Column4":
 					item.ForeColor = Color.Gray;
 					break;
 
-				case "Time":
+				case "Column6":
 					item.ForeColor = Color.LightGray;
 					break;
 			}

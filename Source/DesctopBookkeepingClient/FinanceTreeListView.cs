@@ -7,7 +7,7 @@ namespace DesktopBookkeepingClient
 	public class FinanceTreeListView : TreeListView
 	{
 		private ITreeListViewModel _currentItem;
-		private TreeListViewModel treeListViewModel;
+		private ITreeListViewModel treeListViewModel;
 
 		public ITreeListViewModel CurrentItem //SelectedObject
 		{
@@ -37,7 +37,7 @@ namespace DesktopBookkeepingClient
 		private void FinanceTreeListView_CellEditValidating(object sender, CellEditEventArgs e)
 		{
 			string s1 = ((ITreeListViewModel) e.RowObject).Column2;
-			string s2 = ((ITreeListViewModel) e.RowObject).Account;
+			string s2 = ((ITreeListViewModel) e.RowObject).Column4;
 			//e.Cancel = true;
 		}
 
@@ -189,7 +189,7 @@ namespace DesktopBookkeepingClient
 		protected override void OnCellEditStarting(CellEditEventArgs e)
 		{
 			var row = (ITreeListViewModel) e.RowObject;
-			treeListViewModel = (TreeListViewModel)e.RowObject;
+			treeListViewModel = (ITreeListViewModel)e.RowObject;
 
 			//if (row.NestingLevel == NestingLevel.InvoiceLine)
 			//{
@@ -241,14 +241,14 @@ namespace DesktopBookkeepingClient
 					e.Control = commentTextBox;
 					break;
 
-				case "Account":
+				case "Column4":
 					accountComboBox = new ComboBox {DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/};
 					accountComboBox.Items.AddRange(LocalDb.GetAccounts());
 
 					accountComboBox.Font = Font;
 					accountComboBox.Bounds = e.CellBounds;
 					accountComboBox.Text = (string) e.Value;
-					accountComboBox.TextChanged += (o, args) => treeListViewModel.Account = accountComboBox.Text;
+					accountComboBox.TextChanged += (o, args) => treeListViewModel.Column4 = accountComboBox.Text;
 					e.Control = accountComboBox;
 					break;
 			}
