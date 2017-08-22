@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace DesktopBookkeepingClient
 {
 	// Model for TreeListView control
-	public abstract class TreeListViewModel : ITreeListViewModel
+	public abstract class TreeListViewModel: ITreeListViewModel
 	{
 		#region Constructors
 		protected TreeListViewModel() { }
@@ -23,12 +23,12 @@ namespace DesktopBookkeepingClient
 			protected set { }
 		}
 
-		string ITreeListViewModel.Column1 { get; set; }
-		string ITreeListViewModel.Column2 { get; set; } // Value, Sum -> Column2
-		string ITreeListViewModel.Column3 { get; set; } // Remark, Note
-		string ITreeListViewModel.Column4 { get; set; }
-		string ITreeListViewModel.Column5 { get; set; }
-		string ITreeListViewModel.Column6 { get; set; }
+		public virtual string Column1 { get; set; }
+		public virtual string Column2 { get; set; }
+		public virtual string Column3 { get; set; }
+		public virtual string Column4 { get; set; }
+		public virtual string Column5 { get; set; }
+		public virtual string Column6 { get; set; }
 
 		public bool CanExpand
 		{
@@ -39,7 +39,7 @@ namespace DesktopBookkeepingClient
 
 		public void AddChild(ITreeListViewModel model)
 		{
-			(model as TreeListViewModel).Parent = this;
+			((TreeListViewModel)model).Parent = this;
 			if (Children == null)
 				Children = new List<ITreeListViewModel>();
 			Children.Add(model);
@@ -47,7 +47,7 @@ namespace DesktopBookkeepingClient
 
 		public void InsertChild(int index, ITreeListViewModel model)
 		{
-			(model as TreeListViewModel).Parent = this;
+			((TreeListViewModel)model).Parent = this;
 			if (Children == null)
 				Children = new List<ITreeListViewModel>();
 			Children.Insert(index, model);

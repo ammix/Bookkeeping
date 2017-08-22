@@ -2,7 +2,7 @@
 
 namespace DesktopBookkeepingClient
 {
-	public class TransactionModel : TreeListViewModel, ITreeListViewModel
+	public class TransactionModel : TreeListViewModel
 	{
 		private decimal amount;
 		private string column2;
@@ -46,37 +46,37 @@ namespace DesktopBookkeepingClient
 		public string Time { get; private set; }
 
 		#region Implementation ITreeListViewModel
-		string ITreeListViewModel.Column1
+		public override string Column1
 		{
 			get { return Counterparty; }
 			set { Counterparty = value; }
 		}
 
-		string ITreeListViewModel.Column2
+		public override string Column2
 		{
 			get { return column2; }
 			set { Amount = decimal.Parse(value); }
 		}
 
-		string ITreeListViewModel.Column3
+		public override string Column3
 		{
 			get { return Comment; }
 			set { Comment = value; }
 		}
 
-		string ITreeListViewModel.Column4
+		public override string Column4
 		{
 			get { return Account;  }
 			set { Account = value; }
 		}
 
-		string ITreeListViewModel.Column5
+		public override string Column5
 		{
 			get { return Balance; }
 			set { Balance = value; }
 		}
 
-		string ITreeListViewModel.Column6
+		public override string Column6
 		{
 			get { return Time; }
 			set { Time = value; }

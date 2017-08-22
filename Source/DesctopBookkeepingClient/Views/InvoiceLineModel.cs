@@ -1,6 +1,6 @@
 ﻿namespace DesktopBookkeepingClient
 {
-	public class InvoiceLineModel : TreeListViewModel, ITreeListViewModel
+	public class InvoiceLineModel : TreeListViewModel
 	{
 		private decimal price;
 		private string column2;
@@ -32,19 +32,19 @@
 		public string Note { get; private set; }
 
 		#region Implementation ITreeListViewModel
-		string ITreeListViewModel.Column1
+		public override string Column1
 		{
 			get { return Article; }
 			set { Article = value; }
 		}
 
-		string ITreeListViewModel.Column2
+		public override string Column2
 		{
 			get { return column2; }
 			set { Price = decimal.Parse(value); }
 		}
 
-		string ITreeListViewModel.Column3
+		public override  string Column3
 		{
 			get { return Note; }
 			set { Note = value; }

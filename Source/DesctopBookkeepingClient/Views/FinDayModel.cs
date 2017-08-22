@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace DesktopBookkeepingClient
 {
-	public class FinDayModel : TreeListViewModel, ITreeListViewModel
+	public class FinDayModel : TreeListViewModel
 	{
 		private string date;
 		private DateTime dateTime;
@@ -16,7 +16,7 @@ namespace DesktopBookkeepingClient
 		}
 
 		#region Implementation ITreeListViewModel
-		string ITreeListViewModel.Column1
+		public override string Column1
 		{
 			get { return date; }
 			set { }
