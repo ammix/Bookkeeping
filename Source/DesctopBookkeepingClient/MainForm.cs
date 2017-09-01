@@ -60,52 +60,6 @@ namespace DesktopBookkeepingClient
 			treeListView.ExpandAll();
 		}
 
-		private void treeListView_FormatCell(object sender, FormatCellEventArgs e)
-		{
-			var cell = (ITreeListViewModel) e.Model;
-			var item = e.SubItem; // use SubItem in cell, Item in cell is like first cell in row
-
-			var font = e.Item.Font;
-			switch (e.Column.AspectName)
-			{
-				case "Column1":
-					if (cell is FinDayModel)
-					{
-						item.Font = new Font(font.Name, font.Size, FontStyle.Underline);
-						item.ForeColor = Color.Blue;
-					}
-					else if (cell is InvoiceLineModel)
-					{
-						item.Text = "• " + item.Text;
-					}
-					break;
-
-				case "Column2":
-					if (cell is InvoiceLineModel)
-					{
-						item.Font = new Font(font.Name, font.Size - 0, FontStyle.Regular);
-					}
-					else if (cell is TransactionModel)
-					{
-						item.ForeColor = cell.Column4 != null && cell.Column2.Contains("-") ? Color.Black : Color.Green; //DeepPink
-						item.Font = new Font(font.Name, font.Size + 0, FontStyle.Bold);
-					}
-					break;
-
-				//case "Balance":
-				//	item.Font = new Font(font.Name, font.Size, FontStyle.Bold);
-				//	break;
-
-				case "Column4":
-					item.ForeColor = Color.Gray;
-					break;
-
-				case "Column6":
-					item.ForeColor = Color.LightGray;
-					break;
-			}
-		}
-
 		private void treeListView_FormatRow(object sender, FormatRowEventArgs e)
 		{
 			var cell = (ITreeListViewModel) e.Model;
@@ -279,20 +233,6 @@ namespace DesktopBookkeepingClient
 
 		//	list.StartCellEdit(list.GetItem(n + 1), 0);
 		//}
-
-		private void treeListView_CellEditStarting(object sender, CellEditEventArgs e)
-		{
-			var row = (ITreeListViewModel)e.RowObject;
-
-			if (row is TransactionModel)
-			{
-				olvColumn5.IsEditable = true;
-			}
-			else if (row is InvoiceLineModel)
-			{
-				olvColumn5.IsEditable = false;
-			}
-		}
 
 		private void treeListView_KeyPress(object sender, KeyPressEventArgs e)
 		{

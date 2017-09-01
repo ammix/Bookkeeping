@@ -66,14 +66,14 @@ namespace DesktopBookkeepingClient
 
 		public override string Column4
 		{
-			get { return Account;  }
-			set { Account = value; }
+			get { return Balance; }
+			set { Balance = value; }
 		}
 
 		public override string Column5
 		{
-			get { return Balance; }
-			set { Balance = value; }
+			get { return Account; }
+			set { Account = value; }
 		}
 
 		public override string Column6

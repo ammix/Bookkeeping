@@ -27,7 +27,7 @@ namespace DesktopBookkeepingClient
 
 			if (row != null)
 			{
-				//if (string.IsNullOrEmpty(row.Column2) || string.IsNullOrEmpty(row.Column4))
+				//if (string.IsNullOrEmpty(row.Column2) || string.IsNullOrEmpty(row.Column5))
 				if (row.Amount == 0 || string.IsNullOrEmpty(row.Account))
 				{
 					MessageBox.Show("Ціна і рахунок мають бути заповнені", "Помилка створення транзакції",

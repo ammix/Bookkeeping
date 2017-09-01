@@ -11,8 +11,8 @@ namespace DesktopBookkeepingClient
 		string Column1 { get; set; } // Tree: Date, Counterparty, Article
 		string Column2 { get; set; } // Value: DaySum, Amount, Price
 		string Column3 { get; set; } // Remark: Comment, Note
-		string Column4 { get; set; } // Account
-		string Column5 { get; set; } // Balance
+		string Column4 { get; set; } // Balance
+		string Column5 { get; set; } // Account
 		string Column6 { get; set; } // Time
 
 		bool CanExpand { get; }

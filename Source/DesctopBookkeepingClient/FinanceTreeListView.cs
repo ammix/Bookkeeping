@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using BrightIdeasSoftware;
 using System.Windows.Forms;
 
@@ -37,7 +38,7 @@ namespace DesktopBookkeepingClient
 		private void FinanceTreeListView_CellEditValidating(object sender, CellEditEventArgs e)
 		{
 			string s1 = ((ITreeListViewModel) e.RowObject).Column2;
-			string s2 = ((ITreeListViewModel) e.RowObject).Column4;
+			string s2 = ((ITreeListViewModel) e.RowObject).Column5;
 			//e.Cancel = true;
 		}
 
@@ -186,9 +187,41 @@ namespace DesktopBookkeepingClient
 			treeListViewModel.Column2 = amountTextBox.Text;
 		}
 
+		protected override void OnSelectionChanged(EventArgs e)
+		{
+			if (SelectedItem.RowObject is FinDayModel)
+			{
+				AllColumns[0].IsEditable = false;
+				AllColumns[1].IsEditable = false;
+				AllColumns[2].IsEditable = false;
+				AllColumns[3].IsEditable = false;
+				AllColumns[4].IsEditable = false;
+				AllColumns[5].IsEditable = false;
+			}
+			else if (SelectedItem.RowObject is TransactionModel)
+			{
+				AllColumns[0].IsEditable = true;
+				AllColumns[1].IsEditable = true;
+				AllColumns[2].IsEditable = true;
+				AllColumns[3].IsEditable = false;
+				AllColumns[4].IsEditable = true;
+				AllColumns[5].IsEditable = false;
+			}
+			else if (SelectedItem.RowObject is InvoiceLineModel)
+			{
+				AllColumns[0].IsEditable = true;
+				AllColumns[1].IsEditable = true;
+				AllColumns[2].IsEditable = true;
+				AllColumns[3].IsEditable = false;
+				AllColumns[4].IsEditable = false;
+				AllColumns[5].IsEditable = false;
+			}
+
+			base.OnSelectionChanged(e);
+		}
+
 		protected override void OnCellEditStarting(CellEditEventArgs e)
 		{
-			var row = (ITreeListViewModel) e.RowObject;
 			treeListViewModel = (ITreeListViewModel)e.RowObject;
 
 			//if (row.NestingLevel == NestingLevel.InvoiceLine)
@@ -196,8 +229,6 @@ namespace DesktopBookkeepingClient
 			//	//CellEditTabChangesRows = true;
 			//	//CellEditEnterChangesRows = true;
 			//}
-
-			base.OnCellEditStarting(e);
 
 			switch (e.Column.AspectName)
 			{
@@ -226,7 +257,7 @@ namespace DesktopBookkeepingClient
 					if (treeListViewModel is TransactionModel)
 						amountTextBox.Text = ((TransactionModel) treeListViewModel).Amount.ToString("F2");
 					else if (treeListViewModel is InvoiceLineModel)
-						amountTextBox.Text = ((InvoiceLineModel)treeListViewModel).Price.ToString("F2");
+						amountTextBox.Text = ((InvoiceLineModel) treeListViewModel).Price.ToString("F2");
 					amountTextBox.Leave += SetColumn2;
 					e.Control = amountTextBox;
 					break;
@@ -241,17 +272,19 @@ namespace DesktopBookkeepingClient
 					e.Control = commentTextBox;
 					break;
 
-				case "Column4":
+				case "Column5":
 					accountComboBox = new ComboBox {DropDownStyle = ComboBoxStyle.DropDown /*DropDownList*/};
 					accountComboBox.Items.AddRange(LocalDb.GetAccounts());
 
 					accountComboBox.Font = Font;
 					accountComboBox.Bounds = e.CellBounds;
 					accountComboBox.Text = (string) e.Value;
-					accountComboBox.TextChanged += (o, args) => treeListViewModel.Column4 = accountComboBox.Text;
+					accountComboBox.TextChanged += (o, args) => treeListViewModel.Column5 = accountComboBox.Text;
 					e.Control = accountComboBox;
 					break;
 			}
+
+			base.OnCellEditStarting(e);
 		}
 
 		//Known issues:
@@ -379,6 +412,54 @@ namespace DesktopBookkeepingClient
 			RebuildAll(true);
 
 			//treeListView.BuildList();
+		}
+
+		protected override void OnFormatCell(FormatCellEventArgs args)
+		{
+			var cell = (ITreeListViewModel)args.Model;
+			var item = args.SubItem; // use SubItem in cell, Item in cell is like first cell in row
+
+			var font = args.Item.Font;
+			switch (args.Column.AspectName)
+			{
+				case "Column1":
+					if (cell is FinDayModel)
+					{
+						item.Font = new Font(font.Name, font.Size, FontStyle.Underline);
+						item.ForeColor = Color.Blue;
+					}
+					else if (cell is InvoiceLineModel)
+					{
+						item.Text = "• " + item.Text;
+					}
+					break;
+
+				case "Column2":
+					if (cell is InvoiceLineModel)
+					{
+						item.Font = new Font(font.Name, font.Size - 0, FontStyle.Regular);
+					}
+					else if (cell is TransactionModel)
+					{
+						item.ForeColor = cell.Column5 != null && cell.Column2.Contains("-") ? Color.Black : Color.Green; //DeepPink
+						item.Font = new Font(font.Name, font.Size + 0, FontStyle.Bold);
+					}
+					break;
+
+				//case "Balance":
+				//	item.Font = new Font(font.Name, font.Size, FontStyle.Bold);
+				//	break;
+
+				case "Column5":
+					item.ForeColor = Color.Gray;
+					break;
+
+				case "Column6":
+					item.ForeColor = Color.LightGray;
+					break;
+			}
+
+			base.OnFormatCell(args);
 		}
 	}
 }
