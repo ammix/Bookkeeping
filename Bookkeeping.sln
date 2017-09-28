@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopBookkeepingClient", "DesctopBookkeepingClient\DesktopBookkeepingClient.csproj", "{A9B75C31-6177-411D-8CAE-D9FF09392CC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopBookkeepingClient", "Source\DesctopBookkeepingClient\DesktopBookkeepingClient.csproj", "{A9B75C31-6177-411D-8CAE-D9FF09392CC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookkeepingServer", "BookkeepingServer\BookkeepingServer.csproj", "{2C79824B-DD84-4D52-BEF2-81BDA196CEEB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookkeepingServer", "Source\BookkeepingServer\BookkeepingServer.csproj", "{2C79824B-DD84-4D52-BEF2-81BDA196CEEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookkeepingServer.Tests", "BookkeepingServer.Tests\BookkeepingServer.Tests.csproj", "{76E358EE-9EC9-486A-B245-55B551E0D863}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookkeepingServer.Tests", "Source\BookkeepingServer.Tests\BookkeepingServer.Tests.csproj", "{76E358EE-9EC9-486A-B245-55B551E0D863}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopBookkeepingClient.Tests", "DesktopBookkepingClient.Tests\DesktopBookkeepingClient.Tests.csproj", "{AE96A485-702E-4809-A12E-CD84178E66B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopBookkeepingClient.Tests", "Source\DesktopBookkepingClient.Tests\DesktopBookkeepingClient.Tests.csproj", "{AE96A485-702E-4809-A12E-CD84178E66B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookkeepingServerChecker", "BookkeepingServerChecker\BookkeepingServerChecker.csproj", "{CF2797FA-695E-4962-A8CE-59D3C5530444}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookkeepingServerChecker", "Source\BookkeepingServerChecker\BookkeepingServerChecker.csproj", "{CF2797FA-695E-4962-A8CE-59D3C5530444}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Privat24Module", "Privat24Module\Privat24Module.csproj", "{55E43F92-5926-41A6-8101-41D315A727AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Privat24Module", "Source\Privat24Module\Privat24Module.csproj", "{55E43F92-5926-41A6-8101-41D315A727AE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{ACB15F55-C214-4188-B3A3-7AC9AF6F3998}"
 EndProject
