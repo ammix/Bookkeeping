@@ -155,6 +155,8 @@ namespace DesktopBookkeepingClient
 			//var model = (ITreeListViewModel)treeListView.SelectedObject;
 			//var index = treeListView.SelectedIndex;
 			//treeListView.MoveObjects(index--, new[] { model });
+
+			treeListView.BuildBalance();
 		}
 
 		ITreeListViewModel clickedRow;

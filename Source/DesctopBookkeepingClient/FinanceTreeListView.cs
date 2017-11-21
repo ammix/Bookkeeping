@@ -189,32 +189,36 @@ namespace DesktopBookkeepingClient
 
 		protected override void OnSelectionChanged(EventArgs e)
 		{
-			if (SelectedItem.RowObject is FinDayModel)
+			if (SelectedItem != null)
 			{
-				AllColumns[0].IsEditable = false;
-				AllColumns[1].IsEditable = false;
-				AllColumns[2].IsEditable = false;
-				AllColumns[3].IsEditable = false;
-				AllColumns[4].IsEditable = false;
-				AllColumns[5].IsEditable = false;
-			}
-			else if (SelectedItem.RowObject is TransactionModel)
-			{
-				AllColumns[0].IsEditable = true;
-				AllColumns[1].IsEditable = true;
-				AllColumns[2].IsEditable = true;
-				AllColumns[3].IsEditable = false;
-				AllColumns[4].IsEditable = true;
-				AllColumns[5].IsEditable = false;
-			}
-			else if (SelectedItem.RowObject is InvoiceLineModel)
-			{
-				AllColumns[0].IsEditable = true;
-				AllColumns[1].IsEditable = true;
-				AllColumns[2].IsEditable = true;
-				AllColumns[3].IsEditable = false;
-				AllColumns[4].IsEditable = false;
-				AllColumns[5].IsEditable = false;
+				// TODO: refactor this
+				if (SelectedItem.RowObject is FinDayModel)
+				{
+					AllColumns[0].IsEditable = false;
+					AllColumns[1].IsEditable = false;
+					AllColumns[2].IsEditable = false;
+					AllColumns[3].IsEditable = false;
+					AllColumns[4].IsEditable = false;
+					AllColumns[5].IsEditable = false;
+				}
+				else if (SelectedItem.RowObject is TransactionModel)
+				{
+					AllColumns[0].IsEditable = true;
+					AllColumns[1].IsEditable = true;
+					AllColumns[2].IsEditable = true;
+					AllColumns[3].IsEditable = false;
+					AllColumns[4].IsEditable = true;
+					AllColumns[5].IsEditable = false;
+				}
+				else if (SelectedItem.RowObject is InvoiceLineModel)
+				{
+					AllColumns[0].IsEditable = true;
+					AllColumns[1].IsEditable = true;
+					AllColumns[2].IsEditable = true;
+					AllColumns[3].IsEditable = false;
+					AllColumns[4].IsEditable = false;
+					AllColumns[5].IsEditable = false;
+				}
 			}
 
 			base.OnSelectionChanged(e);
@@ -460,6 +464,11 @@ namespace DesktopBookkeepingClient
 			}
 
 			base.OnFormatCell(args);
+		}
+
+		public void BuildBalance()
+		{
+			
 		}
 	}
 }

@@ -54,9 +54,13 @@ CREATE TABLE Transactions
 	AccountId INT NOT NULL FOREIGN KEY REFERENCES Accounts(Id),
 	CounterpartyId INT FOREIGN KEY REFERENCES Counterparties(Id),
 	Amount MONEY NOT NULL,
-	TransactionDate DATETIME NOT NULL DEFAULT GETDATE(),
+	IsTrsBalance BIT NOT NULL,
+	Balance MONEY NOT NULL,
+	Date DATE NOT NULL,
+	Time TIME(0),
+	Note NVARCHAR(255),
 	Invoice VARBINARY(MAX),
-	Note NVARCHAR(255)
+	Order INT NOT NULL
 )
 
 CREATE TABLE InvoiceLines
@@ -80,35 +84,3 @@ CREATE TABLE Snapshots
 )
 
 GO
-
-CREATE VIEW MainView
-AS SELECT
-t.Id,
-i.Id AS LineId,
-t.TransactionDate AS Date,
-c.Name AS Counterparty,
-ar.Label AS Article,
-i.Price,
-i.Note AS Note,
-t.Note AS Comment,
-t.Amount,
-ac.Name AS Account,
-ac.Currency
-
-FROM Transactions t 
-	LEFT OUTER JOIN InvoiceLines i ON i.TransactionId = t.Id
-	LEFT OUTER JOIN Articles ar ON ar.Id = i.ArticleId
-	LEFT OUTER JOIN CounterParties c ON c.Id = t.CounterpartyId
-	INNER JOIN Accounts ac ON ac.Id = t.AccountId
-
-GO
-
-CREATE VIEW [SnapshotsView]
-AS SELECT
-a.[Name] AS [Account],
-s.[Amount],
-s.[SnapShotDate] AS [Date]
-
-FROM [Snapshots] s
-	INNER JOIN [Accounts] a ON s.AccountId = a.Id
-	WHERE DATEPART(day, s.[SnapshotDate]) = 1

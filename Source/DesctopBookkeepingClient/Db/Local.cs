@@ -91,15 +91,23 @@ namespace DesktopBookkeepingClient
 			{
 				connection.Open();
 				var cmdText = $@"
-					INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, TransactionDate, Invoice, Note) 
-						SELECT 1, 
-					(SELECT [Id] FROM [Accounts] WHERE [Name] = N'{transaction.Account}'), 
-					(SELECT [Id] FROM [Counterparties] WHERE [Name] = N'{transaction.Counterparty}'), 
-						{transaction.Amount}, @DateTime, NULL, N'{transaction.Comment}'";
+INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, IsTrsBalance, Balance, [Date], [Time], Note, Invoice, [Order])
+	SELECT 1,
+	(SELECT [Id] FROM [Accounts] WHERE [Name] = N'{transaction.Account}'), 
+	(SELECT [Id] FROM [Counterparties] WHERE [Name] = N'{transaction.Counterparty}'), 
+	{transaction.Amount},
+	'FALSE',
+	0.0,
+	@Date,
+	NULL,
+	N'{transaction.Comment}',
+	NULL,
+	(SELECT MAX([Order])+1 FROM [Transactions] WHERE Date = @Date)
+";
 
 				var param = new SqlParameter
 				{
-					ParameterName = "@DateTime",
+					ParameterName = "@Date",
 					Value = transaction.Date,
 					SqlDbType = SqlDbType.DateTime
 				};
@@ -207,15 +215,15 @@ namespace DesktopBookkeepingClient
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				var cmdText = $"DECLARE @date1 DATETIME = (SELECT TransactionDate FROM [Transactions] WHERE Id = {transaction1.Id}) " +
-							  $"DECLARE @date2 DATETIME = (SELECT TransactionDate FROM [Transactions] WHERE Id = {transaction2.Id}) " +
+				var cmdText = $"DECLARE @order1 INT = (SELECT [Order] FROM [Transactions] WHERE Id = {transaction1.Id}) " +
+							  $"DECLARE @order2 INT = (SELECT [Order] FROM [Transactions] WHERE Id = {transaction2.Id}) " +
 
 				              "UPDATE [Transactions] " +
-				              "SET TransactionDate = @date2 " +
+				              "SET [Order] = @order2 " +
 				              $"WHERE Id = {transaction1.Id} " +
 
 				              "UPDATE [Transactions] " +
-				              "SET TransactionDate = @date1 " +
+				              "SET [Order] = @order1 " +
 				              $"WHERE Id = {transaction2.Id}";
 
 				var command = new SqlCommand(cmdText, connection);
@@ -365,7 +373,7 @@ namespace DesktopBookkeepingClient
 			SELECT
 			t.Id,
 			i.Id AS LineId,
-			t.TransactionDate AS Date,
+			t.Date AS Date,
 			c.Name AS Counterparty,
 			ar.Label AS Article,
 			i.Price,
@@ -381,7 +389,7 @@ namespace DesktopBookkeepingClient
 				LEFT OUTER JOIN CounterParties c ON c.Id = t.CounterpartyId
 				INNER JOIN Accounts ac ON ac.Id = t.AccountId
 
-			ORDER BY [Date] ASC
+			ORDER BY [Date], [Order]
 			";
 
 		const string getSnapshotSql = @"
