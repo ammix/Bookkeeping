@@ -30,6 +30,22 @@ namespace DesktopBookkeepingClient
 		{
 			treeListView.AddDecoration(new EditingCellBorderDecoration { UseLightbox = true });
 
+			//treeListView.UseHotItem = true;
+			var rbd = new FinanceRowBorderDecoration
+			{
+				//BorderPen = new Pen(Color.FromArgb(128, Color.LightSeaGreen), 2),
+				//BoundsPadding = new Size(1, 1),
+				//CornerRounding = 4.0f
+				BorderPen = new Pen(Color.DarkBlue, 2),
+				CornerRounding = 8,
+				BoundsPadding = new Size(10, 8),
+				FillBrush = new SolidBrush(Color.FromArgb(64, Color.Black))
+			};
+
+			// Put the decoration onto the hot item
+			treeListView.HotItemStyle = new HotItemStyle { Decoration = rbd };
+
+
 			treeListView.CanExpandGetter = model => ((ITreeListViewModel)model).CanExpand;
 			treeListView.ChildrenGetter = model => ((ITreeListViewModel)model).Children;
 
@@ -41,16 +57,17 @@ namespace DesktopBookkeepingClient
 			treeListView.FullRowSelect = true;
 			treeListView.UseCellFormatEvents = true;
 
+
 			//treeListView.GetColumn(2).AspectPutter = delegate (object model, object newValue)
 			//{
 			//	ITreeListViewModel m = (ITreeListViewModel)model;
 			//	m.Comment = (string)newValue;
 			//};
 
-							//this.columnHeaderSalaryRate.AspectPutter = delegate (object model, object newValue) {
-							//	Person p = (Person)model;
-							//	p.SetRate((double)newValue);
-							//};
+			//this.columnHeaderSalaryRate.AspectPutter = delegate (object model, object newValue) {
+			//	Person p = (Person)model;
+			//	p.SetRate((double)newValue);
+			//};
 
 
 			//treeListView.CellEditUseWholeCell = true;
@@ -238,31 +255,13 @@ namespace DesktopBookkeepingClient
 
 		private void treeListView_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			var row = treeListView.SelectedObject as TransactionModel;
-			if (row == null) return;
-
-			var index = row.Parent.Children.IndexOf(row);
-
-			//var index = clickedRow.Parent.Children.IndexOf(clickedRow);
-			//var upper = clickedRow.Parent.Children[index - 1];
-			//var downer = clickedRow.Parent.Children[index + 1];
 			switch (e.KeyChar)
 			{
 				case '-':
-					row.Parent.Children.RemoveAt(index);
-					row.Parent.Children.Insert(index + 1, row);
-					treeListView.RebuildAll(true);
-
-					var next = (TransactionModel) row.Parent.Children[index];
-					LocalDb.MoveTransaction(row, next);
+					treeListView.MoveSelectedTransactionDown();
 					break;
 				case '+':
-					row.Parent.Children.RemoveAt(index);
-					row.Parent.Children.Insert(index - 1, row);
-					treeListView.RebuildAll(true);
-
-					var prev = (TransactionModel) row.Parent.Children[index]; // - 1];
-					LocalDb.MoveTransaction(row, prev);
+					treeListView.MoveSelectedTransactionUp();
 					break;
 			}
 		}

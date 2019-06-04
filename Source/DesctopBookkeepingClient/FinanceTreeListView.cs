@@ -1,12 +1,149 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using BrightIdeasSoftware;
 using System.Windows.Forms;
 
 namespace DesktopBookkeepingClient
 {
+	/*
+
+public override void Draw(ObjectListView olv, Graphics g, Rectangle r)
+{
+    Rectangle bounds = this.CalculateBounds();
+    if (!bounds.IsEmpty)
+        this.DrawFilledBorder(g, bounds);
+}
+
+        protected void DrawFilledBorder(Graphics g, Rectangle bounds)
+        {
+            bounds.Inflate(this.BoundsPadding);
+            GraphicsPath path = this.GetRoundedRect(bounds, this.CornerRounding);
+            if (this.FillGradientFrom != null && this.FillGradientTo != null) {
+                if (this.FillBrush != null)
+                    this.FillBrush.Dispose();
+                this.FillBrush = new LinearGradientBrush(bounds, this.FillGradientFrom.Value, this.FillGradientTo.Value, this.FillGradientMode);
+            }
+            if (this.FillBrush != null)
+                g.FillPath(this.FillBrush, path);
+            if (this.BorderPen != null)
+                g.DrawPath(this.BorderPen, path);
+        }
+        
+        ------------------------------------------------
+        
+        
+        public override void Draw(ObjectListView olv, Graphics g, Rectangle r) {
+            if (!olv.IsCellEditing) 
+                return;
+
+            Rectangle bounds = olv.CellEditor.Bounds;
+            if (bounds.IsEmpty)
+                return;
+
+            bounds.Inflate(this.BoundsPadding);
+            GraphicsPath path = this.GetRoundedRect(bounds, this.CornerRounding);
+            if (this.FillBrush != null) {
+                if (this.UseLightbox) {
+                    using (Region newClip = new Region(r)) {
+                        newClip.Exclude(path);
+                        Region originalClip = g.Clip;
+                        g.Clip = newClip;
+                        g.FillRectangle(this.FillBrush, r);
+                        g.Clip = originalClip;
+                    }
+                } else {
+                    g.FillPath(this.FillBrush, path);
+                }
+            }
+            if (this.BorderPen != null)
+                g.DrawPath(this.BorderPen, path);
+        }
+	*/
+	public class FinanceRowBorderDecoration : RowBorderDecoration
+	{
+		public override void Draw(ObjectListView olv, Graphics g, Rectangle r)
+		{
+			//base.Draw(olv, g, r);
+			Rectangle bounds = this.CalculateBounds();
+			if (!bounds.IsEmpty)
+				this.DrawFilledBorderNew(g, bounds, r);
+		}
+
+		private void DrawFilledBorderNew(Graphics g, Rectangle bounds, Rectangle r)
+		{
+			bounds.Inflate(this.BoundsPadding);
+			GraphicsPath path = this.GetRoundedRect(bounds, this.CornerRounding);
+			if (this.FillGradientFrom != null && this.FillGradientTo != null)
+			{
+				if (this.FillBrush != null)
+					this.FillBrush.Dispose();
+				this.FillBrush = new LinearGradientBrush(bounds, this.FillGradientFrom.Value, this.FillGradientTo.Value, this.FillGradientMode);
+			}
+			if (this.FillBrush != null)
+				//g.FillPath(this.FillBrush, path);
+			{
+				using (Region newClip = new Region(r))
+				{
+					newClip.Exclude(path);
+					Region originalClip = g.Clip;
+					g.Clip = newClip;
+					g.FillRectangle(this.FillBrush, r);
+					g.Clip = originalClip;
+				}
+			}
+			if (this.BorderPen != null)
+				g.DrawPath(this.BorderPen, path);
+		}
+	}
+
 	public class FinanceTreeListView : TreeListView
 	{
+		protected override bool ProcessDialogKey(Keys keyData)
+		{
+			// Treat F2 as a request to edit the primary column
+			if (keyData == (Keys.F2 | Keys.Shift))
+			{
+				//this.EditSubItem((OLVListItem)this.FocusedItem, 0);
+				MessageBox.Show(this, "SHIFT + F2");
+				return base.ProcessDialogKey(keyData);
+			}
+
+			//this.EditSubItem();
+
+			return base.ProcessDialogKey(keyData);
+		}
+
+		//protected override bool ProcessDialogKey(Keys keyData)
+		//{
+
+		//	if (this.IsCellEditing)
+		//		return this.CellEditKeyEngine.HandleKey(this, keyData);
+
+		//	// Treat F2 as a request to edit the primary column
+		//	if (keyData == Keys.F2)
+		//	{
+		//		this.EditSubItem((OLVListItem)this.FocusedItem, 0);
+		//		return base.ProcessDialogKey(keyData);
+		//	}
+
+		//	// Treat Ctrl-C as Copy To Clipboard. 
+		//	if (this.CopySelectionOnControlC && keyData == (Keys.C | Keys.Control))
+		//	{
+		//		this.CopySelectionToClipboard();
+		//		return true;
+		//	}
+
+		//	// Treat Ctrl-A as Select All.
+		//	if (this.SelectAllOnControlA && keyData == (Keys.A | Keys.Control))
+		//	{
+		//		this.SelectAll();
+		//		return true;
+		//	}
+
+		//	return base.ProcessDialogKey(keyData);
+		//}
+
 		private ITreeListViewModel _currentItem;
 		private ITreeListViewModel treeListViewModel;
 
@@ -158,7 +295,8 @@ namespace DesktopBookkeepingClient
 			//	((TreeListViewModel)e.RowObject).Value = decimal.Parse(amountTextBox.Text);
 			//};
 
-			amountTextBox.Leave -= SetColumn2;
+			if (amountTextBox != null) // F2 -> Esc => Exception
+				amountTextBox.Leave -= SetColumn2;
 
 			if (CurrentItem != null)
 			{
@@ -416,6 +554,66 @@ namespace DesktopBookkeepingClient
 			RebuildAll(true);
 
 			//treeListView.BuildList();
+		}
+
+		public void MoveSelectedTransactionUp()
+		{
+			//var index = clickedRow.Parent.Children.IndexOf(clickedRow);
+			//var upper = clickedRow.Parent.Children[index - 1];
+			//var downer = clickedRow.Parent.Children[index + 1];
+
+			var row = SelectedObject as TransactionModel;
+			if (row == null) return;
+
+			var index = row.Parent.Children.IndexOf(row);
+
+			if (index != 0)
+			{
+				row.Parent.Children.RemoveAt(index);
+				row.Parent.Children.Insert(index - 1, row);
+
+				var prev = (TransactionModel)row.Parent.Children[index]; // - 1];
+				LocalDb.MoveTransaction(row, prev);
+			}
+			else
+			{
+				row.Parent.Children.RemoveAt(index);
+				var roots = EnumerableToArray(Roots, true);
+				var k = roots.IndexOf(row.Parent);
+				var finDay = (FinDayModel)roots[k - 1];
+				finDay.AddChild(row);
+
+				LocalDb.MoveTransactionIntoDate(row, finDay, "TOP");
+			}
+			RebuildAll(true);
+		}
+
+		public void MoveSelectedTransactionDown()
+		{
+			var row = SelectedObject as TransactionModel;
+			if (row == null) return;
+
+			var index = row.Parent.Children.IndexOf(row);
+
+			if (index < row.Parent.Children.Count - 1)
+			{
+				row.Parent.Children.RemoveAt(index);
+				row.Parent.Children.Insert(index + 1, row);
+				var next = (TransactionModel)row.Parent.Children[index];
+				LocalDb.MoveTransaction(row, next);
+			}
+			else
+			{
+				row.Parent.Children.RemoveAt(index);
+				var roots = EnumerableToArray(Roots, true);
+				var k = roots.IndexOf(row.Parent);
+				var finDay = (FinDayModel) roots[k + 1];
+				finDay.InsertChild(0, row);
+
+				LocalDb.MoveTransactionIntoDate(row, finDay, "BOTTOM");
+			}
+
+			RebuildAll(true);
 		}
 
 		protected override void OnFormatCell(FormatCellEventArgs args)

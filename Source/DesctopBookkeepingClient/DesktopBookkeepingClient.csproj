@@ -70,9 +70,7 @@
       <DependentUpon>DateDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="FinanceCellEditKeyEngine.cs" />
-    <Compile Include="FinanceTreeListView.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="FinanceTreeListView.cs" />
     <Compile Include="Db\Local.cs" />
     <Compile Include="Db\Remote.cs" />
     <Compile Include="InputWindow.cs">
@@ -116,7 +114,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="App.debug.config" />
+    <None Include="App.debug.config_">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -139,9 +139,11 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  -->
+
   <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v14.0\Web\Microsoft.Web.Publishing.Tasks.dll" />
   <Target Name="AfterBuild">
     <TransformXml Source="App.config" Transform="App.$(Configuration).config" Destination="$(OutputPath)$(TargetFileName).config" StackTrace="true" />
   </Target>
+  https://stackoverflow.com/questions/20358747/transformxml-task-could-not-be-loaded-from-microsoft-web-publishing-tasks-dll
+    -->
 </Project>

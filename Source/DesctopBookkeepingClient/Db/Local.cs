@@ -102,7 +102,7 @@ INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, IsTrsBala
 	NULL,
 	N'{transaction.Comment}',
 	NULL,
-	(SELECT MAX([Order])+1 FROM [Transactions] WHERE Date = @Date)
+	(SELECT COALESCE(MAX([Order]), 0)+1 FROM [Transactions] WHERE Date = @Date)
 ";
 
 				var param = new SqlParameter
@@ -229,6 +229,11 @@ INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, IsTrsBala
 				var command = new SqlCommand(cmdText, connection);
 				command.ExecuteNonQuery();
 			}
+		}
+
+		public static void MoveTransactionIntoDate(TransactionModel transaction, FinDayModel finDay, string flag)
+		{
+			
 		}
 
 		// Months have to be in order (without gaps)
