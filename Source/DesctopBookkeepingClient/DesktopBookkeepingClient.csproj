@@ -69,6 +69,7 @@
     <Compile Include="DateDialog.Designer.cs">
       <DependentUpon>DateDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="BookkeepingDomain\BookeepingService.cs" />
     <Compile Include="FinanceCellEditKeyEngine.cs" />
     <Compile Include="FinanceTreeListView.cs" />
     <Compile Include="Db\Local.cs" />

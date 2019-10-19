@@ -9,6 +9,7 @@ namespace DesktopBookkeepingClient
 	public partial class MainForm : Form
 	{
 		bool flag = false;
+		LocalDb localDb;
 
 		public MainForm()
 		{
@@ -49,7 +50,7 @@ namespace DesktopBookkeepingClient
 			treeListView.CanExpandGetter = model => ((ITreeListViewModel)model).CanExpand;
 			treeListView.ChildrenGetter = model => ((ITreeListViewModel)model).Children;
 
-			var localDb = new LocalDb();
+			localDb = new LocalDb();
 			treeListView.Roots = localDb.GetTransactions();
 
 			treeListView.TreeColumnRenderer.IsShowLines = false;
@@ -173,7 +174,9 @@ namespace DesktopBookkeepingClient
 			//var index = treeListView.SelectedIndex;
 			//treeListView.MoveObjects(index--, new[] { model });
 
-			treeListView.BuildBalance();
+
+			//treeListView.BuildBalance();
+			localDb.RebuildBalance();
 		}
 
 		ITreeListViewModel clickedRow;

@@ -20,7 +20,7 @@ namespace DesktopBookkeepingClient
 		string comment;
 		decimal amount;
 		string account;
-		Dictionary<string, decimal> balance = new Dictionary<string, decimal>();
+		string balance;
 		string currency;
 
 		readonly static string connectionString = ConfigurationManager.ConnectionStrings["BookkeepingDb"].ConnectionString;
@@ -97,19 +97,18 @@ INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, IsTrsBala
 	(SELECT [Id] FROM [Counterparties] WHERE [Name] = N'{transaction.Counterparty}'), 
 	{transaction.Amount},
 	'FALSE',
-	0.0,
+	{transaction.Amount} + (SELECT TOP 1 [Balance] FROM [Transactions] ORDER BY [Date] DESC, [Order] DESC),
 	@Date,
 	NULL,
 	N'{transaction.Comment}',
 	NULL,
-	(SELECT COALESCE(MAX([Order]), 0)+1 FROM [Transactions] WHERE Date = @Date)
-";
+	(SELECT COALESCE(MAX([Order]), 0)+1 FROM [Transactions] WHERE Date = @Date)";
 
 				var param = new SqlParameter
 				{
 					ParameterName = "@Date",
 					Value = transaction.Date,
-					SqlDbType = SqlDbType.DateTime
+					SqlDbType = SqlDbType.Date
 				};
 
 				var command = new SqlCommand(cmdText, connection);
@@ -215,6 +214,7 @@ INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, IsTrsBala
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
+				// use DB TRANSACTION
 				var cmdText = $"DECLARE @order1 INT = (SELECT [Order] FROM [Transactions] WHERE Id = {transaction1.Id}) " +
 							  $"DECLARE @order2 INT = (SELECT [Order] FROM [Transactions] WHERE Id = {transaction2.Id}) " +
 
@@ -233,7 +233,7 @@ INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, IsTrsBala
 
 		public static void MoveTransactionIntoDate(TransactionModel transaction, FinDayModel finDay, string flag)
 		{
-			
+			throw new NotImplementedException();
 		}
 
 		// Months have to be in order (without gaps)
@@ -246,16 +246,6 @@ INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, IsTrsBala
 			{
 				connection.Open();
 
-				// Rule: snapshots must be on 00:00 of 1-st new month (and day if exist)
-				//var getSnapshotsSql = new SqlCommand($"SELECT [Account], [Amount] FROM [SnapshotsView] WHERE DATEPART(month, [Date]) = {month}", connection);
-				var getSnapshotsSql = new SqlCommand(getSnapshotSql, connection);
-				using (var dr = getSnapshotsSql.ExecuteReader())
-				{
-					while (dr.Read())
-						balance.Add((string)dr["Account"], (decimal)dr["Amount"]);
-				}
-
-				//var cmdText = $"SELECT * FROM [MainView] WHERE DATEPART(month, [DATE]) = {month} ORDER BY [Date] ASC";
 				var command = new SqlCommand(mainViewSql, connection);
 				using (var dr = command.ExecuteReader())
 				{
@@ -274,7 +264,7 @@ INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, IsTrsBala
 						comment = GetValue(dr, "Comment");
 						amount = (decimal)dr["Amount"]; //$"{dr["Amount"]:N}";
 						account = dr["Account"].ToString();
-						//balance = $"{dr["Balance"]:N}";
+						balance = $"{dr["Balance"]:N}";
 						//balance = snapshotReader.GetInitialAccountValue(account, dateTime);
 						//balance = Balance.GetValue(account, transactionId).ToString("N");
 						currency = GetValue(dr, "Currency");
@@ -313,6 +303,64 @@ INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, IsTrsBala
 			return finDays;
 		}
 
+		public void RebuildBalance()
+		{
+			var cmdText = @"
+			DECLARE @Id INT
+			DECLARE @AccountId INT
+			DECLARE @Amount MONEY
+			DECLARE @RealBalance MONEY
+			DECLARE @IsTrsBalance BIT
+
+			DECLARE @Balance MONEY = 0
+			DECLARE @Balances TABLE
+			(
+				AccountId INT NOT NULL,
+				Balance MONEY NOT NULL DEFAULT 0
+			)
+			INSERT INTO @Balances(AccountId, Balance)
+			SELECT[Id], 0 AS Balance FROM[Bookkeeping].[dbo].[Accounts]
+
+			DECLARE row CURSOR FOR
+				SELECT[Id], [AccountId], [Amount], [IsTrsBalance], [Balance] AS RealBalance
+					FROM[Bookkeeping].[dbo].[Transactions]
+						ORDER BY [Date], [Order]
+
+			UPDATE[Bookkeeping].[dbo].[Transactions]
+				SET[Balance] = 0
+					WHERE[IsTrsBalance] = 0
+
+			OPEN row
+				FETCH NEXT FROM row INTO @Id, @AccountId, @Amount, @IsTrsBalance, @RealBalance
+				WHILE @@FETCH_STATUS = 0
+				BEGIN
+					SET @Balance = (SELECT Balance FROM @Balances WHERE AccountId = @AccountId)
+					SET @Balance = @Balance + @Amount
+
+					IF(@IsTrsBalance = 1 AND @Balance != @RealBalance)
+					BREAK
+
+					UPDATE @Balances SET Balance = @Balance
+						WHERE AccountId = @AccountId
+
+					IF(@IsTrsBalance = 0)
+						UPDATE[Bookkeeping].[dbo].[Transactions] SET[Balance] = @Balance
+							WHERE Id = @Id
+
+					FETCH NEXT FROM row INTO @Id, @AccountId, @Amount, @IsTrsBalance, @RealBalance
+				END
+			CLOSE row
+			DEALLOCATE row";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				var command = new SqlCommand(cmdText, connection);
+				command.ExecuteNonQuery();
+			}
+
+		}
+
 		FinDayModel CreateFinDayView()
 		{
 			return new FinDayModel
@@ -324,9 +372,6 @@ INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, IsTrsBala
 
 		ITreeListViewModel CreateFinTransactionView()
 		{
-			if (balance.ContainsKey(account))
-				balance[account] += amount;
-
 			var transactionModel = new TransactionModel
 			(
 				id: transactionId,
@@ -334,7 +379,8 @@ INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, IsTrsBala
 				amount: amount, //.ToString("N"), //TODO
 				comment: comment,
 				account: account,
-				balance: balance.ContainsKey(account)? balance[account].ToString("N"): "",
+				//balance: balance.ContainsKey(account)? balance[account].ToString("N"): "",
+				balance: balance,
 				time: time
 			);
 			transactionModel.AddChildren((article != null) ? new List<ITreeListViewModel> { CreateInvoiceLineView() } : null);
@@ -386,6 +432,7 @@ INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, IsTrsBala
 			t.Note AS Comment,
 			t.Amount,
 			ac.Name AS Account,
+			t.Balance,
 			ac.Currency
 
 			FROM Transactions t
@@ -408,3 +455,68 @@ INSERT INTO [Transactions] (UserId, AccountId, CounterpartyId, Amount, IsTrsBala
 			";
 	}
 }
+
+/*
+ 
+DECLARE @StartDate DATE = '2017-01-01'
+DECLARE @EndDate DATE = '2017-01-02'
+
+--SELECT * FROM [Bookkeeping].[dbo].[Transactions]
+--	WHERE [Date] = @StartDate
+--	  ORDER BY [Order] DESC
+----------------------------------------------
+UPDATE[Bookkeeping].[dbo].[Transactions]
+	SET[Balance] = 0
+		WHERE[IsTrsBalance] = 0
+UPDATE[Bookkeeping].[dbo].[Transactions]
+	SET[Amount] = 0
+		WHERE[IsTrsBalance] = 1
+
+DECLARE @Id INT
+DECLARE @AccountId INT
+DECLARE @Amount MONEY
+DECLARE @RealBalance MONEY
+DECLARE @IsTrsBalance BIT
+DECLARE @Date DATE
+
+DECLARE @Balance MONEY = 0
+DECLARE @Balances TABLE
+(
+	AccountId INT NOT NULL,
+	Balance MONEY
+)
+DECLARE row CURSOR FOR
+	SELECT [Id], [AccountId], [Amount], [IsTrsBalance], [Balance] AS RealBalance, [Date]
+		FROM[Bookkeeping].[dbo].[Transactions]
+			WHERE [Date] >= @StartDate AND [Date] <= @EndDate
+				ORDER BY [Date], [Order]
+
+OPEN row
+	FETCH NEXT FROM row INTO @Id, @AccountId, @Amount, @IsTrsBalance, @RealBalance, @Date
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		SET @Balance = (SELECT Balance FROM @Balances WHERE AccountId = @AccountId)
+		IF @Balance IS NULL
+			BEGIN
+				INSERT INTO @Balances (AccountId, Balance)
+					VALUES(@AccountId, @RealBalance)
+				CONTINUE
+			END
+
+		SET @Balance = @Balance + @Amount
+
+		IF(@IsTrsBalance = 1 AND @Balance != @RealBalance)
+		BREAK
+
+		UPDATE @Balances SET Balance = @Balance
+			WHERE AccountId = @AccountId
+
+		IF(@IsTrsBalance = 0)
+			UPDATE[Bookkeeping].[dbo].[Transactions] SET[Balance] = @Balance
+				WHERE Id = @Id
+
+		FETCH NEXT FROM row INTO @Id, @AccountId, @Amount, @IsTrsBalance, @RealBalance, @Date
+	END
+CLOSE row
+DEALLOCATE row
+ */

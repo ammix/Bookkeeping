@@ -91,19 +91,22 @@
 			this.tabControl1.Controls.Add(this.tabPage2);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.tabControl1.Location = new System.Drawing.Point(0, 82);
+			this.tabControl1.Location = new System.Drawing.Point(0, 88);
+			this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(1167, 529);
+			this.tabControl1.Size = new System.Drawing.Size(1556, 664);
 			this.tabControl1.TabIndex = 2;
 			// 
 			// tabPage1
 			// 
 			this.tabPage1.Controls.Add(this.splitContainer1);
-			this.tabPage1.Location = new System.Drawing.Point(4, 25);
+			this.tabPage1.Controls.Add(this.label1);
+			this.tabPage1.Location = new System.Drawing.Point(4, 29);
+			this.tabPage1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(1159, 500);
+			this.tabPage1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.tabPage1.Size = new System.Drawing.Size(1548, 631);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "Головна";
 			this.tabPage1.UseVisualStyleBackColor = true;
@@ -112,7 +115,8 @@
 			// 
 			this.splitContainer1.BackColor = System.Drawing.Color.Transparent;
 			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer1.Location = new System.Drawing.Point(3, 3);
+			this.splitContainer1.Location = new System.Drawing.Point(4, 4);
+			this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.splitContainer1.Name = "splitContainer1";
 			this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
@@ -123,26 +127,30 @@
 			// splitContainer1.Panel2
 			// 
 			this.splitContainer1.Panel2.Controls.Add(this.groupBox1);
-			this.splitContainer1.Size = new System.Drawing.Size(1153, 494);
-			this.splitContainer1.SplitterDistance = 399;
+			this.splitContainer1.Size = new System.Drawing.Size(1540, 623);
+			this.splitContainer1.SplitterDistance = 503;
+			this.splitContainer1.SplitterWidth = 5;
 			this.splitContainer1.TabIndex = 2;
 			// 
 			// groupBox1
 			// 
 			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox1.Location = new System.Drawing.Point(0, 0);
+			this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(1153, 91);
+			this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.groupBox1.Size = new System.Drawing.Size(1540, 115);
 			this.groupBox1.TabIndex = 0;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Підсумки";
 			// 
 			// tabPage2
 			// 
-			this.tabPage2.Location = new System.Drawing.Point(4, 25);
+			this.tabPage2.Location = new System.Drawing.Point(4, 29);
+			this.tabPage2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(1159, 500);
+			this.tabPage2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.tabPage2.Size = new System.Drawing.Size(1548, 631);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Рахунки";
 			this.tabPage2.UseVisualStyleBackColor = true;
@@ -161,9 +169,9 @@
             this.toolStripButton5,
             this.toolStripButton6,
             this.toolStripButton7});
-			this.toolStrip1.Location = new System.Drawing.Point(0, 25);
+			this.toolStrip1.Location = new System.Drawing.Point(0, 31);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(1167, 57);
+			this.toolStrip1.Size = new System.Drawing.Size(1556, 57);
 			this.toolStrip1.TabIndex = 3;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -191,14 +199,14 @@
 			this.toolStripButton3.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton3.Name = "toolStripButton3";
-			this.toolStripButton3.Size = new System.Drawing.Size(39, 54);
+			this.toolStripButton3.Size = new System.Drawing.Size(47, 54);
 			this.toolStripButton3.Text = "+";
 			this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
 			// 
 			// toolStripComboBox1
 			// 
 			this.toolStripComboBox1.Name = "toolStripComboBox1";
-			this.toolStripComboBox1.Size = new System.Drawing.Size(121, 57);
+			this.toolStripComboBox1.Size = new System.Drawing.Size(160, 57);
 			// 
 			// toolStripSeparator2
 			// 
@@ -207,53 +215,51 @@
 			// 
 			// toolStripButton4
 			// 
-			this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
 			this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton4.Name = "toolStripButton4";
-			this.toolStripButton4.Size = new System.Drawing.Size(54, 54);
-			this.toolStripButton4.Text = "toolStripButton4";
+			this.toolStripButton4.Size = new System.Drawing.Size(191, 54);
+			this.toolStripButton4.Text = "Expand/Collapse";
 			this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
 			// 
 			// toolStripButton5
 			// 
-			this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
 			this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton5.Name = "toolStripButton5";
-			this.toolStripButton5.Size = new System.Drawing.Size(54, 54);
-			this.toolStripButton5.Text = "toolStripButton5";
+			this.toolStripButton5.Size = new System.Drawing.Size(239, 54);
+			this.toolStripButton5.Text = "RemoveSelectedObject";
 			this.toolStripButton5.Click += new System.EventHandler(this.toolStripButton5_Click);
 			// 
 			// toolStripButton6
 			// 
-			this.toolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.toolStripButton6.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton6.Image")));
 			this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton6.Name = "toolStripButton6";
-			this.toolStripButton6.Size = new System.Drawing.Size(54, 54);
-			this.toolStripButton6.Text = "toolStripButton6";
+			this.toolStripButton6.Size = new System.Drawing.Size(188, 54);
+			this.toolStripButton6.Text = "Refresh from DB";
 			this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
 			// 
 			// toolStripButton7
 			// 
-			this.toolStripButton7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.toolStripButton7.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton7.Image")));
 			this.toolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton7.Name = "toolStripButton7";
-			this.toolStripButton7.Size = new System.Drawing.Size(54, 54);
-			this.toolStripButton7.Text = "toolStripButton7";
+			this.toolStripButton7.Size = new System.Drawing.Size(185, 54);
+			this.toolStripButton7.Text = "Rebuild balance";
 			this.toolStripButton7.Click += new System.EventHandler(this.toolStripButton7_Click);
 			// 
 			// menuStrip1
 			// 
 			this.menuStrip1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1,
             this.валютиToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(1167, 25);
+			this.menuStrip1.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
+			this.menuStrip1.Size = new System.Drawing.Size(1556, 31);
 			this.menuStrip1.TabIndex = 4;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -261,69 +267,72 @@
 			// 
 			this.toolStripMenuItem1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(59, 21);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(73, 27);
 			this.toolStripMenuItem1.Text = "Сервіс";
 			// 
 			// валютиToolStripMenuItem
 			// 
 			this.валютиToolStripMenuItem.Name = "валютиToolStripMenuItem";
-			this.валютиToolStripMenuItem.Size = new System.Drawing.Size(64, 21);
+			this.валютиToolStripMenuItem.Size = new System.Drawing.Size(81, 27);
 			this.валютиToolStripMenuItem.Text = "Валюти";
 			// 
 			// contextMenuStrip1
 			// 
+			this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
 			this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addTransactionToolStripMenuItem,
             this.addProfitToolStripMenuItem});
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new System.Drawing.Size(169, 48);
+			this.contextMenuStrip1.Size = new System.Drawing.Size(198, 52);
 			// 
 			// addTransactionToolStripMenuItem
 			// 
 			this.addTransactionToolStripMenuItem.Name = "addTransactionToolStripMenuItem";
-			this.addTransactionToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+			this.addTransactionToolStripMenuItem.Size = new System.Drawing.Size(197, 24);
 			this.addTransactionToolStripMenuItem.Text = "Додати трату";
 			this.addTransactionToolStripMenuItem.Click += new System.EventHandler(this.addTransactionToolStripMenuItem_Click);
 			// 
 			// addProfitToolStripMenuItem
 			// 
 			this.addProfitToolStripMenuItem.Name = "addProfitToolStripMenuItem";
-			this.addProfitToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+			this.addProfitToolStripMenuItem.Size = new System.Drawing.Size(197, 24);
 			this.addProfitToolStripMenuItem.Text = "Додати прибуток";
 			// 
 			// contextMenuStrip2
 			// 
+			this.contextMenuStrip2.ImageScalingSize = new System.Drawing.Size(20, 20);
 			this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.виToolStripMenuItem,
             this.addInvoiceLineToolStripMenuItem});
 			this.contextMenuStrip2.Name = "contextMenuStrip2";
-			this.contextMenuStrip2.Size = new System.Drawing.Size(193, 48);
+			this.contextMenuStrip2.Size = new System.Drawing.Size(228, 52);
 			// 
 			// виToolStripMenuItem
 			// 
 			this.виToolStripMenuItem.Name = "виToolStripMenuItem";
-			this.виToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.виToolStripMenuItem.Size = new System.Drawing.Size(227, 24);
 			this.виToolStripMenuItem.Text = "Видалити трансакцію";
 			this.виToolStripMenuItem.Click += new System.EventHandler(this.removeTransactionToolStripMenuItem_Click);
 			// 
 			// addInvoiceLineToolStripMenuItem
 			// 
 			this.addInvoiceLineToolStripMenuItem.Name = "addInvoiceLineToolStripMenuItem";
-			this.addInvoiceLineToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.addInvoiceLineToolStripMenuItem.Size = new System.Drawing.Size(227, 24);
 			this.addInvoiceLineToolStripMenuItem.Text = "Парсити чек";
 			this.addInvoiceLineToolStripMenuItem.Click += new System.EventHandler(this.addInvoiceLineToolStripMenuItem_Click);
 			// 
 			// contextMenuStrip3
 			// 
+			this.contextMenuStrip3.ImageScalingSize = new System.Drawing.Size(20, 20);
 			this.contextMenuStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.removeInvoiceLineToolStripMenuItem});
 			this.contextMenuStrip3.Name = "contextMenuStrip3";
-			this.contextMenuStrip3.Size = new System.Drawing.Size(160, 26);
+			this.contextMenuStrip3.Size = new System.Drawing.Size(186, 28);
 			// 
 			// removeInvoiceLineToolStripMenuItem
 			// 
 			this.removeInvoiceLineToolStripMenuItem.Name = "removeInvoiceLineToolStripMenuItem";
-			this.removeInvoiceLineToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+			this.removeInvoiceLineToolStripMenuItem.Size = new System.Drawing.Size(185, 24);
 			this.removeInvoiceLineToolStripMenuItem.Text = "Видалити лінію";
 			this.removeInvoiceLineToolStripMenuItem.Click += new System.EventHandler(this.removeInvoiceLineToolStripMenuItem_Click);
 			// 
@@ -331,9 +340,10 @@
 			// 
 			this.label1.AutoSize = true;
 			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label1.Location = new System.Drawing.Point(662, 44);
+			this.label1.Location = new System.Drawing.Point(1303, -60);
+			this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(0, 25);
+			this.label1.Size = new System.Drawing.Size(0, 31);
 			this.label1.TabIndex = 5;
 			// 
 			// treeListView
@@ -346,6 +356,7 @@
 			this.treeListView.AllColumns.Add(this.olvColumn6);
 			this.treeListView.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.treeListView.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.F2Only;
+			this.treeListView.CellEditUseWholeCell = false;
 			this.treeListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumn1,
             this.olvColumn2,
@@ -360,9 +371,10 @@
 			this.treeListView.FullRowSelect = true;
 			this.treeListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
 			this.treeListView.Location = new System.Drawing.Point(0, 0);
+			this.treeListView.Margin = new System.Windows.Forms.Padding(4);
 			this.treeListView.Name = "treeListView";
 			this.treeListView.ShowGroups = false;
-			this.treeListView.Size = new System.Drawing.Size(1153, 399);
+			this.treeListView.Size = new System.Drawing.Size(1540, 503);
 			this.treeListView.SmallImageList = this.imageList;
 			this.treeListView.TabIndex = 1;
 			this.treeListView.UseCompatibleStateImageBehavior = false;
@@ -428,18 +440,19 @@
 			// 
 			// MainForm
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1167, 611);
-			this.Controls.Add(this.label1);
+			this.ClientSize = new System.Drawing.Size(1556, 752);
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.menuStrip1);
+			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.Name = "MainForm";
 			this.Text = "Form1";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
+			this.tabPage1.PerformLayout();
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
